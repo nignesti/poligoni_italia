@@ -1,0 +1,21 @@
+{
+  "name": "@poligoni/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Logica di dominio pura. Zero dipendenze esterne, zero I/O. Vedi Piano_Sviluppo_App.md §5",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ammo": "./src/ammo/index.ts",
+    "./ballistics": "./src/ballistics/index.ts",
+    "./gpg": "./src/gpg/index.ts",
+    "./documents": "./src/documents/index.ts",
+    "./booking": "./src/booking/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  }
+}

@@ -1,0 +1,43 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: app/pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm -r typecheck
+
+      - name: Test
+        run: pnpm -r test
+
+      # I moduli a rilevanza normativa devono restare al 100%.
+      # Vedi Piano_Sviluppo_App.md §10.
+      - name: Coverage soglia core
+        run: >
+          pnpm --filter @poligoni/core exec vitest run --coverage
+          --coverage.thresholds.lines=100
+          --coverage.thresholds.branches=100
+          --coverage.thresholds.functions=100
+          --coverage.thresholds.statements=100
