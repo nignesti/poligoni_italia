@@ -11,8 +11,6 @@ const nextConfig: NextConfig = {
     '@poligoni/db',
   ],
 
-  outputFileTracingRoot: new URL('../../', import.meta.url).pathname,
-
   webpack: (config) => {
     // I workspace packages usano `verbatimModuleSyntax` e importano con
     // estensione `.js`. Webpack deve sapere che `.js` può essere `.ts`.
