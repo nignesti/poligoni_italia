@@ -29,8 +29,11 @@ jobs:
       - name: Typecheck
         run: pnpm -r typecheck
 
+      - name: Lint
+        run: pnpm -r --if-present lint
+
       - name: Test
-        run: pnpm -r test
+        run: pnpm -r --if-present test
 
       # I moduli a rilevanza normativa devono restare al 100%.
       # Vedi Piano_Sviluppo_App.md §10.

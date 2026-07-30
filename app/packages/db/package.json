@@ -1,0 +1,32 @@
+{
+  "name": "@poligoni/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Schema Drizzle, migrazioni e query. Piano_Sviluppo_App.md §4 e §9.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./schema/ranges": "./src/schema/ranges.ts",
+    "./schema/users": "./src/schema/users.ts",
+    "./schema/bookings": "./src/schema/bookings.ts",
+    "./schema/sessions": "./src/schema/sessions.ts",
+    "./schema/ammo": "./src/schema/ammo.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:check": "drizzle-kit check",
+    "db:drop": "drizzle-kit drop"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.43.1",
+    "@poligoni/schemas": "workspace:*"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.0",
+    "typescript": "^5.6.3"
+  }
+}

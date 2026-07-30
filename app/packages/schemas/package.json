@@ -1,0 +1,29 @@
+{
+  "name": "@poligoni/schemas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Schemi Zod condivisi = contratto API tra client e server. Piano_Sviluppo_App.md §6.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./common": "./src/common.ts",
+    "./ranges": "./src/ranges.ts",
+    "./bookings": "./src/bookings.ts",
+    "./sessions": "./src/sessions.ts",
+    "./firearms": "./src/firearms.ts",
+    "./ammo": "./src/ammo.ts",
+    "./documents": "./src/documents.ts",
+    "./gpg": "./src/gpg.ts"
+  },
+  "dependencies": {
+    "zod": "^3.24.4"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

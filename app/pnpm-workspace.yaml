@@ -4,3 +4,4 @@ packages:
 allowBuilds:
   # Dipendenza di vitest: compila il binario nativo in fase di installazione.
   esbuild: true
+  sharp: true
