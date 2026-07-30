@@ -1,0 +1,555 @@
+{
+  "Agrigento|AG": {
+    "lat": 37.3122991,
+    "lng": 13.57465,
+    "displayName": "Agrigento, Sicilia, 92100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:07.207Z"
+  },
+  "Altavilla Milicia|PA": {
+    "lat": 38.0427339,
+    "lng": 13.5508934,
+    "displayName": "Altavilla Milicia, Palermo, Sicilia, 90010, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:08.485Z"
+  },
+  "Bagheria|PA": {
+    "lat": 38.079351,
+    "lng": 13.509349,
+    "displayName": "Bagheria, Palermo, Sicilia, 90011, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:09.684Z"
+  },
+  "Barletta|BT": {
+    "lat": 41.3214976,
+    "lng": 16.2868696,
+    "displayName": "Barletta, Barletta-Andria-Trani, Puglia, 76121, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:10.896Z"
+  },
+  "Breno|BS": {
+    "lat": 45.9414695,
+    "lng": 10.4475635,
+    "displayName": "Breno, Comunità montana della valle Camonica, Brescia, Lombardia, 25043, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:12.737Z"
+  },
+  "Busto Arsizio|VA": {
+    "lat": 45.611932,
+    "lng": 8.8518269,
+    "displayName": "Busto Arsizio, Varese, Lombardia, 21052, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:13.972Z"
+  },
+  "Caltagirone|CT": {
+    "lat": 37.2372009,
+    "lng": 14.5132023,
+    "displayName": "Caltagirone, Catania, Sicilia, 95041, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:15.183Z"
+  },
+  "Caltanissetta|CL": {
+    "lat": 37.4902628,
+    "lng": 14.063284,
+    "displayName": "Caltanissetta, Sicilia, 93100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:16.384Z"
+  },
+  "Campobasso|CB": {
+    "lat": 41.5597935,
+    "lng": 14.6602725,
+    "displayName": "Campobasso, Molise, 86100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:17.591Z"
+  },
+  "Candela|FG": {
+    "lat": 41.137925,
+    "lng": 15.514654,
+    "displayName": "Candela, Foggia, Puglia, 71024, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:19.147Z"
+  },
+  "Carpi|MO": {
+    "lat": 44.7835699,
+    "lng": 10.8854523,
+    "displayName": "Carpi, Unione delle Terre d'Argine, Modena, Emilia-Romagna, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:20.965Z"
+  },
+  "Castellammare di Stabia|NA": {
+    "lat": 40.6943046,
+    "lng": 14.4804813,
+    "displayName": "Castellammare di Stabia, Napoli, Campania, 80053, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:22.187Z"
+  },
+  "Castelfranco Emilia|BO": {
+    "lat": 44.5949142,
+    "lng": 11.0528786,
+    "displayName": "Castelfranco Emilia, Unione dei comuni del Sorbara, Modena, Emilia-Romagna, 41013, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:24.648Z"
+  },
+  "Catania|CT": {
+    "lat": 37.5023612,
+    "lng": 15.0873718,
+    "displayName": "Catania, Sicilia, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:25.916Z"
+  },
+  "Centuripe|EN": {
+    "lat": 37.6206871,
+    "lng": 14.7418808,
+    "displayName": "Centuripe, Enna, Sicilia, 94010, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:27.124Z"
+  },
+  "Cerea|VR": {
+    "lat": 45.1601865,
+    "lng": 11.247415,
+    "displayName": "Cerea, Verona, Veneto, 37053, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:28.453Z"
+  },
+  "Chieti|CH": {
+    "lat": 42.3446529,
+    "lng": 14.1659738,
+    "displayName": "Chieti, Abruzzo, 66100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:29.732Z"
+  },
+  "Cividale del Friuli|UD": {
+    "lat": 46.0731464,
+    "lng": 13.4387878,
+    "displayName": "Cividale del Friuli, Udine / Udin / Videm, Friuli-Venezia Giulia, 33043, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:31.168Z"
+  },
+  "Civitavecchia|RM": {
+    "lat": 42.0937524,
+    "lng": 11.7922462,
+    "displayName": "Civitavecchia, Roma Capitale, Lazio, 00053, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:32.449Z"
+  },
+  "Como|CO": {
+    "lat": 45.8115623,
+    "lng": 9.0830353,
+    "displayName": "Como, Lombardia, 22100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:33.734Z"
+  },
+  "Crotone|KR": {
+    "lat": 39.0806223,
+    "lng": 17.127196,
+    "displayName": "Crotone, Calabria, 88900, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:34.917Z"
+  },
+  "Enna|EN": {
+    "lat": 37.5667573,
+    "lng": 14.2807473,
+    "displayName": "Enna, Sicilia, 94100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:36.172Z"
+  },
+  "Este|PD": {
+    "lat": 45.2201668,
+    "lng": 11.6589117,
+    "displayName": "Este, Padova, Veneto, 35042, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:37.529Z"
+  },
+  "Firenze|FI": {
+    "lat": 43.7697955,
+    "lng": 11.2556404,
+    "displayName": "Firenze, Toscana, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:39.268Z"
+  },
+  "Gallarate|VA": {
+    "lat": 45.6598951,
+    "lng": 8.7932013,
+    "displayName": "Gallarate, Varese, Lombardia, 21013, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:40.533Z"
+  },
+  "Imola|BO": {
+    "lat": 44.3535145,
+    "lng": 11.7141233,
+    "displayName": "Imola, Nuovo Circondario Imolese, Bologna, Emilia-Romagna, 40026, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:42.286Z"
+  },
+  "L'Aquila|AQ": {
+    "lat": 42.3489203,
+    "lng": 13.3979672,
+    "displayName": "L'Aquila, Abruzzo, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:43.484Z"
+  },
+  "Lanciano|CH": {
+    "lat": 42.2305316,
+    "lng": 14.3907794,
+    "displayName": "Lanciano, Chieti, Abruzzo, 66034, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:45.290Z"
+  },
+  "Livorno|LI": {
+    "lat": 43.5507317,
+    "lng": 10.3091256,
+    "displayName": "Livorno, Toscana, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:47.138Z"
+  },
+  "Lucca|LU": {
+    "lat": 43.8428381,
+    "lng": 10.502876,
+    "displayName": "Lucca, Toscana, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:48.873Z"
+  },
+  "Mazara del Vallo|TP": {
+    "lat": 37.6537292,
+    "lng": 12.5886912,
+    "displayName": "Mazara del Vallo, Trapani, Sicilia, 91026, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:50.072Z"
+  },
+  "Messina|ME": {
+    "lat": 38.1937571,
+    "lng": 15.5542082,
+    "displayName": "Messina, Sicilia, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:51.292Z"
+  },
+  "Milazzo|ME": {
+    "lat": 38.2208049,
+    "lng": 15.2415129,
+    "displayName": "Milazzo, Messina, Sicilia, 98057, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:52.549Z"
+  },
+  "Milano|MI": {
+    "lat": 45.4641943,
+    "lng": 9.1896346,
+    "displayName": "Milano, Rodano, Milano, Lombardia, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:53.857Z"
+  },
+  "Modena|MO": {
+    "lat": 44.6458885,
+    "lng": 10.9255707,
+    "displayName": "Modena, Emilia-Romagna, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:55.102Z"
+  },
+  "Napoli|NA": {
+    "lat": 40.8358846,
+    "lng": 14.2487679,
+    "displayName": "Napoli, Campania, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:56.391Z"
+  },
+  "Padova|PD": {
+    "lat": 45.3984428,
+    "lng": 11.8956829,
+    "displayName": "Padova, Veneto, 35121-35143, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:57.621Z"
+  },
+  "Palermo|PA": {
+    "lat": 38.1112268,
+    "lng": 13.3524434,
+    "displayName": "Palermo, Sicilia, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:27:58.867Z"
+  },
+  "Pavia|PV": {
+    "lat": 45.1860043,
+    "lng": 9.1546375,
+    "displayName": "Pavia, Lombardia, 27100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:00.602Z"
+  },
+  "Perugia|PG": {
+    "lat": 43.1119613,
+    "lng": 12.3890104,
+    "displayName": "Perugia, Umbria, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:01.875Z"
+  },
+  "Pescara|PE": {
+    "lat": 42.469613,
+    "lng": 14.2059269,
+    "displayName": "Pescara, Abruzzo, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:03.074Z"
+  },
+  "Pordenone|PN": {
+    "lat": 45.9562503,
+    "lng": 12.6597197,
+    "displayName": "Pordenone / Pordenon, Friuli-Venezia Giulia, 33170, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:04.336Z"
+  },
+  "Ragusa|RG": {
+    "lat": 36.9257118,
+    "lng": 14.7307524,
+    "displayName": "Ragusa, Sicilia, 97100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:05.688Z"
+  },
+  "Reggio Calabria|RC": {
+    "lat": 38.1035389,
+    "lng": 15.6397556,
+    "displayName": "Reggio di Calabria, Reggio Calabria, Calabria, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:06.934Z"
+  },
+  "Reggio Emilia|RE": {
+    "lat": 44.6978389,
+    "lng": 10.6304971,
+    "displayName": "Reggio Emilia, Reggio nell'Emilia, Emilia-Romagna, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:08.200Z"
+  },
+  "Rho|MI": {
+    "lat": 45.5310355,
+    "lng": 9.0463469,
+    "displayName": "Rho, Milano, Lombardia, 20017, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:09.473Z"
+  },
+  "Roma|RM": {
+    "lat": 41.8933203,
+    "lng": 12.4829321,
+    "displayName": "Roma, Roma Capitale, Lazio, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:10.676Z"
+  },
+  "Siracusa|SR": {
+    "lat": 37.0315752,
+    "lng": 15.2124277,
+    "displayName": "Siracusa, Sicilia, 96100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:12.037Z"
+  },
+  "Spoleto|PG": {
+    "lat": 42.7342971,
+    "lng": 12.7382035,
+    "displayName": "Spoleto, Perugia, Umbria, 06049, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:13.213Z"
+  },
+  "Sulmona|AQ": {
+    "lat": 42.0474231,
+    "lng": 13.927011,
+    "displayName": "Sulmona, L'Aquila, Abruzzo, 67039, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:15.856Z"
+  },
+  "Teramo|TE": {
+    "lat": 42.6612893,
+    "lng": 13.6983524,
+    "displayName": "Teramo, Abruzzo, 64100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:17.610Z"
+  },
+  "Tolmezzo|UD": {
+    "lat": 46.4053676,
+    "lng": 13.0158357,
+    "displayName": "Tolmezzo / Tumieç, Udine / Udin / Videm, Friuli-Venezia Giulia, 33028, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:18.889Z"
+  },
+  "Torino|TO": {
+    "lat": 45.0677551,
+    "lng": 7.6824892,
+    "displayName": "Torino, Piemonte, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:20.157Z"
+  },
+  "Trapani|TP": {
+    "lat": 37.9003731,
+    "lng": 12.7116255,
+    "displayName": "Trapani, Sicilia, 91100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:21.438Z"
+  },
+  "Trieste|TS": {
+    "lat": 45.6496485,
+    "lng": 13.7772781,
+    "displayName": "Trieste, Friuli-Venezia Giulia, 34121-34151, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:23.362Z"
+  },
+  "Udine|UD": {
+    "lat": 46.0634632,
+    "lng": 13.2358377,
+    "displayName": "Udine / Udin, Udine / Udin / Videm, Friuli-Venezia Giulia, 33100, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:24.611Z"
+  },
+  "Vasto|CH": {
+    "lat": 42.12434,
+    "lng": 14.705923,
+    "displayName": "Vasto, Chieti, Abruzzo, 66054, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:25.813Z"
+  },
+  "Vercelli|VC": {
+    "lat": 45.3251557,
+    "lng": 8.4227666,
+    "displayName": "Vercelli, Piemonte, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:27.032Z"
+  },
+  "Lonato del Garda|BS": {
+    "lat": 45.443959,
+    "lng": 10.4804104,
+    "displayName": "Lonato del Garda, Brescia, Lombardia, 25017, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:28.385Z"
+  },
+  "Magione|PG": {
+    "lat": 43.1427366,
+    "lng": 12.2034965,
+    "displayName": "Magione, Perugia, Umbria, 06063, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:29.709Z"
+  },
+  "Floridia|SR": {
+    "lat": 37.0820396,
+    "lng": 15.1522561,
+    "displayName": "Floridia, Siracusa, Sicilia, 96014, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:31.471Z"
+  },
+  "Collazzone|PG": {
+    "lat": 42.8996582,
+    "lng": 12.4359527,
+    "displayName": "Collazzone, Perugia, Umbria, 06050, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:32.790Z"
+  },
+  "Martinengo|BG": {
+    "lat": 45.5703685,
+    "lng": 9.767376,
+    "displayName": "Martinengo, Bergamo, Lombardia, 24057, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:34.128Z"
+  },
+  "Perosa Argentina|TO": {
+    "lat": 44.95744,
+    "lng": 7.190914,
+    "displayName": "Perosa Argentina, Torino, Piemonte, 10063, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:35.374Z"
+  },
+  "San Zenone degli Ezzelini|TV": {
+    "lat": 45.7739346,
+    "lng": 11.8422455,
+    "displayName": "San Zenone degli Ezzelini, Treviso, Veneto, 31020, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:36.560Z"
+  },
+  "Conselice|RA": {
+    "lat": 44.5127578,
+    "lng": 11.8291743,
+    "displayName": "Conselice, Unione dei comuni della Bassa Romagna, Ravenna, Emilia-Romagna, 48017, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:37.953Z"
+  },
+  "Rocca Massima|LT": {
+    "lat": 41.6794147,
+    "lng": 12.9194152,
+    "displayName": "Rocca Massima, Latina, Lazio, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:39.158Z"
+  },
+  "Sedilo|OR": {
+    "lat": 40.1731514,
+    "lng": 8.9191225,
+    "displayName": "Sèdilo/Sedilo, Aristanis/Oristano, Sardigna/Sardegna, 09076, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:40.345Z"
+  },
+  "Bassiano|LT": {
+    "lat": 41.5497551,
+    "lng": 13.032233,
+    "displayName": "Bassiano, Latina, Lazio, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:41.676Z"
+  },
+  "Ubiale Clanezzo|BG": {
+    "lat": 45.7809355,
+    "lng": 9.6058224,
+    "displayName": "Ubiale Clanezzo, Bergamo, Lombardia, 24010, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:42.889Z"
+  },
+  "Loiano|BO": {
+    "lat": 44.26833,
+    "lng": 11.3234319,
+    "displayName": "Loiano, Unione dei comuni Savena-Idice, Bologna, Emilia-Romagna, 40050, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:44.641Z"
+  },
+  "Arzene|PN": {
+    "lat": 46.0013275,
+    "lng": 12.8469614,
+    "displayName": "Arzene / Darzin, Valvasone Arzene / Voleson Darzin, Pordenone / Pordenon, Friuli-Venezia Giulia, 33098, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:45.881Z"
+  },
+  "Guastalla|RE": {
+    "lat": 44.9211516,
+    "lng": 10.6539985,
+    "displayName": "Guastalla, Bassa Reggiana, Reggio nell'Emilia, Emilia-Romagna, 42016, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:50.082Z"
+  },
+  "Vidracco|TO": {
+    "lat": 45.430657,
+    "lng": 7.757417,
+    "displayName": "Vidracco, Torino, Piemonte, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:51.847Z"
+  },
+  "Fara in Sabina|RI": {
+    "lat": 42.2095575,
+    "lng": 12.7292119,
+    "displayName": "Fara in Sabina, Rieti, Lazio, 02032, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:53.377Z"
+  },
+  "Montereale Valcellina|PN": {
+    "lat": 46.1605087,
+    "lng": 12.6621363,
+    "displayName": "Montereale Valcellina / Montreâl, Pordenone / Pordenon, Friuli-Venezia Giulia, 33086, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:54.644Z"
+  },
+  "Casei Gerola|PV": {
+    "lat": 45.0061458,
+    "lng": 8.9269892,
+    "displayName": "Casei Gerola, Pavia, Lombardia, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:55.993Z"
+  },
+  "Lograto|BS": {
+    "lat": 45.4842379,
+    "lng": 10.0532758,
+    "displayName": "Lograto, Unione dei Comuni Bassa Bresciana Occidentale, Brescia, Lombardia, 25030, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:28:57.223Z"
+  },
+  "Vittoria|RG": {
+    "lat": 36.9514957,
+    "lng": 14.5304867,
+    "displayName": "Vittoria, Ragusa, Sicilia, 97019, Italia",
+    "precision": "comune",
+    "resolvedAt": "2026-07-30T11:29:53.735Z"
+  }
+}

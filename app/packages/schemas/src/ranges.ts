@@ -132,11 +132,14 @@ export const rangeSchema = z.object({
   slug: slugSchema,
   name: z.string().min(1).max(300),
   type: rangeTypeSchema,
-  address: z.string().min(1).max(300),
+  // Nullable: le strutture da censimento secondario spesso non hanno un
+  // indirizzo civico o CAP verificato. Vedi schema Drizzle in packages/db
+  // per la stessa motivazione.
+  address: z.string().min(1).max(300).nullable().optional(),
   comune: z.string().min(1).max(100),
   provincia: z.string().min(1).max(100),
   regione: z.string().min(1).max(100),
-  cap: z.string().regex(/^\d{5}$/, 'CAP: 5 cifre'),
+  cap: z.string().regex(/^\d{5}$/, 'CAP: 5 cifre').nullable().optional(),
   location: coordinatesSchema,
   phone: z.string().max(30).nullable().optional(),
   email: z.string().email().max(200).nullable().optional(),

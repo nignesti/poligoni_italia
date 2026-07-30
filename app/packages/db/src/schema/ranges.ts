@@ -32,6 +32,7 @@ export const rangeType = pgEnum('range_type', [
   'dinamico',
   'long_range',
 ]);
+export type RangeType = (typeof rangeType.enumValues)[number];
 
 export const rangeStatus = pgEnum('range_status', [
   'censito',
@@ -39,11 +40,13 @@ export const rangeStatus = pgEnum('range_status', [
   'partner',
   'inattivo',
 ]);
+export type RangeStatus = (typeof rangeStatus.enumValues)[number];
 
 export const rangeManagerRole = pgEnum('range_manager_role', [
   'proprietario',
   'staff',
 ]);
+export type RangeManagerRole = (typeof rangeManagerRole.enumValues)[number];
 
 export const discipline = pgEnum('discipline', [
   'tiro_a_segno',
@@ -53,6 +56,7 @@ export const discipline = pgEnum('discipline', [
   'tiro_difensivo',
   'avancarica',
 ]);
+export type Discipline = (typeof discipline.enumValues)[number];
 
 // ---------------------------------------------------------------------------
 // Tabelle
@@ -63,11 +67,15 @@ export const ranges = pgTable('ranges', {
   slug: text('slug').notNull().unique(),
   name: text('name').notNull(),
   type: rangeType('type').notNull(),
-  address: text('address').notNull(),
+  // address/cap nullable: per le strutture da censimento secondario (non
+  // inserite dal gestore) spesso non si conosce l'indirizzo civico esatto.
+  // Meglio NULL che un indirizzo o CAP inventato (BP §3.5.8, stesso
+  // principio: mai fabbricare precisione che non si ha).
+  address: text('address'),
   comune: text('comune').notNull(),
   provincia: text('provincia').notNull(),
   regione: text('regione').notNull(),
-  cap: text('cap').notNull(),
+  cap: text('cap'),
   location: geographyPoint('location').notNull(),
   phone: text('phone'),
   email: text('email'),

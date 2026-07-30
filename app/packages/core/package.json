@@ -10,7 +10,8 @@
     "./ballistics": "./src/ballistics/index.ts",
     "./gpg": "./src/gpg/index.ts",
     "./documents": "./src/documents/index.ts",
-    "./booking": "./src/booking/index.ts"
+    "./booking": "./src/booking/index.ts",
+    "./slug": "./src/slug/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

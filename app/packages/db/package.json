@@ -15,18 +15,25 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:check": "drizzle-kit check",
-    "db:drop": "drizzle-kit drop"
+    "db:drop": "drizzle-kit drop",
+    "db:geocode": "tsx scripts/geocode-census.ts",
+    "db:seed": "tsx scripts/run-seed.ts"
   },
   "dependencies": {
-    "drizzle-orm": "^0.43.1",
-    "@poligoni/schemas": "workspace:*"
+    "@poligoni/core": "workspace:*",
+    "@poligoni/schemas": "workspace:*",
+    "drizzle-orm": "^0.43.1"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.0",
-    "typescript": "^5.6.3"
+    "postgres": "^3.4.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
   }
 }
