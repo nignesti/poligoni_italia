@@ -5,3 +5,5 @@ allowBuilds:
   # Dipendenza di vitest: compila il binario nativo in fase di installazione.
   esbuild: true
   sharp: true
+  # Downloader del binario nativo precompilato per la risoluzione moduli di ESLint (eslint-config-next).
+  unrs-resolver: true
