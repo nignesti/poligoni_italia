@@ -1,9 +1,18 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
 import './styles/globals.css';
+
+// Self-hosted da Next in fase di build: nessuna richiesta bloccante a
+// fonts.googleapis.com in produzione (sostituisce il precedente @import nel CSS).
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: {
-    default: 'Poligoni Italia — Trova e prenota poligoni di tiro sportivo',
+    default: 'Poligoni Italia: trova e prenota poligoni di tiro sportivo',
     template: '%s | Poligoni Italia',
   },
   description:
@@ -23,7 +32,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'it_IT',
     siteName: 'Poligoni Italia',
-    title: 'Poligoni Italia — Trova e prenota poligoni di tiro sportivo',
+    title: 'Poligoni Italia: trova e prenota poligoni di tiro sportivo',
     description:
       'Trova poligoni di tiro in Italia, controlla orari, calibri e disponibilità. Prenota la tua linea online.',
   },
@@ -47,8 +56,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it">
-      <body>{children}</body>
+    <html lang="it" className={inter.variable}>
+      <body className="bg-surface text-ink font-sans antialiased">{children}</body>
     </html>
   );
 }

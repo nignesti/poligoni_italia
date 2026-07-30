@@ -7,34 +7,7 @@
  */
 import { type NextRequest } from 'next/server';
 import { json, notFound, withCache } from '../../../../_utils';
-
-// ---------------------------------------------------------------------------
-// Mock — in produzione: db.ranges.findMany({ where: eq(ranges.provincia, provincia) })
-// ---------------------------------------------------------------------------
-const MOCK_PROVINCE: Record<string, unknown[]> = {
-  milano: [
-    { slug: 'tsn-milano', name: 'TSN Milano', type: 'tsn', comune: 'Milano', lines: ['10 m', '25 m', '50 m'], hasIndoor: true, status: 'partner' },
-    { slug: 'poligono-corsico', name: 'Poligono di Corsico', type: 'privato', comune: 'Corsico', lines: ['25 m', '50 m'], hasIndoor: false, status: 'censito' },
-    { slug: 'tsn-rho', name: 'Tiro a Segno Rho', type: 'tsn', comune: 'Rho', lines: ['10 m', '25 m'], hasIndoor: true, status: 'censito' },
-  ],
-  roma: [
-    { slug: 'tsn-roma', name: 'TSN Roma', type: 'tsn', comune: 'Roma', lines: ['10 m', '25 m', '50 m'], hasIndoor: true, status: 'partner' },
-    { slug: 'poligono-tuscolo', name: 'Poligono Tuscolo', type: 'tiro_a_volo', comune: 'Frascati', lines: ['Fossa olimpica'], hasIndoor: false, status: 'censito' },
-  ],
-  napoli: [
-    { slug: 'tsn-napoli', name: 'TSN Napoli', type: 'tsn', comune: 'Napoli', lines: ['10 m', '25 m'], hasIndoor: true, status: 'censito' },
-  ],
-  torino: [
-    { slug: 'tsn-torino', name: 'TSN Torino', type: 'tsn', comune: 'Torino', lines: ['10 m', '25 m', '50 m'], hasIndoor: true, status: 'censito' },
-    { slug: 'poligono-nichelino', name: 'Poligono di Nichelino', type: 'privato', comune: 'Nichelino', lines: ['25 m'], hasIndoor: false, status: 'censito' },
-  ],
-  bologna: [
-    { slug: 'tsn-bologna', name: 'TSN Bologna', type: 'tsn', comune: 'Bologna', lines: ['10 m', '25 m', '50 m'], hasIndoor: true, status: 'censito' },
-  ],
-  firenze: [
-    { slug: 'tsn-firenze', name: 'TSN Firenze', type: 'tsn', comune: 'Firenze', lines: ['10 m', '25 m'], hasIndoor: true, status: 'censito' },
-  ],
-};
+import { rangesByProvincia } from '@/lib/fixtures';
 
 export async function GET(
   _request: NextRequest,
@@ -42,16 +15,28 @@ export async function GET(
 ) {
   const { provincia } = await props.params;
 
-  const normalized = provincia.toLowerCase();
-  const ranges = MOCK_PROVINCE[normalized];
+  // `provincia` arriva già come slug (lib/slugify.ts), non un semplice
+  // .toLowerCase(): rangesByProvincia si aspetta lo stesso formato.
+  const normalized = provincia;
+  const ranges = rangesByProvincia(normalized);
 
-  if (!ranges) {
+  if (ranges.length === 0) {
     return notFound(`Nessun poligono trovato in provincia di ${provincia}`);
   }
 
+  const data = ranges.map((r) => ({
+    slug: r.slug,
+    name: r.name,
+    type: r.type,
+    comune: r.comune,
+    lines: r.lines.map((l) => `${l.distanceMeters} m`),
+    hasIndoor: r.lines.some((l) => l.isIndoor),
+    status: r.status,
+  }));
+
   return withCache(json({
     provincia: normalized,
-    data: ranges,
-    total: ranges.length,
+    data,
+    total: data.length,
   }));
 }

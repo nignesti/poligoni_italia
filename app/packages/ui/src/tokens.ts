@@ -10,7 +10,12 @@
 // Colori — palette
 // ---------------------------------------------------------------------------
 export const colors = {
-  /** Verde oliva scuro — colore principale del brand. */
+  /**
+   * Verde oliva scuro — unico accento del brand su tutta la piattaforma.
+   * Non introdurre un secondo accento (redesign audit 30/07/2026): la
+   * famiglia "earth" (bronzo/ocra) qui presente in precedenza non era
+   * utilizzata in nessuna pagina ed è stata rimossa.
+   */
   green: {
     50: '#f0f7f0',
     100: '#d9eed9',
@@ -36,20 +41,6 @@ export const colors = {
     700: '#44403c',
     800: '#292524',
     900: '#1c1917',
-  },
-
-  /** Terra — accenti caldi per CTA e marcatori. */
-  earth: {
-    50: '#fdf8f0',
-    100: '#f9edd9',
-    200: '#f2d9b0',
-    300: '#e8bf80',
-    400: '#d9a24d',
-    500: '#b8860b',
-    600: '#8b6914',
-    700: '#6b4f0e',
-    800: '#4d390a',
-    900: '#332607',
   },
 
   /** Bianco e nero. */

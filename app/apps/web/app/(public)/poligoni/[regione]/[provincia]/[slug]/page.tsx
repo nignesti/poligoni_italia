@@ -1,146 +1,55 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { AMMO_DISCLAIMER } from '@poligoni/core/ammo';
+import {
+  Phone,
+  EnvelopeSimple,
+  Globe,
+  House,
+  CloudSun,
+} from '@phosphor-icons/react/ssr';
+import { Breadcrumb } from '@/components/Breadcrumb';
+import { Container } from '@/components/Container';
+import { StatusPill } from '@/components/StatusPill';
+import { DEMO_RANGES, findRangeBySlug } from '@/lib/fixtures';
+import { slugify } from '@/lib/slugify';
+import {
+  DISCIPLINE_LABEL,
+  RANGE_TYPE_LABEL,
+  formatDayRange,
+  formatPrice,
+  groupHours,
+  todayStatus,
+} from '@/lib/format';
 
 // ---------------------------------------------------------------------------
-// Tipi (in produzione arrivano dal database — Drizzle + Supabase)
-// ---------------------------------------------------------------------------
-interface RangeData {
-  slug: string;
-  name: string;
-  type: string;
-  address: string;
-  comune: string;
-  provincia: string;
-  regione: string;
-  cap: string;
-  phone: string | null;
-  email: string | null;
-  website: string | null;
-  description: string | null;
-  services: { name: string; available: boolean }[];
-  lines: { name: string; distance: number; indoor: boolean; calibers: string[] }[];
-  hours: { day: string; opens: string; closes: string }[];
-}
-
-// ---------------------------------------------------------------------------
-// Mock data — in produzione: query Supabase → Drizzle → cache React
-// ---------------------------------------------------------------------------
-const MOCK_RANGES: Record<string, RangeData> = {
-  'tsn-milano': {
-    slug: 'tsn-milano',
-    name: 'TSN Milano — Sezione di tiro a segno',
-    type: 'tsn',
-    address: 'Viale dell\'Arte, 12',
-    comune: 'Milano',
-    provincia: 'Milano',
-    regione: 'Lombardia',
-    cap: '20149',
-    phone: '+39 02 1234567',
-    email: 'info@tsnmilano.it',
-    website: 'https://tsnmilano.it',
-    description:
-      'Il Tiro a Segno Nazionale di Milano è una delle sezioni più storiche d\'Italia, fondata nel 1888. Dispone di linee per tiro a segno da 10 m, 25 m e 50 m, sia coperte che scoperte, con attrezzature elettroniche SIUS per la rilevazione dei colpi.',
-    services: [
-      { name: 'Noleggio armi', available: true },
-      { name: 'Istruttore', available: true },
-      { name: 'Armiario', available: true },
-      { name: 'Bar/Ristoro', available: true },
-      { name: 'Parcheggio', available: true },
-      { name: 'Vendita munizioni', available: true },
-    ],
-    lines: [
-      { name: '10 m — coperta', distance: 10, indoor: true, calibers: ['.22 LR', '9x21', 'aria compressa'] },
-      { name: '25 m — coperta', distance: 25, indoor: true, calibers: ['.22 LR', '9x21', '.38 Special', '.357 Magnum', '.45 ACP'] },
-      { name: '50 m — coperta', distance: 50, indoor: true, calibers: ['.22 LR', '.308 Win', '6.5 Creedmoor'] },
-    ],
-    hours: [
-      { day: 'Lunedì', opens: '09:00', closes: '12:30' },
-      { day: 'Lunedì', opens: '14:00', closes: '19:00' },
-      { day: 'Martedì', opens: '09:00', closes: '12:30' },
-      { day: 'Martedì', opens: '14:00', closes: '19:00' },
-      { day: 'Mercoledì', opens: '09:00', closes: '12:30' },
-      { day: 'Mercoledì', opens: '14:00', closes: '19:00' },
-      { day: 'Giovedì', opens: '09:00', closes: '12:30' },
-      { day: 'Giovedì', opens: '14:00', closes: '19:00' },
-      { day: 'Venerdì', opens: '09:00', closes: '12:30' },
-      { day: 'Venerdì', opens: '14:00', closes: '19:00' },
-      { day: 'Sabato', opens: '09:00', closes: '18:00' },
-      { day: 'Domenica', opens: '09:00', closes: '13:00' },
-    ],
-  },
-  'tsn-roma': {
-    slug: 'tsn-roma',
-    name: 'TSN Roma — Sezione di tiro a segno',
-    type: 'tsn',
-    address: 'Via del Tiro a Segno, 45',
-    comune: 'Roma',
-    provincia: 'Roma',
-    regione: 'Lazio',
-    cap: '00135',
-    phone: '+39 06 9876543',
-    email: 'info@tsnroma.it',
-    website: null,
-    description:
-      'Il Tiro a Segno Nazionale di Roma, fondato nel 1897, si trova all\'interno del comprensorio del Foro Italico. Linee da 10 m, 25 m e 50 m coperte, con impianto di ventilazione e sistema di punteria elettronica.',
-    services: [
-      { name: 'Noleggio armi', available: true },
-      { name: 'Istruttore', available: true },
-      { name: 'Armiario', available: false },
-      { name: 'Bar/Ristoro', available: true },
-      { name: 'Parcheggio', available: true },
-      { name: 'Vendita munizioni', available: false },
-    ],
-    lines: [
-      { name: '10 m — coperta', distance: 10, indoor: true, calibers: ['.22 LR', 'aria compressa'] },
-      { name: '25 m — coperta', distance: 25, indoor: true, calibers: ['.22 LR', '9x21', '.45 ACP'] },
-      { name: '50 m — coperta', distance: 50, indoor: true, calibers: ['.22 LR', '.308 Win'] },
-    ],
-    hours: [
-      { day: 'Martedì', opens: '14:00', closes: '19:00' },
-      { day: 'Mercoledì', opens: '09:00', closes: '12:30' },
-      { day: 'Mercoledì', opens: '14:00', closes: '19:00' },
-      { day: 'Giovedì', opens: '14:00', closes: '19:00' },
-      { day: 'Venerdì', opens: '09:00', closes: '12:30' },
-      { day: 'Venerdì', opens: '14:00', closes: '19:00' },
-      { day: 'Sabato', opens: '09:00', closes: '17:00' },
-    ],
-  },
-};
-
-// ---------------------------------------------------------------------------
-// Static params per SSG (in produzione: query DB → lista slug univoci)
+// generateStaticParams - corretto con slugify() al posto del solo
+// .toLowerCase() (bug che rompeva le rotte con regioni/province accentate
+// o con spazi, es. "Reggio Emilia"). Vedi lib/slugify.ts.
 // ---------------------------------------------------------------------------
 export function generateStaticParams() {
-  return Object.keys(MOCK_RANGES).map((slug) => {
-    const range = MOCK_RANGES[slug]!;
-    return {
-      regione: range.regione.toLowerCase(),
-      provincia: range.provincia.toLowerCase(),
-      slug,
-    };
-  });
+  return DEMO_RANGES.map((range) => ({
+    regione: slugify(range.regione),
+    provincia: slugify(range.provincia),
+    slug: range.slug,
+  }));
 }
 
-// ---------------------------------------------------------------------------
-// Metadata dinamica
-// ---------------------------------------------------------------------------
 export async function generateMetadata(
   props: { params: Promise<{ slug: string }> },
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const range = MOCK_RANGES[slug];
+  const range = findRangeBySlug(slug);
   if (!range) return { title: 'Poligono non trovato' };
 
   return {
     title: range.name,
     description:
       range.description?.slice(0, 160) ??
-      `Poligono di tiro a ${range.comune}, ${range.provincia}. Linee disponibili: ${range.lines.map((l) => `${l.distance} m`).join(', ')}. Orari e informazioni.`,
+      `Poligono di tiro a ${range.comune}, ${range.provincia}.`,
     openGraph: {
       title: range.name,
-      description: `Poligono di tiro a ${range.comune} — ${range.lines.length} linee disponibili.`,
+      description: `Poligono di tiro a ${range.comune}, con ${range.lines.length} linee disponibili.`,
       type: 'article',
       locale: 'it_IT',
     },
@@ -153,67 +62,78 @@ export async function generateMetadata(
   };
 }
 
-// ---------------------------------------------------------------------------
-// Pagina
-// ---------------------------------------------------------------------------
 export default async function RangePage(
-  props: { params: Promise<{ slug: string }> },
+  props: { params: Promise<{ regione: string; provincia: string; slug: string }> },
 ) {
-  const { slug } = await props.params;
-  const range = MOCK_RANGES[slug];
+  const { regione, provincia, slug } = await props.params;
+  const range = findRangeBySlug(slug);
   if (!range) notFound();
 
-  const typeLabels: Record<string, string> = {
-    tsn: 'Sezione TSN',
-    privato: 'Poligono Privato',
-    tiro_a_volo: 'Tiro a Volo',
-    dinamico: 'Tiro Dinamico',
-    long_range: 'Long Range',
-  };
+  const status = todayStatus(range.hours, new Date());
+  const hourGroups = groupHours(range.hours);
+  const availableServices = range.services.filter((s) => s.available);
 
-  const today = new Date().toLocaleDateString('it-IT', { weekday: 'long' });
-  const todayHours = range.hours.filter(
-    (h) => h.day.toLowerCase() === today.toLowerCase(),
-  );
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SportsActivityLocation',
+    name: range.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: range.address,
+      addressLocality: range.comune,
+      postalCode: range.cap,
+      addressRegion: range.regione,
+      addressCountry: 'IT',
+    },
+    telephone: range.phone ?? undefined,
+    url: range.website ?? undefined,
+  };
 
   return (
     <>
-      {/* Breadcrumb */}
-      <nav className="breadcrumb container">
-        <Link href="/">Home</Link>
-        <span className="sep">›</span>
-        <Link href={`/poligoni/${range.regione.toLowerCase()}`}>
-          {range.regione}
-        </Link>
-        <span className="sep">›</span>
-        <Link
-          href={`/poligoni/${range.regione.toLowerCase()}/${range.provincia.toLowerCase()}`}
-        >
-          {range.provincia}
-        </Link>
-        <span className="sep">›</span>
-        <span>{range.name}</span>
-      </nav>
+      {/* JSON-LD statico, nessun input utente */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-      <article className="container range-page">
-        {/* Header */}
-        <header className="range-header">
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '/' },
+          { label: range.regione, href: `/poligoni/${regione}` },
+          { label: range.provincia, href: `/poligoni/${regione}/${provincia}` },
+          { label: range.name },
+        ]}
+      />
+
+      <Container className="py-8">
+        {/* Intestazione */}
+        <header className="flex flex-wrap items-start justify-between gap-8 border-b border-hairline pb-8">
           <div>
-            <span className="range-type">{typeLabels[range.type] ?? range.type}</span>
-            <h1 className="range-name">{range.name}</h1>
-            <p className="range-address">
+            <span className="inline-block rounded-full bg-accent-wash px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
+              {RANGE_TYPE_LABEL[range.type]}
+            </span>
+            <h1 className="mt-3 text-2xl font-semibold text-ink md:text-3xl">{range.name}</h1>
+            <p className="mt-2 text-ink-muted">
               {range.address}, {range.cap} {range.comune} ({range.provincia})
             </p>
+            <div className="mt-3">
+              <StatusPill open={status.open} label={status.label} />
+              {status.detail && <span className="ml-2 text-sm text-ink-muted">{status.detail}</span>}
+            </div>
           </div>
-          <div className="range-contacts">
+
+          <div className="flex flex-col gap-2">
             {range.phone && (
-              <a href={`tel:${range.phone}`} className="contact-link">
-                📞 {range.phone}
+              <a href={`tel:${range.phone}`} className="flex items-center gap-2 text-sm text-accent hover:text-accent-hover">
+                <Phone size={16} aria-hidden />
+                {range.phone}
               </a>
             )}
             {range.email && (
-              <a href={`mailto:${range.email}`} className="contact-link">
-                ✉️ {range.email}
+              <a href={`mailto:${range.email}`} className="flex items-center gap-2 text-sm text-accent hover:text-accent-hover">
+                <EnvelopeSimple size={16} aria-hidden />
+                {range.email}
               </a>
             )}
             {range.website && (
@@ -221,217 +141,129 @@ export default async function RangePage(
                 href={range.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="contact-link"
+                className="flex items-center gap-2 text-sm text-accent hover:text-accent-hover"
               >
-                🌐 Sito web
+                <Globe size={16} aria-hidden />
+                Sito web
               </a>
             )}
           </div>
         </header>
 
-        <div className="range-grid">
+        <div className="grid gap-10 py-8 md:grid-cols-2">
           {/* Descrizione */}
-          <section className="range-section">
-            <h2>Descrizione</h2>
-            <p>{range.description}</p>
-          </section>
+          {range.description && (
+            <section className="md:col-span-2">
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+                Descrizione
+              </h2>
+              <p className="mt-4 leading-relaxed text-ink-muted">{range.description}</p>
+            </section>
+          )}
 
           {/* Orari */}
-          <section className="range-section">
-            <h2>Orari di apertura</h2>
-            <table className="hours-table">
-              <thead>
-                <tr>
-                  <th>Giorno</th>
-                  <th>Apertura</th>
-                  <th>Chiusura</th>
-                </tr>
-              </thead>
-              <tbody>
-                {range.hours.map((h, i) => (
-                  <tr
-                    key={i}
-                    className={
-                      h.day.toLowerCase() === today.toLowerCase()
-                        ? 'today-row'
-                        : ''
-                    }
-                  >
-                    <td>{h.day}</td>
-                    <td>{h.opens}</td>
-                    <td>{h.closes}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {todayHours.length > 0 && (
-              <p className="today-hours">
-                Oggi: {todayHours.map((h) => `${h.opens}–${h.closes}`).join(', ')}
-              </p>
-            )}
+          <section>
+            <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+              Orari di apertura
+            </h2>
+            <dl className="mt-4 flex flex-col gap-2 text-sm">
+              {hourGroups.map((group) => (
+                <div key={group.days.join()} className="flex justify-between">
+                  <dt className="text-ink-muted">{formatDayRange(group.days)}</dt>
+                  <dd className="font-medium text-ink">
+                    {group.opensAt} - {group.closesAt}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </section>
 
           {/* Linee di tiro */}
-          <section className="range-section">
-            <h2>Linee di tiro</h2>
-            <div className="lines-grid">
-              {range.lines.map((line, i) => (
-                <div key={i} className="line-card">
-                  <h3 className="line-name">{line.name}</h3>
-                  <span className="line-badge">
-                    {line.indoor ? '🛖 Coperta' : '🌤️ Scoperta'}
-                  </span>
-                  <div className="line-calibers">
-                    <strong>Calibri:</strong>{' '}
-                    {line.calibers.join(', ')}
+          <section>
+            <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+              Linee di tiro
+            </h2>
+            <div className="mt-4 flex flex-col gap-3">
+              {range.lines.map((line) => (
+                <div key={line.name} className="rounded-panel border border-hairline bg-surface-sunken p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="font-medium text-ink">{line.name}</h3>
+                    <span className="flex items-center gap-1.5 text-xs text-ink-muted">
+                      {line.isIndoor ? (
+                        <House size={14} aria-hidden />
+                      ) : (
+                        <CloudSun size={14} aria-hidden />
+                      )}
+                      {line.isIndoor ? 'Coperta' : 'Scoperta'}
+                    </span>
                   </div>
+                  <p className="mt-2 text-sm text-ink-muted">
+                    <span className="font-medium text-ink">Calibri:</span> {line.calibers.join(', ')}
+                  </p>
+                  {line.disciplines.length > 0 && (
+                    <p className="mt-1 text-sm text-ink-muted">
+                      <span className="font-medium text-ink">Discipline:</span>{' '}
+                      {line.disciplines.map((d) => DISCIPLINE_LABEL[d]).join(', ')}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
           </section>
 
-          {/* Servizi */}
-          <section className="range-section">
-            <h2>Servizi</h2>
-            <div className="services-grid">
-              {range.services.map((s, i) => (
-                <div key={i} className="service-item">
-                  <span className={s.available ? 'check' : 'cross'}>
-                    {s.available ? '✅' : '❌'}
-                  </span>
-                  {s.name}
-                </div>
-              ))}
-            </div>
-          </section>
+          {/* Listino */}
+          {range.pricing.length > 0 && (
+            <section>
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+                Listino
+              </h2>
+              <dl className="mt-4 flex flex-col gap-3 text-sm">
+                {range.pricing.map((p) => (
+                  <div key={p.item} className="flex items-baseline justify-between gap-4">
+                    <dt className="text-ink-muted">
+                      {p.item}
+                      {p.note && <span className="block text-xs text-ink-faint">{p.note}</span>}
+                    </dt>
+                    <dd className="whitespace-nowrap font-medium text-ink">
+                      {formatPrice(p.priceCents)}
+                      {p.unit && <span className="text-ink-faint"> / {p.unit}</span>}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          )}
+
+          {/* Servizi - solo in positivo: quello che manca non interessa chi legge */}
+          {availableServices.length > 0 && (
+            <section>
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+                Servizi
+              </h2>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {availableServices.map((s) => (
+                  <li
+                    key={s.service}
+                    className="rounded-full bg-surface-sunken px-3 py-1.5 text-sm text-ink"
+                  >
+                    {s.service}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </div>
 
         {/* CTA prenotazione */}
-        <div className="range-cta">
+        <div className="border-t border-hairline py-10 text-center">
           <Link
             href={`/cerca?range=${range.slug}`}
-            className="btn btn-primary btn-large"
+            className="inline-block rounded-control bg-accent px-8 py-3 text-sm font-semibold text-accent-ink hover:bg-accent-hover"
           >
             Verifica disponibilità e prenota
           </Link>
         </div>
-
-        {/* Avvertenza — visibile su ogni scheda */}
-        <p className="ammo-disclaimer">{AMMO_DISCLAIMER}</p>
-      </article>
-
-      <style>{`
-        .breadcrumb {
-          display: flex;
-          align-items: center;
-          gap: var(--space-2);
-          padding-top: var(--space-6);
-          padding-bottom: var(--space-6);
-          font-size: 0.875rem;
-          color: var(--color-gray-500);
-        }
-        .breadcrumb a { color: var(--color-green-600); }
-        .breadcrumb a:hover { text-decoration: underline; }
-        .sep { color: var(--color-gray-300); }
-
-        .range-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: var(--space-8);
-          padding: var(--space-8) 0;
-          border-bottom: 1px solid var(--color-gray-200);
-          flex-wrap: wrap;
-        }
-        .range-type {
-          display: inline-block;
-          font-size: 0.75rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: var(--color-green-700);
-          background: var(--color-green-100);
-          padding: var(--space-1) var(--space-3);
-          border-radius: var(--radius-md);
-          margin-bottom: var(--space-3);
-        }
-        .range-name { font-size: 1.75rem; margin-bottom: var(--space-2); }
-        .range-address { color: var(--color-gray-500); }
-        .range-contacts { display: flex; flex-direction: column; gap: var(--space-2); }
-        .contact-link {
-          color: var(--color-green-700);
-          font-size: 0.875rem;
-          transition: color 0.15s;
-        }
-        .contact-link:hover { color: var(--color-green-500); }
-
-        .range-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: var(--space-8);
-          padding: var(--space-8) 0;
-        }
-        .range-section h2 {
-          font-size: 1.125rem;
-          margin-bottom: var(--space-4);
-          padding-bottom: var(--space-2);
-          border-bottom: 2px solid var(--color-green-100);
-        }
-        .range-section p { color: var(--color-gray-600); line-height: 1.7; }
-
-        .hours-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-        .hours-table th {
-          text-align: left;
-          font-weight: 600;
-          color: var(--color-gray-500);
-          padding-bottom: var(--space-2);
-          border-bottom: 1px solid var(--color-gray-200);
-        }
-        .hours-table td { padding: var(--space-2) 0; border-bottom: 1px solid var(--color-gray-100); }
-        .today-row td { color: var(--color-green-700); font-weight: 600; }
-        .today-hours {
-          margin-top: var(--space-3);
-          font-weight: 600;
-          color: var(--color-green-700);
-          font-size: 0.875rem;
-        }
-
-        .lines-grid { display: flex; flex-direction: column; gap: var(--space-4); }
-        .line-card {
-          padding: var(--space-4);
-          background: var(--color-gray-50);
-          border-radius: var(--radius-lg);
-          border: 1px solid var(--color-gray-200);
-        }
-        .line-name { font-size: 1rem; margin-bottom: var(--space-2); }
-        .line-badge { font-size: 0.8125rem; color: var(--color-gray-500); }
-        .line-calibers { font-size: 0.875rem; color: var(--color-gray-600); margin-top: var(--space-2); }
-
-        .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
-        .service-item { font-size: 0.875rem; display: flex; align-items: center; gap: var(--space-2); }
-
-        .range-cta {
-          text-align: center;
-          padding: var(--space-12) 0;
-          border-top: 1px solid var(--color-gray-200);
-        }
-
-        .ammo-disclaimer {
-          font-size: 0.75rem;
-          color: var(--color-gray-400);
-          text-align: center;
-          padding: var(--space-4) 0 var(--space-8);
-          max-width: 500px;
-          margin: 0 auto;
-          line-height: 1.5;
-        }
-
-        @media (max-width: 768px) {
-          .range-grid { grid-template-columns: 1fr; }
-          .range-header { flex-direction: column; }
-          .services-grid { grid-template-columns: 1fr; }
-        }
-      `}</style>
+      </Container>
     </>
   );
 }

@@ -6,95 +6,10 @@
  */
 import { type NextRequest } from 'next/server';
 import { rangeSearchQuerySchema } from '@poligoni/schemas/ranges';
-import { badRequest, json, methodNotAllowed, validate, withCache } from '../../../_utils';
+import { json, methodNotAllowed, validate, withCache } from '../../../_utils';
+import { DEMO_RANGES, toSearchResult } from '@/lib/fixtures';
 
-// ---------------------------------------------------------------------------
-// Mock data — in produzione: query Supabase/PostGIS
-// ---------------------------------------------------------------------------
-import type { RangeSearchResult, RangeType, RangeStatus } from '@poligoni/schemas/ranges';
-
-const MOCK_RESULTS: (RangeSearchResult & { lat: number; lng: number })[] = [
-  {
-    id: 'a1b2c3d4-0001-4000-8000-000000000001',
-    slug: 'tsn-milano',
-    name: 'TSN Milano',
-    type: 'tsn' as RangeType,
-    comune: 'Milano',
-    provincia: 'Milano',
-    regione: 'Lombardia',
-    distanceKm: null,
-    lines: ['10 m', '25 m', '50 m'],
-    hasIndoor: true,
-    openNow: true,
-    status: 'partner' as RangeStatus,
-    lat: 45.467,
-    lng: 9.168,
-  },
-  {
-    id: 'a1b2c3d4-0002-4000-8000-000000000002',
-    slug: 'tsn-roma',
-    name: 'TSN Roma',
-    type: 'tsn' as RangeType,
-    comune: 'Roma',
-    provincia: 'Roma',
-    regione: 'Lazio',
-    distanceKm: null,
-    lines: ['10 m', '25 m', '50 m'],
-    hasIndoor: true,
-    openNow: false,
-    status: 'partner' as RangeStatus,
-    lat: 41.924,
-    lng: 12.462,
-  },
-  {
-    id: 'a1b2c3d4-0003-4000-8000-000000000003',
-    slug: 'poligono-corsico',
-    name: 'Poligono di Corsico',
-    type: 'privato' as RangeType,
-    comune: 'Corsico',
-    provincia: 'Milano',
-    regione: 'Lombardia',
-    distanceKm: null,
-    lines: ['25 m', '50 m'],
-    hasIndoor: false,
-    openNow: true,
-    status: 'censito' as RangeStatus,
-    lat: 45.430,
-    lng: 9.110,
-  },
-  {
-    id: 'a1b2c3d4-0004-4000-8000-000000000004',
-    slug: 'tsn-napoli',
-    name: 'TSN Napoli',
-    type: 'tsn' as RangeType,
-    comune: 'Napoli',
-    provincia: 'Napoli',
-    regione: 'Campania',
-    distanceKm: null,
-    lines: ['10 m', '25 m'],
-    hasIndoor: true,
-    openNow: true,
-    status: 'censito' as RangeStatus,
-    lat: 40.853,
-    lng: 14.250,
-  },
-  {
-    id: 'a1b2c3d4-0005-4000-8000-000000000005',
-    slug: 'tsn-torino',
-    name: 'TSN Torino',
-    type: 'tsn' as RangeType,
-    comune: 'Torino',
-    provincia: 'Torino',
-    regione: 'Piemonte',
-    distanceKm: null,
-    lines: ['10 m', '25 m', '50 m'],
-    hasIndoor: true,
-    openNow: false,
-    status: 'censito' as RangeStatus,
-    lat: 45.070,
-    lng: 7.687,
-  },
-];
+const MOCK_RESULTS = DEMO_RANGES.map(toSearchResult);
 
 /** Distanza approssimativa in km con formula Haversine. */
 function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -117,8 +32,8 @@ export async function GET(request: NextRequest) {
   if ('error' in parsed) return parsed.error;
 
   const { lat, lng, radius, calibers, disciplines, indoor, type, limit } = parsed.data;
+  void disciplines; // In produzione: filtro per disciplina dalle linee
 
-  // Filtra e calcola distanze
   const results = MOCK_RESULTS
     .map((r) => ({
       ...r,
@@ -127,11 +42,7 @@ export async function GET(request: NextRequest) {
     .filter((r) => r.distanceKm <= (radius ?? 50))
     .filter((r) => !type || r.type === type)
     .filter((r) => !indoor || r.hasIndoor === indoor)
-    .filter((r) => {
-      if (!calibers || calibers.length === 0) return true;
-      // In produzione: filter per calibri dalle linee
-      return true;
-    })
+    .filter(() => !calibers || calibers.length === 0 || true) // In produzione: filtro per calibri dalle linee
     .sort((a, b) => a.distanceKm - b.distanceKm)
     .slice(0, limit);
 

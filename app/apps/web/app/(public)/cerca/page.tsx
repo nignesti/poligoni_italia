@@ -1,103 +1,76 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import { MagnifyingGlass, CaretRight } from '@phosphor-icons/react/ssr';
+import { Container } from '@/components/Container';
+import { DEMO_RANGES } from '@/lib/fixtures';
+import { slugify } from '@/lib/slugify';
+import { RANGE_TYPE_LABEL } from '@/lib/format';
+import type { RangeType } from '@poligoni/schemas/ranges';
 
 // ---------------------------------------------------------------------------
-// Cerca — pagina interattiva con filtri
-// Piano_Sviluppo_App.md §7.1 — /cerca → Client, mappa e filtri interattivi
+// Cerca: pagina interattiva con filtri (Piano_Sviluppo_App.md §7.1, client,
+// mappa e filtri interattivi). La mappa è demandata a T3: qui solo elenco e
+// filtri testuali, che coprono già la maggior parte dei casi d'uso.
 // ---------------------------------------------------------------------------
 
-const MOCK_RESULTS = [
-  {
-    slug: 'tsn-milano',
-    name: 'TSN Milano',
-    comune: 'Milano',
-    provincia: 'Milano',
-    regione: 'Lombardia',
-    type: 'tsn',
-    lines: ['10 m', '25 m', '50 m'],
-    distance: null as number | null,
-  },
-  {
-    slug: 'tsn-roma',
-    name: 'TSN Roma',
-    comune: 'Roma',
-    provincia: 'Roma',
-    regione: 'Lazio',
-    type: 'tsn',
-    lines: ['10 m', '25 m', '50 m'],
-    distance: null as number | null,
-  },
-  {
-    slug: 'poligono-corsico',
-    name: 'Poligono di Corsico',
-    comune: 'Corsico',
-    provincia: 'Milano',
-    regione: 'Lombardia',
-    type: 'privato',
-    lines: ['25 m', '50 m'],
-    distance: null as number | null,
-  },
-];
-
-const TYPE_FILTERS = [
+const TYPE_FILTERS: { value: RangeType | ''; label: string }[] = [
   { value: '', label: 'Tutti i tipi' },
   { value: 'tsn', label: 'Sezioni TSN' },
-  { value: 'privato', label: 'Poligoni Privati' },
-  { value: 'tiro_a_volo', label: 'Tiro a Volo' },
-] as const;
+  { value: 'privato', label: 'Poligoni privati' },
+  { value: 'tiro_a_volo', label: 'Tiro a volo' },
+  { value: 'dinamico', label: 'Campi dinamici' },
+  { value: 'long_range', label: 'Long range' },
+];
 
 export default function SearchPage() {
   const [search, setSearch] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState<RangeType | ''>('');
 
-  const filtered = MOCK_RESULTS.filter((r) => {
-    if (search) {
-      const q = search.toLowerCase();
-      if (
-        !r.name.toLowerCase().includes(q) &&
-        !r.comune.toLowerCase().includes(q) &&
-        !r.provincia.toLowerCase().includes(q)
-      ) {
-        return false;
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return DEMO_RANGES.filter((r) => {
+      if (q) {
+        const matches =
+          r.name.toLowerCase().includes(q) ||
+          r.comune.toLowerCase().includes(q) ||
+          r.provincia.toLowerCase().includes(q);
+        if (!matches) return false;
       }
-    }
-    if (typeFilter && r.type !== typeFilter) return false;
-    return true;
-  });
+      if (typeFilter && r.type !== typeFilter) return false;
+      return true;
+    });
+  }, [search, typeFilter]);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
   }, []);
 
   return (
-    <div className="search-page">
-      {/* Header */}
-      <header className="search-header">
-        <nav className="container search-nav">
-          <Link href="/" className="logo">
-            <span className="logo-icon">🎯</span>
-            <span className="logo-text">Poligoni Italia</span>
-          </Link>
-        </nav>
-        <div className="container">
-          <h1 className="search-title">Cerca un poligono</h1>
-          <form onSubmit={handleSubmit} className="search-form">
-            <div className="search-input-wrap">
-              <span className="search-icon">🔍</span>
+    <div className="pb-16">
+      <div className="border-b border-hairline bg-surface-sunken py-10">
+        <Container>
+          <h1 className="text-2xl font-semibold text-ink md:text-3xl">Cerca un poligono</h1>
+          <form onSubmit={handleSubmit} className="mt-6 flex max-w-2xl flex-col gap-3 sm:flex-row">
+            <div className="relative flex-1">
+              <MagnifyingGlass
+                size={18}
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-faint"
+                aria-hidden
+              />
               <input
                 type="text"
-                placeholder="Città, provincia o nome del poligono…"
+                placeholder="Città, provincia o nome del poligono"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="search-input"
+                className="w-full rounded-control border border-hairline-strong bg-surface py-3 pl-11 pr-4 text-sm text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
               />
             </div>
             <select
               value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="search-select"
+              onChange={(e) => setTypeFilter(e.target.value as RangeType | '')}
+              className="rounded-control border border-hairline-strong bg-surface px-4 py-3 text-sm text-ink focus:border-accent focus:outline-none"
             >
               {TYPE_FILTERS.map((f) => (
                 <option key={f.value} value={f.value}>
@@ -106,152 +79,44 @@ export default function SearchPage() {
               ))}
             </select>
           </form>
-        </div>
-      </header>
+        </Container>
+      </div>
 
-      {/* Results */}
-      <div className="container search-results">
-        <p className="results-count">{filtered.length} risultati</p>
+      <Container className="pt-8">
+        <p className="text-sm text-ink-muted">{filtered.length} risultati</p>
+
         {filtered.length === 0 ? (
-          <div className="no-results">
-            <p>Nessun poligono trovato. Prova a modificare i filtri.</p>
-          </div>
+          <p className="py-16 text-center text-ink-muted">
+            Nessun poligono trovato. Prova a modificare i filtri.
+          </p>
         ) : (
-          <div className="results-list">
+          <div className="mt-4 flex flex-col gap-3">
             {filtered.map((r) => (
               <Link
                 key={r.slug}
-                href={`/poligoni/${r.regione.toLowerCase()}/${r.provincia.toLowerCase()}/${r.slug}`}
-                className="result-card"
+                href={`/poligoni/${slugify(r.regione)}/${slugify(r.provincia)}/${r.slug}`}
+                className="flex items-center justify-between gap-4 rounded-panel border border-hairline bg-surface px-6 py-5 hover:border-accent hover:shadow-panel"
               >
-                <div className="result-info">
-                  <h2 className="result-name">{r.name}</h2>
-                  <p className="result-location">
+                <div>
+                  <h2 className="font-medium text-ink">{r.name}</h2>
+                  <p className="mt-1 text-sm text-ink-muted">
                     {r.comune} ({r.provincia})
                   </p>
-                  <p className="result-lines">
-                    Linee: {r.lines.join(', ')}
+                  <p className="mt-1 text-xs text-ink-faint">
+                    Linee: {r.lines.map((l) => `${l.distanceMeters} m`).join(', ')}
                   </p>
                 </div>
-                <div className="result-meta">
-                  <span className="result-type">
-                    {r.type === 'tsn'
-                      ? 'TSN'
-                      : r.type === 'privato'
-                        ? 'Privato'
-                        : 'Tiro a Volo'}
+                <div className="flex items-center gap-4">
+                  <span className="rounded-full bg-accent-wash px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
+                    {RANGE_TYPE_LABEL[r.type]}
                   </span>
-                  <span className="result-arrow">→</span>
+                  <CaretRight size={18} className="text-ink-faint" aria-hidden />
                 </div>
               </Link>
             ))}
           </div>
         )}
-      </div>
-
-      <style>{`
-        .search-header {
-          background: linear-gradient(135deg, #0d3b0d 0%, #1b5e20 100%);
-          color: white;
-          padding-bottom: var(--space-12);
-        }
-        .search-nav {
-          display: flex;
-          align-items: center;
-          padding-top: var(--space-6);
-          padding-bottom: var(--space-8);
-        }
-        .search-nav .logo { color: white; }
-        .search-title {
-          font-size: 2rem;
-          color: white;
-          margin-bottom: var(--space-6);
-        }
-        .search-form {
-          display: flex;
-          gap: var(--space-3);
-          max-width: 640px;
-        }
-        .search-input-wrap {
-          flex: 1;
-          position: relative;
-        }
-        .search-icon {
-          position: absolute;
-          left: var(--space-4);
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 1.125rem;
-        }
-        .search-input {
-          width: 100%;
-          padding: var(--space-4) var(--space-4) var(--space-4) var(--space-10);
-          border: none;
-          border-radius: var(--radius-lg);
-          font-size: 1rem;
-          background: white;
-          color: var(--color-gray-900);
-        }
-        .search-input::placeholder { color: var(--color-gray-400); }
-        .search-input:focus { outline: 2px solid var(--color-green-400); }
-        .search-select {
-          padding: var(--space-4);
-          border: none;
-          border-radius: var(--radius-lg);
-          font-size: 0.875rem;
-          background: white;
-          color: var(--color-gray-700);
-        }
-        .search-select:focus { outline: 2px solid var(--color-green-400); }
-
-        .search-results { padding: var(--space-8) 0 var(--space-16); }
-        .results-count {
-          font-size: 0.875rem;
-          color: var(--color-gray-500);
-          margin-bottom: var(--space-4);
-        }
-        .results-list { display: flex; flex-direction: column; gap: var(--space-3); }
-        .result-card {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: var(--space-5) var(--space-6);
-          background: white;
-          border: 1px solid var(--color-gray-200);
-          border-radius: var(--radius-lg);
-          transition: border-color 0.15s, box-shadow 0.15s;
-        }
-        .result-card:hover {
-          border-color: var(--color-green-400);
-          box-shadow: var(--shadow-md);
-        }
-        .result-name { font-size: 1.125rem; margin-bottom: var(--space-1); }
-        .result-location { font-size: 0.875rem; color: var(--color-gray-500); margin-bottom: var(--space-1); }
-        .result-lines { font-size: 0.8125rem; color: var(--color-gray-400); }
-        .result-meta { display: flex; align-items: center; gap: var(--space-4); }
-        .result-type {
-          font-size: 0.75rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: var(--color-green-700);
-          background: var(--color-green-50);
-          padding: var(--space-1) var(--space-3);
-          border-radius: var(--radius-md);
-        }
-        .result-arrow { color: var(--color-gray-300); font-size: 1.25rem; }
-
-        .no-results {
-          text-align: center;
-          padding: var(--space-16) 0;
-          color: var(--color-gray-500);
-        }
-
-        @media (max-width: 768px) {
-          .search-form { flex-direction: column; }
-          .search-title { font-size: 1.5rem; }
-        }
-      `}</style>
+      </Container>
     </div>
   );
 }
