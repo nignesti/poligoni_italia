@@ -50,7 +50,7 @@ export default function PassProPage() {
           </h1>
           <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/80">
             Il piano gratuito basta per iniziare. Pass Pro toglie i limiti quando il diario
-            diventa un'abitudine.
+            diventa un&apos;abitudine.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
