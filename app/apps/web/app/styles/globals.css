@@ -42,11 +42,11 @@
   --ink-muted: #57534e;
   --ink-faint: #78716c;
 
-  /* Accento - verde di brand, unico su tutta la pagina */
-  --accent: #1b5e20;
-  --accent-hover: #145214;
+  /* Accento - blu BMW, unico su tutta la pagina */
+  --accent: #0066b1;
+  --accent-hover: #004a87;
   --accent-ink: #ffffff;
-  --accent-wash: #f0f7f0;
+  --accent-wash: #e8f2ff;
 
   /* Stato semantico - non decorativo */
   --state-error: #b91c1c;
@@ -55,8 +55,8 @@
   --state-warning-wash: #fffbeb;
   --state-success: #1b5e20;
 
-  --radius-control: 8px;
-  --radius-panel: 12px;
+  --radius-control: 4px;
+  --radius-panel: 8px;
 
   --shadow-panel: 0 1px 2px 0 rgb(28 25 23 / 0.05), 0 1px 3px 0 rgb(28 25 23 / 0.06);
 }
@@ -73,10 +73,10 @@
     --ink-muted: #b9b3a6;
     --ink-faint: #928c7e;
 
-    --accent: #6fbf73;
-    --accent-hover: #8fd192;
-    --accent-ink: #0d1f0d;
-    --accent-wash: #16261a;
+    --accent: #3d9aff;
+    --accent-hover: #5aafff;
+    --accent-ink: #001a4d;
+    --accent-wash: #0d1f38;
 
     --state-error: #f28b82;
     --state-error-wash: #2a1615;
@@ -248,22 +248,22 @@
 }
 
 .btn-primary {
-  background-color: var(--color-green-600);
+  background-color: #0066b1;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-green-700);
+  background-color: #004a87;
 }
 
 .btn-secondary {
   background-color: white;
-  color: var(--color-green-600);
-  border: 2px solid var(--color-green-600);
+  color: #0066b1;
+  border: 2px solid #0066b1;
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-green-50);
+  background-color: #e8f2ff;
 }
 
 .btn-ghost {

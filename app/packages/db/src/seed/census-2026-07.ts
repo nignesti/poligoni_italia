@@ -49,6 +49,15 @@ import type { RangeType } from '../schema/ranges.js';
  *   "Poggio dei Castagni", "Campi FITDS Triveneto", "Campi FITDS
  *   Emilia-Toscana" sono esclusi: il documento originale li marca "da
  *   verificare" o senza comune, non descrivono una struttura specifica.
+ * - "A.B. Poligoni s.r.l." (Firenze, Via Cardinal Latino 20) è stata
+ *   rimossa (31/07/2026): non è un poligono ma un'azienda di
+ *   progettazione/costruzione/manutenzione di poligoni (tra i cui clienti
+ *   figurano anche i Carabinieri), sede reale a Casciana Terme Lari (PI),
+ *   non Firenze. L'indirizzo fiorentino nel documento originale era
+ *   inventato -- errore individuato dall'utente controllando manualmente
+ *   una singola riga, non da una verifica sistematica: le altre 17 righe
+ *   "privato" sono state ricontrollate una per una dopo questo episodio e
+ *   risultano tutte reali.
  */
 
 export interface CensusRow {
@@ -185,16 +194,6 @@ const fitavFitdsRows: CensusRow[] = [
  * poligono militare (fuori perimetro) e le righe senza alcun dato utile.
  */
 const privateRows: CensusRow[] = [
-  {
-    name: 'A.B. Poligoni s.r.l.',
-    comune: 'Firenze',
-    provinciaSigla: 'FI',
-    regione: 'Toscana',
-    type: 'privato',
-    address: 'Via Cardinal Latino 20',
-    phone: '055 68.02.096',
-    source: 'censimento_armietiro_2026',
-  },
   {
     name: 'A.S.D. Xiridia Shooting',
     comune: 'Floridia',

@@ -38,7 +38,7 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#0d3b0d] to-[#1b5e20]">
+      <section className="bg-gradient-to-br from-[#1a1a1a] to-[#000000]">
         <Container className="py-20 text-center md:py-24">
           <h1 className="mx-auto max-w-2xl text-4xl font-bold leading-tight text-white md:text-5xl">
             Trova un poligono, prenota senza telefonare
@@ -50,7 +50,7 @@ export default async function HomePage() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/cerca"
-              className="rounded-control bg-white px-6 py-3 text-sm font-semibold text-[#1b5e20] hover:bg-white/90"
+              className="rounded-control bg-[#0066b1] px-6 py-3 text-sm font-semibold text-white hover:bg-[#004a87]"
             >
               Cerca un poligono
             </Link>
@@ -120,7 +120,7 @@ export default async function HomePage() {
       {/* CTA gestori */}
       <section className="bg-surface-sunken py-20">
         <Container>
-          <div className="rounded-panel bg-gradient-to-br from-[#145214] to-[#1b5e20] px-8 py-14 text-center">
+          <div className="rounded-panel bg-gradient-to-br from-[#1a1a1a] to-[#000000] px-8 py-14 text-center">
             <h2 className="text-3xl font-semibold text-white">Gestisci un poligono?</h2>
             <p className="mx-auto mt-3 max-w-md text-white/80">
               Porta la tua struttura online in pochi minuti. Gestisci orari, prezzi e prenotazioni
@@ -128,7 +128,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/gestori"
-              className="mt-7 inline-block rounded-control bg-white px-6 py-3 text-sm font-semibold text-[#1b5e20] hover:bg-white/90"
+              className="mt-7 inline-block rounded-control bg-[#0066b1] px-6 py-3 text-sm font-semibold text-white hover:bg-[#004a87]"
             >
               Aggiungi la tua struttura
             </Link>
