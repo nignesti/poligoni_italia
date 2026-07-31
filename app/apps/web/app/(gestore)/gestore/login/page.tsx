@@ -2,57 +2,45 @@
 
 import Link from 'next/link';
 import { Suspense, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next') || '/gestore';
   const oauthFailed = searchParams.get('error') === 'auth_failed';
 
-  const [step, setStep] = useState<'email' | 'code'>('email');
   const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const [error, setError] = useState<string | null>(
     oauthFailed ? 'Accesso con Google non riuscito. Riprova.' : null,
   );
 
   const supabase = createClient();
 
-  const handleSendCode = async (e: React.FormEvent) => {
+  const handleSendLink = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { shouldCreateUser: true },
+      options: {
+        shouldCreateUser: true,
+        emailRedirectTo: redirectTo,
+      },
     });
-    setLoading(false);
-    if (error) {
-      setError('Non siamo riusciti a inviare il codice. Riprova.');
-      return;
-    }
-    setStep('code');
-  };
 
-  const handleVerifyCode = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token: code,
-      type: 'email',
-    });
     setLoading(false);
     if (error) {
-      setError('Codice non valido o scaduto. Controlla e riprova.');
+      setError('Non siamo riusciti a inviare il link di accesso. Riprova.');
       return;
     }
-    router.push(next);
-    router.refresh();
+
+    setEmailSent(true);
   };
 
   const handleGoogleLogin = async () => {
@@ -79,14 +67,14 @@ function LoginForm() {
           🎯 <span>Poligoni Italia</span>
         </Link>
 
-        {step === 'email' ? (
+        {!emailSent ? (
           <>
             <h1 className="login-title">Accedi alla dashboard</h1>
             <p className="login-subtitle">
-              Inserisci la tua email: ti mandiamo un codice per accedere, senza password.
+              Inserisci la tua email: ti mandiamo un link per accedere, senza password.
             </p>
 
-            <form className="login-form" onSubmit={handleSendCode}>
+            <form className="login-form" onSubmit={handleSendLink}>
               <label className="login-label" htmlFor="email">
                 Email
               </label>
@@ -102,7 +90,7 @@ function LoginForm() {
               />
               {error && <p className="login-error">{error}</p>}
               <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
-                {loading ? 'Invio…' : 'Invia codice di accesso'}
+                {loading ? 'Invio…' : 'Invia link di accesso'}
               </button>
             </form>
 
@@ -129,45 +117,20 @@ function LoginForm() {
           <>
             <h1 className="login-title">Controlla la tua email</h1>
             <p className="login-subtitle">
-              Abbiamo mandato un codice a <strong>{email}</strong>. Inseriscilo qui sotto.
+              Abbiamo inviato un link di accesso a <strong>{email}</strong>. Aprilo per entrare nella dashboard.
             </p>
 
-            <form className="login-form" onSubmit={handleVerifyCode}>
-              <label className="login-label" htmlFor="code">
-                Codice di accesso
-              </label>
-              <input
-                id="code"
-                type="text"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                className="login-input login-code-input"
-                placeholder="123456"
-                value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-                required
-                disabled={loading}
-                autoFocus
-              />
-              {error && <p className="login-error">{error}</p>}
-              <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
-                {loading ? 'Verifica…' : 'Verifica e accedi'}
-              </button>
-            </form>
-
-            <p className="login-footer">
-              <button
-                type="button"
-                className="login-back-link"
-                onClick={() => {
-                  setStep('email');
-                  setCode('');
-                  setError(null);
-                }}
-              >
-                Usa un&apos;altra email
-              </button>
-            </p>
+            <button
+              type="button"
+              className="btn btn-primary login-btn"
+              onClick={() => {
+                setEmailSent(false);
+                setEmail('');
+                setError(null);
+              }}
+            >
+              Usa un&apos;altra email
+            </button>
           </>
         )}
       </div>
