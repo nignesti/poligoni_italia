@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './styles/globals.css';
 
 // Self-hosted da Next in fase di build: nessuna richiesta bloccante a
@@ -57,7 +58,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it" className={inter.variable}>
-      <body className="bg-surface text-ink font-sans antialiased">{children}</body>
+      <body className="bg-surface text-ink font-sans antialiased">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
