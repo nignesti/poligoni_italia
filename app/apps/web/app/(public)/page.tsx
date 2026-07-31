@@ -66,8 +66,11 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-[var(--surface-dark-from)] to-[var(--surface-dark-to)]">
         <Container className="py-20 text-center md:py-24">
-          <h1 className="mx-auto max-w-2xl text-4xl font-bold leading-tight text-white md:text-5xl">
-            Trova un poligono, richiedi la tua linea senza telefonare
+          <h1 className="mx-auto max-w-2xl text-4xl font-extrabold tracking-tight leading-tight text-white md:text-5xl">
+            Trova un poligono, richiedi la tua linea{' '}
+            <span className="box-decoration-clone rounded-lg bg-accent px-2 text-accent-ink">
+              senza telefonare
+            </span>
           </h1>
           <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/80">
             Orari, calibri e disponibilità aggiornati. Confronta le strutture vicino a te e

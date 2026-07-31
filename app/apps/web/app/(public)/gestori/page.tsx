@@ -10,6 +10,7 @@ import {
   Check,
 } from '@phosphor-icons/react/ssr';
 import { Container } from '@/components/Container';
+import { FaqAccordion } from './FaqAccordion';
 
 export const metadata: Metadata = {
   title: 'Sei un gestore? Porta il tuo poligono online',
@@ -99,8 +100,11 @@ export default function GestoriPage() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-[var(--surface-dark-from)] to-[var(--surface-dark-to)]">
         <Container className="py-20 text-center">
-          <h1 className="mx-auto max-w-2xl text-4xl font-bold leading-tight text-white md:text-5xl">
-            Porta il tuo poligono online
+          <h1 className="mx-auto max-w-2xl text-4xl font-extrabold tracking-tight leading-tight text-white md:text-5xl">
+            Porta il tuo poligono{' '}
+            <span className="box-decoration-clone rounded-lg bg-accent px-2 text-accent-ink">
+              online
+            </span>
           </h1>
           <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/80">
             La dashboard gratuita per gestire orari, prezzi e prenotazioni. Nuovi tiratori ti
@@ -155,9 +159,9 @@ export default function GestoriPage() {
             {PLANS.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative flex flex-col gap-6 rounded-panel bg-surface p-8 shadow-panel ${
+                className={`relative flex flex-col gap-6 rounded-panel bg-surface p-8 shadow-panel transition-transform hover:-translate-y-1 ${
                   plan.highlighted
-                    ? 'border border-accent'
+                    ? 'border-2 border-accent'
                     : 'border border-hairline'
                 }`}
               >
@@ -169,7 +173,9 @@ export default function GestoriPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-ink">{plan.name}</h3>
                   <p className="mt-1">
-                    <span className="text-3xl font-bold text-ink">{plan.price}</span>
+                    <span className="text-4xl font-black tracking-tight tabular-nums text-ink md:text-5xl">
+                      {plan.price}
+                    </span>
                     <span className="text-sm text-ink-muted">{plan.period}</span>
                   </p>
                 </div>
@@ -193,6 +199,18 @@ export default function GestoriPage() {
                 </a>
               </div>
             ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20">
+        <Container>
+          <div className="mx-auto max-w-xl text-center">
+            <h2 className="text-3xl font-semibold text-ink">Domande frequenti</h2>
+          </div>
+          <div className="mt-12">
+            <FaqAccordion />
           </div>
         </Container>
       </section>
