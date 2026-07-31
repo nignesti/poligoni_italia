@@ -14,6 +14,7 @@ import { and, asc, eq, ne, sql } from 'drizzle-orm';
 import { slugify } from '@poligoni/core/slug';
 import type { Range, RangeType, RangeStatus } from '@poligoni/schemas/ranges';
 import { getDb } from '../client.js';
+import { PROVINCIA_BY_SIGLA } from '../seed/province-sigle.js';
 import {
   ranges,
   rangeHours,
@@ -80,6 +81,44 @@ function normalizeRegione(raw: string): string {
   return REGIONE_CANONICA_BY_LOWER.get(trimmed.toLowerCase()) ?? trimmed;
 }
 
+/**
+ * Stesso problema di normalizeRegione ma per il comune: alcune fonti
+ * importate scrivono il nome in TUTTO MAIUSCOLO (es. "GUASTALLA" invece di
+ * "Guastalla"). Qui non esiste un elenco canonico di ~8000 comuni italiani
+ * da usare come lookup: normalizziamo solo quando la stringa è interamente
+ * maiuscola (pattern netto e riconoscibile), senza toccare le altre — un
+ * title-case generico applicato a tutti rischierebbe di corrompere nomi
+ * già corretti (es. "L'Aquila", "Reggio nell'Emilia").
+ */
+function normalizeComune(raw: string): string {
+  const trimmed = raw.trim();
+  if (trimmed !== trimmed.toUpperCase() || trimmed === trimmed.toLowerCase()) {
+    return trimmed;
+  }
+  return trimmed
+    .toLowerCase()
+    .split(/(\s+|'|’|-)/)
+    .map((part) => (/^[a-zà-öø-ÿ]/.test(part) ? part.charAt(0).toUpperCase() + part.slice(1) : part))
+    .join('');
+}
+
+/**
+ * Alcune fonti importate (Targetfun, tutte le 72 righe del batch — vedi
+ * TARGETFUN_IMPORT_LOG.md) scrivono la provincia come sigla ("LE") invece
+ * che per esteso ("Lecce"), a differenza del censimento originale: senza
+ * normalizzazione, le pagine provincia si frammentano nello stesso modo
+ * delle regioni duplicate. Espande solo le sigle a 2 lettere riconosciute
+ * in PROVINCIA_BY_SIGLA; il resto (già per esteso) resta invariato.
+ */
+function normalizeProvincia(raw: string): string {
+  const trimmed = raw.trim();
+  if (/^[A-Za-z]{2}$/.test(trimmed)) {
+    const nomeCompleto = PROVINCIA_BY_SIGLA[trimmed.toUpperCase()];
+    if (nomeCompleto) return nomeCompleto;
+  }
+  return trimmed;
+}
+
 const locationGeoJson = sql<string>`ST_AsGeoJSON(${ranges.location})`;
 
 /** Tutte le strutture pubblicabili (esclude 'inattivo'), ordinate per nome. */
@@ -103,6 +142,8 @@ export async function listRangeSummaries(): Promise<RangeSummary[]> {
 
   return rows.map(({ locationGeoJson: geoJson, ...r }) => ({
     ...r,
+    comune: normalizeComune(r.comune),
+    provincia: normalizeProvincia(r.provincia),
     regione: normalizeRegione(r.regione),
     location: parseGeoJsonPoint(geoJson),
   }));
@@ -165,8 +206,8 @@ export async function findRangeBySlug(slug: string): Promise<Range | null> {
     // (packages/db/scripts/run-seed.ts) — normalizzati qui perché lo schema
     // Zod richiede min(1) quando il campo è valorizzato.
     address: base.address || null,
-    comune: base.comune,
-    provincia: base.provincia,
+    comune: normalizeComune(base.comune),
+    provincia: normalizeProvincia(base.provincia),
     regione: normalizeRegione(base.regione),
     cap: base.cap || null,
     location: parseGeoJsonPoint(base.locationGeoJson),
