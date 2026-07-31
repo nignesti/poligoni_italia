@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { appClient } from "@/api/appClient";
 import { getRange } from "@/api/rangesApi";
-import { ArrowLeft, Clock, Calendar, Check, Loader2 } from "lucide-react";
+import { createBookingRequest } from "@/api/requestsApi";
+import { ArrowLeft, Clock, Check, Loader2, CheckCircle2 } from "lucide-react";
 
+// Nessuna struttura ha ancora linee/orari popolati in range_lines (Piano
+// §4.1): senza quei dati non esiste uno slot reale da prenotare. Questo
+// flusso raccoglie data/ora/durata desiderate e le inoltra come richiesta
+// di disponibilità (booking_requests), non come prenotazione confermata.
 const TIME_SLOTS = [
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
   "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
@@ -22,13 +26,15 @@ export default function BookingPage() {
   const navigate = useNavigate();
   const [range, setRange] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [step, setStep] = useState(1); // 1: date/time, 2: details, 3: confirm
+  const [step, setStep] = useState(1); // 1: date/time, 2: contatti, 3: riepilogo
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
   const [duration, setDuration] = useState(60);
-  const [line, setLine] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
-  const [booking, setBooking] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -45,37 +51,22 @@ export default function BookingPage() {
     })();
   }, [id]);
 
-  const getEndDate = (startTime, durMin) => {
-    const [h, m] = startTime.split(":").map(Number);
-    const total = h * 60 + m + durMin;
-    const eh = Math.floor(total / 60) % 24;
-    const em = total % 60;
-    return `${String(eh).padStart(2, "0")}:${String(em).padStart(2, "0")}`;
-  };
-
-  const handleConfirm = async () => {
-    setBooking(true);
+  const handleSend = async () => {
+    setSending(true);
     try {
-      const created = await appClient.entities.Booking.create({
-        range_id: range.id,
-        range_name: range.name,
-        range_comune: range.comune,
-        slot_date: selectedDate,
-        slot_start: selectedSlot,
-        slot_end: getEndDate(selectedSlot, duration),
-        line_name: line || "Linea 25m",
-        distance_m: range.distances_m?.[0] || 25,
-        status: "confermata",
-        price_cents: 800,
-        notes,
-        qr_token: Math.random().toString(36).substring(2, 10).toUpperCase(),
+      await createBookingRequest({
+        rangeId: range.id,
+        name,
+        email,
+        requestedFor: new Date(`${selectedDate}T${selectedSlot}:00`).toISOString(),
+        message: `Durata desiderata: ${duration} min.${notes ? ` Note: ${notes}` : ""}`,
       });
-      navigate("/prenotazioni");
+      setSent(true);
     } catch (e) {
       console.error(e);
-      alert("Errore nella prenotazione. Riprova.");
+      alert("Errore nell'invio della richiesta. Riprova.");
     }
-    setBooking(false);
+    setSending(false);
   };
 
   if (loading) {
@@ -91,6 +82,24 @@ export default function BookingPage() {
       <div className="flex flex-col items-center justify-center min-h-screen">
         <p className="text-slate-500">Struttura non trovata</p>
         <button onClick={() => navigate("/")} className="mt-4 text-orange-600 font-medium">
+          Torna alla ricerca
+        </button>
+      </div>
+    );
+  }
+
+  if (sent) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-6">
+        <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
+        <h2 className="text-lg font-bold text-slate-900 mb-1">Richiesta inviata!</h2>
+        <p className="text-sm text-slate-500 text-center mb-6">
+          Abbiamo inoltrato la tua richiesta a {range.name}. Riceverai una risposta via email.
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          className="bg-slate-900 text-white font-semibold py-3 px-8 rounded-xl text-sm active:scale-95 transition-transform"
+        >
           Torna alla ricerca
         </button>
       </div>
@@ -115,7 +124,7 @@ export default function BookingPage() {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="font-semibold text-slate-900 text-sm">Prenota</h1>
+          <h1 className="font-semibold text-slate-900 text-sm">Richiedi disponibilità</h1>
           <p className="text-xs text-slate-500">{range.name}</p>
         </div>
       </div>
@@ -135,7 +144,7 @@ export default function BookingPage() {
           <>
             {/* Date selector */}
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-2">Seleziona data</h3>
+              <h3 className="font-semibold text-slate-900 text-sm mb-2">Data desiderata</h3>
               <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4">
                 {dates.map((d) => (
                   <button
@@ -158,7 +167,7 @@ export default function BookingPage() {
             {/* Time slots */}
             <div>
               <h3 className="font-semibold text-slate-900 text-sm mb-2 flex items-center gap-1">
-                <Clock className="w-4 h-4" /> Orari disponibili
+                <Clock className="w-4 h-4" /> Orario preferito
               </h3>
               <div className="grid grid-cols-4 gap-2">
                 {TIME_SLOTS.map((slot) => (
@@ -210,25 +219,22 @@ export default function BookingPage() {
         {step === 2 && (
           <>
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-2">Linea di tiro</h3>
-              <div className="space-y-2">
-                {(range.distances_m || [25, 50]).map((dist, i) => (
-                  <button
-                    key={dist}
-                    onClick={() => setLine(`Linea ${dist}m`)}
-                    className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-colors text-left ${
-                      line === `Linea ${dist}m`
-                        ? "border-orange-500 bg-orange-50"
-                        : "border-slate-200 bg-white"
-                    }`}
-                  >
-                    <div>
-                      <p className="font-medium text-slate-900 text-sm">Linea {dist}m</p>
-                      <p className="text-xs text-slate-500">{dist < 50 ? "Indoor" : "Outdoor"}</p>
-                    </div>
-                    {line === `Linea ${dist}m` && <Check className="w-5 h-5 text-orange-500" />}
-                  </button>
-                ))}
+              <h3 className="font-semibold text-slate-900 text-sm mb-2">I tuoi contatti</h3>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Nome e cognome"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
               </div>
             </div>
 
@@ -243,7 +249,7 @@ export default function BookingPage() {
             </div>
 
             <button
-              disabled={!line}
+              disabled={!name || !email}
               onClick={() => setStep(3)}
               className="w-full bg-slate-900 text-white font-semibold py-3.5 rounded-xl text-sm disabled:opacity-30 active:scale-95 transition-transform"
             >
@@ -255,7 +261,7 @@ export default function BookingPage() {
         {step === 3 && (
           <>
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
-              <h3 className="font-semibold text-slate-900 text-sm">Riepilogo prenotazione</h3>
+              <h3 className="font-semibold text-slate-900 text-sm">Riepilogo richiesta</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-slate-500">Struttura</span>
@@ -269,38 +275,28 @@ export default function BookingPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Orario</span>
-                  <span className="font-medium text-slate-900">
-                    {selectedSlot} - {getEndDate(selectedSlot, duration)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Linea</span>
-                  <span className="font-medium text-slate-900">{line}</span>
+                  <span className="font-medium text-slate-900">{selectedSlot}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Durata</span>
                   <span className="font-medium text-slate-900">{duration} min</span>
-                </div>
-                <div className="border-t border-slate-100 pt-2 flex justify-between">
-                  <span className="text-slate-500">Costo</span>
-                  <span className="font-bold text-slate-900">8,00 €</span>
                 </div>
               </div>
             </div>
 
             <div className="bg-orange-50 rounded-xl p-3">
               <p className="text-xs text-orange-800">
-                💡 Il check-in QR sarà disponibile nella sezione Prenotazioni. Presentati al banco con il QR.
+                Questa struttura non ha ancora la prenotazione online attiva: la tua richiesta viene inoltrata al gestore, che ti risponderà via email.
               </p>
             </div>
 
             <button
-              disabled={booking}
-              onClick={handleConfirm}
+              disabled={sending}
+              onClick={handleSend}
               className="w-full bg-orange-600 text-white font-semibold py-3.5 rounded-xl text-sm disabled:opacity-50 active:scale-95 transition-transform flex items-center justify-center gap-2"
             >
-              {booking ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-              {booking ? "Prenotazione…" : "Conferma prenotazione"}
+              {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+              {sending ? "Invio…" : "Invia richiesta"}
             </button>
           </>
         )}

@@ -11,7 +11,6 @@ import {
   Euro,
   Crosshair,
   Wrench,
-  ChevronRight,
   Loader2,
   CheckCircle2,
   ExternalLink,

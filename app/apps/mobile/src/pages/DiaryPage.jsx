@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { appClient } from "@/api/appClient";
-import { Crosshair, Plus, Loader2, MapPin, Calendar, Trash2, X } from "lucide-react";
+import { listSessions, listSessionShots, createSession, deleteSession } from "@/api/sessionsApi";
+import { listFirearms, deleteFirearm } from "@/api/firearmsApi";
+import { createAmmoMovement } from "@/api/ammoApi";
+import { Crosshair, Plus, Loader2, Calendar, Trash2, X } from "lucide-react";
 import { formatDate } from "@/lib/domain";
 
 export default function DiaryPage() {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState([]);
   const [firearms, setFirearms] = useState([]);
+  const [shots, setShots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [view, setView] = useState("sessions"); // sessions | firearms
@@ -18,66 +21,66 @@ export default function DiaryPage() {
 
   const loadData = async () => {
     try {
-      const [sess, arms] = await Promise.all([
-        appClient.entities.Session.filter({}, "-started_at", 50),
-        appClient.entities.Firearm.filter({}, "-created_date", 50),
-      ]);
+      const [sess, arms, sh] = await Promise.all([listSessions(), listFirearms(), listSessionShots()]);
       setSessions(sess || []);
       setFirearms(arms || []);
+      setShots(sh || []);
     } catch (e) {
       console.error(e);
     }
     setLoading(false);
   };
 
+  const roundsByFirearm = shots.reduce((acc, s) => {
+    acc[s.firearm_id] = (acc[s.firearm_id] || 0) + (s.rounds_fired || 0);
+    return acc;
+  }, {});
+
   const [newSession, setNewSession] = useState({
     range_name: "",
     started_at: new Date().toISOString().slice(0, 16),
     duration_min: 60,
     distance_m: 25,
-    firearm_nickname: "",
+    firearm_id: "",
     caliber: "",
     rounds_fired: 50,
     notes: "",
   });
 
+  const ammoCategoryFor = (caliber, distanceM) => {
+    if (caliber?.toLowerCase().includes("gauge") || caliber?.toLowerCase().includes("pallini")) return "spezzone";
+    return distanceM <= 50 ? "arma_corta" : "arma_lunga_caccia";
+  };
+
   const handleAddSession = async () => {
     try {
-      await appClient.entities.Session.create({
-        ...newSession,
-        started_at: new Date(newSession.started_at).toISOString(),
-        confirmed_by_user: true,
-        auto_generated: false,
-      });
-      // Aggiorna colpi totali arma
-      if (newSession.firearm_nickname) {
-        const arm = firearms.find((f) => f.nickname === newSession.firearm_nickname);
-        if (arm) {
-          await appClient.entities.Firearm.update(arm.id, {
-            total_rounds: (arm.total_rounds || 0) + Number(newSession.rounds_fired),
-          });
-        }
-      }
-      // Movimento munizioni consumo
-      const category = newSession.caliber?.includes("gauge") || newSession.caliber?.includes("pallini")
-        ? "spezzone"
-        : newSession.distance_m <= 50
-        ? "arma_corta"
-        : "arma_lunga_caccia";
-      await appClient.entities.AmmoMovement.create({
+      const session = await createSession({
+        rangeName: newSession.range_name,
+        startedAt: new Date(newSession.started_at).toISOString(),
+        durationMin: Number(newSession.duration_min),
+        distanceM: Number(newSession.distance_m),
+        firearmId: newSession.firearm_id || null,
         caliber: newSession.caliber,
-        category,
-        delta: -Number(newSession.rounds_fired),
-        reason: "consumo_sessione",
-        occurred_at: new Date().toISOString(),
-        note: `Sessione ${newSession.range_name}`,
+        roundsFired: Number(newSession.rounds_fired),
+        notes: newSession.notes,
       });
+
+      if (newSession.caliber && newSession.rounds_fired) {
+        await createAmmoMovement({
+          caliber: newSession.caliber,
+          category: ammoCategoryFor(newSession.caliber, Number(newSession.distance_m)),
+          delta: -Number(newSession.rounds_fired),
+          reason: "consumo_sessione",
+          sessionId: session.id,
+        });
+      }
+
       setNewSession({
         range_name: "",
         started_at: new Date().toISOString().slice(0, 16),
         duration_min: 60,
         distance_m: 25,
-        firearm_nickname: "",
+        firearm_id: "",
         caliber: "",
         rounds_fired: 50,
         notes: "",
@@ -92,7 +95,7 @@ export default function DiaryPage() {
 
   const handleDeleteSession = async (id) => {
     try {
-      await appClient.entities.Session.delete(id);
+      await deleteSession(id);
       loadData();
     } catch (e) {
       console.error(e);
@@ -101,7 +104,7 @@ export default function DiaryPage() {
 
   const handleDeleteFirearm = async (id) => {
     try {
-      await appClient.entities.Firearm.delete(id);
+      await deleteFirearm(id);
       loadData();
     } catch (e) {
       console.error(e);
@@ -116,7 +119,7 @@ export default function DiaryPage() {
     );
   }
 
-  const totalRounds = sessions.reduce((sum, s) => sum + (s.rounds_fired || 0), 0);
+  const totalRounds = shots.reduce((sum, s) => sum + (s.rounds_fired || 0), 0);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -185,7 +188,7 @@ export default function DiaryPage() {
                   <div key={s.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-slate-900 text-sm">{s.range_name}</h3>
+                        <h3 className="font-semibold text-slate-900 text-sm">{s.range_name_manual}</h3>
                         <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
                           <Calendar className="w-3 h-3" />
                           {formatDate(s.started_at)}
@@ -202,17 +205,6 @@ export default function DiaryPage() {
                     <div className="flex flex-wrap gap-3 text-xs text-slate-600">
                       {s.distance_m && (
                         <span className="bg-slate-100 px-2 py-0.5 rounded-lg">{s.distance_m}m</span>
-                      )}
-                      {s.firearm_nickname && (
-                        <span className="bg-slate-100 px-2 py-0.5 rounded-lg">{s.firearm_nickname}</span>
-                      )}
-                      {s.caliber && (
-                        <span className="bg-slate-100 px-2 py-0.5 rounded-lg">{s.caliber}</span>
-                      )}
-                      {s.rounds_fired > 0 && (
-                        <span className="bg-orange-50 text-orange-700 px-2 py-0.5 rounded-lg font-medium">
-                          {s.rounds_fired} colpi
-                        </span>
                       )}
                       <span className="bg-slate-100 px-2 py-0.5 rounded-lg">{s.duration_min} min</span>
                     </div>
@@ -259,11 +251,7 @@ export default function DiaryPage() {
                             {f.caliber}
                           </span>
                         </div>
-                        {(f.brand || f.model) && (
-                          <p className="text-xs text-slate-400 mt-1">
-                            {[f.brand, f.model].filter(Boolean).join(" ")}
-                          </p>
-                        )}
+                        {f.notes && <p className="text-xs text-slate-400 mt-1">{f.notes}</p>}
                       </div>
                       <button
                         onClick={() => handleDeleteFirearm(f.id)}
@@ -274,7 +262,7 @@ export default function DiaryPage() {
                     </div>
                     <div className="mt-2 pt-2 border-t border-slate-50 flex items-center justify-between">
                       <span className="text-xs text-slate-400">Colpi totali</span>
-                      <span className="text-sm font-bold text-slate-900">{f.total_rounds || 0}</span>
+                      <span className="text-sm font-bold text-slate-900">{roundsByFirearm[f.id] || 0}</span>
                     </div>
                   </div>
                 ))}
@@ -345,12 +333,12 @@ export default function DiaryPage() {
                 <div>
                   <label className="text-xs font-medium text-slate-500">Arma</label>
                   <select
-                    value={newSession.firearm_nickname}
+                    value={newSession.firearm_id}
                     onChange={(e) => {
-                      const arm = firearms.find((f) => f.nickname === e.target.value);
+                      const arm = firearms.find((f) => f.id === e.target.value);
                       setNewSession({
                         ...newSession,
-                        firearm_nickname: e.target.value,
+                        firearm_id: e.target.value,
                         caliber: arm?.caliber || "",
                       });
                     }}
@@ -358,7 +346,7 @@ export default function DiaryPage() {
                   >
                     <option value="">Seleziona</option>
                     {firearms.map((f) => (
-                      <option key={f.id} value={f.nickname}>
+                      <option key={f.id} value={f.id}>
                         {f.nickname} ({f.caliber})
                       </option>
                     ))}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { appClient } from "@/api/appClient";
-import { Boxes, Plus, Loader2, AlertTriangle, Info, X, ArrowDown, ArrowUp } from "lucide-react";
+import { listAmmoMovements, createAmmoMovement } from "@/api/ammoApi";
+import { Boxes, Plus, Loader2, AlertTriangle, X, ArrowDown, ArrowUp } from "lucide-react";
 import {
   evaluateAmmoLimits,
   computeInventoryByCategory,
@@ -13,6 +13,7 @@ export default function AmmoPage() {
   const [movements, setMovements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -20,7 +21,7 @@ export default function AmmoPage() {
 
   const loadData = async () => {
     try {
-      const data = await appClient.entities.AmmoMovement.filter({}, "-occurred_at", 100);
+      const data = await listAmmoMovements();
       setMovements(data || []);
     } catch (e) {
       console.error(e);
@@ -28,31 +29,35 @@ export default function AmmoPage() {
     setLoading(false);
   };
 
-  const inventory = computeInventoryByCategory(movements);
-  const statuses = evaluateAmmoLimits(inventory);
+  const inventoryByCategory = computeInventoryByCategory(
+    movements.map((m) => ({ category: m.category, delta: m.delta }))
+  );
+  const statuses = evaluateAmmoLimits(inventoryByCategory);
 
   const [newMovement, setNewMovement] = useState({
     caliber: "",
     category: "arma_corta",
     delta: 50,
     reason: "acquisto",
-    note: "",
   });
 
   const handleAddMovement = async () => {
+    setSaving(true);
     try {
-      await appClient.entities.AmmoMovement.create({
-        ...newMovement,
+      await createAmmoMovement({
+        caliber: newMovement.caliber,
+        category: newMovement.category,
         delta: Number(newMovement.delta),
-        occurred_at: new Date().toISOString(),
+        reason: newMovement.reason,
       });
-      setNewMovement({ caliber: "", category: "arma_corta", delta: 50, reason: "acquisto", note: "" });
+      setNewMovement({ caliber: "", category: "arma_corta", delta: 50, reason: "acquisto" });
       setShowAdd(false);
       loadData();
     } catch (e) {
       console.error(e);
       alert("Errore nel salvataggio");
     }
+    setSaving(false);
   };
 
   if (loading) {
@@ -214,23 +219,12 @@ export default function AmmoPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="text-xs font-medium text-slate-500">Note</label>
-                <input
-                  type="text"
-                  value={newMovement.note}
-                  onChange={(e) => setNewMovement({ ...newMovement, note: e.target.value })}
-                  placeholder="Note opzionali"
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-              </div>
-
               <button
                 onClick={handleAddMovement}
-                disabled={!newMovement.caliber || !newMovement.delta}
+                disabled={!newMovement.caliber || !newMovement.delta || saving}
                 className="w-full bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-30 active:scale-95 transition-transform"
               >
-                Salva movimento
+                {saving ? "Salvataggio…" : "Salva movimento"}
               </button>
             </div>
           </div>

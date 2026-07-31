@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { appClient } from "@/api/appClient";
-import { User, FileText, AlertTriangle, LogOut, ChevronRight, Loader2, Plus, Shield, Download, Trash2, X, Upload, Paperclip, Award, Calendar } from "lucide-react";
+import { listDocuments, createDocument } from "@/api/documentsApi";
+import { User, FileText, AlertTriangle, ChevronRight, Loader2, Plus, Shield, Download, X, Award } from "lucide-react";
 import { computeDocumentAlerts, DOCUMENT_LABELS, formatDate } from "@/lib/domain";
 
+// Le etichette locali includono "tessera_socio", non presente nell'enum
+// document_type dello schema (Piano §4.2): esclusa dalle opzioni selezionabili.
+const SELECTABLE_DOCUMENT_TYPES = Object.keys(DOCUMENT_LABELS).filter((t) => t !== "tessera_socio");
+
 export default function ProfilePage() {
-  const navigate = useNavigate();
-  const [user, setUser] = useState(null);
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddDoc, setShowAddDoc] = useState(false);
-  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -18,9 +19,7 @@ export default function ProfilePage() {
 
   const loadData = async () => {
     try {
-      const me = await appClient.auth.me();
-      setUser(me);
-      const docData = await appClient.entities.UserDocument.filter({}, "expires_on", 50);
+      const docData = await listDocuments();
       setDocs(docData || []);
     } catch (e) {
       console.error(e);
@@ -33,35 +32,20 @@ export default function ProfilePage() {
   const [newDoc, setNewDoc] = useState({
     type: "porto_armi_tav",
     expires_on: "",
-    association_name: "",
-    file_url: "",
-    note: "",
   });
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    try {
-      const res = await appClient.integrations.Core.UploadFile({ file });
-      setNewDoc({ ...newDoc, file_url: res.file_url });
-    } catch (err) {
-      console.error(err);
-      alert("Errore nel caricamento del file");
-    }
-    setUploading(false);
-  };
-
   const handleAddDoc = async () => {
+    setSaving(true);
     try {
-      await appClient.entities.UserDocument.create(newDoc);
-      setNewDoc({ type: "porto_armi_tav", expires_on: "", association_name: "", file_url: "", note: "" });
+      await createDocument({ type: newDoc.type, expiresOn: newDoc.expires_on });
+      setNewDoc({ type: "porto_armi_tav", expires_on: "" });
       setShowAddDoc(false);
       loadData();
     } catch (e) {
       console.error(e);
       alert("Errore nel salvataggio");
     }
+    setSaving(false);
   };
 
   const alertStyles = {
@@ -96,8 +80,8 @@ export default function ProfilePage() {
             <User className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold">{user?.full_name || "Tiratore"}</h1>
-            <p className="text-sm text-slate-300">{user?.email}</p>
+            <h1 className="text-lg font-bold">Tiratore</h1>
+            <p className="text-sm text-slate-300">Profilo su questo dispositivo</p>
           </div>
         </div>
       </div>
@@ -168,26 +152,10 @@ export default function ProfilePage() {
                 >
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium">{DOCUMENT_LABELS[doc.type] || doc.type}</p>
-                    {doc.association_name && (
-                      <p className="text-xs opacity-80 flex items-center gap-1 mt-0.5">
-                        <Award className="w-3 h-3" />
-                        {doc.association_name}
-                      </p>
-                    )}
                     <p className="text-xs opacity-80">
                       Scade: {formatDate(doc.expires_on)}
                       {doc.daysLeft >= 0 ? ` (${doc.daysLeft} giorni)` : ""}
                     </p>
-                    {doc.file_url && (
-                      <a
-                        href={doc.file_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-blue-600 underline flex items-center gap-1 mt-1"
-                      >
-                        <Paperclip className="w-3 h-3" /> Vedi allegato
-                      </a>
-                    )}
                   </div>
                   <span className="text-xs font-semibold whitespace-nowrap ml-2">{alertLabels[doc.alertLevel]}</span>
                 </div>
@@ -210,17 +178,10 @@ export default function ProfilePage() {
             <span className="flex-1 text-left text-sm text-slate-700">Esporta i miei dati</span>
             <ChevronRight className="w-4 h-4 text-slate-300" />
           </button>
-          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50">
+          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors">
             <Shield className="w-5 h-5 text-slate-400" />
             <span className="flex-1 text-left text-sm text-slate-700">Privacy e dati</span>
             <ChevronRight className="w-4 h-4 text-slate-300" />
-          </button>
-          <button
-            onClick={() => appClient.auth.logout("/")}
-            className="w-full flex items-center gap-3 p-4 hover:bg-red-50 transition-colors text-red-600"
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="flex-1 text-left text-sm font-medium">Esci</span>
           </button>
         </div>
 
@@ -249,29 +210,16 @@ export default function ProfilePage() {
                 <label className="text-xs font-medium text-slate-500">Tipo documento</label>
                 <select
                   value={newDoc.type}
-                  onChange={(e) => setNewDoc({ ...newDoc, type: e.target.value, association_name: e.target.value === "tessera_socio" ? newDoc.association_name : "" })}
+                  onChange={(e) => setNewDoc({ ...newDoc, type: e.target.value })}
                   className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
-                  {Object.entries(DOCUMENT_LABELS).map(([key, label]) => (
+                  {SELECTABLE_DOCUMENT_TYPES.map((key) => (
                     <option key={key} value={key}>
-                      {label}
+                      {DOCUMENT_LABELS[key]}
                     </option>
                   ))}
                 </select>
               </div>
-
-              {newDoc.type === "tessera_socio" && (
-                <div>
-                  <label className="text-xs font-medium text-slate-500">Nome associazione sportiva</label>
-                  <input
-                    type="text"
-                    value={newDoc.association_name}
-                    onChange={(e) => setNewDoc({ ...newDoc, association_name: e.target.value })}
-                    placeholder="Es. TSN Milano, ASD Tiro Dinamico..."
-                    className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                </div>
-              )}
 
               <div>
                 <label className="text-xs font-medium text-slate-500">Data di scadenza</label>
@@ -283,54 +231,12 @@ export default function ProfilePage() {
                 />
               </div>
 
-              <div>
-                <label className="text-xs font-medium text-slate-500">Carica documento (opzionale)</label>
-                <label className="flex items-center justify-center gap-2 mt-1 border-2 border-dashed border-slate-200 rounded-xl px-3 py-3 text-sm text-slate-500 cursor-pointer hover:border-orange-400 hover:text-orange-600 transition-colors">
-                  {uploading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Caricamento...
-                    </>
-                  ) : newDoc.file_url ? (
-                    <>
-                      <Paperclip className="w-4 h-4 text-green-600" />
-                      <span className="text-green-600 font-medium">File caricato ✓</span>
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="w-4 h-4" />
-                      Foto o PDF del documento
-                    </>
-                  )}
-                  <input type="file" accept="image/*,.pdf" className="hidden" onChange={handleFileUpload} />
-                </label>
-                {newDoc.file_url && (
-                  <button
-                    onClick={() => setNewDoc({ ...newDoc, file_url: "" })}
-                    className="text-xs text-red-500 mt-1"
-                  >
-                    Rimuovi file
-                  </button>
-                )}
-              </div>
-
-              <div>
-                <label className="text-xs font-medium text-slate-500">Note (opzionale)</label>
-                <input
-                  type="text"
-                  value={newDoc.note}
-                  onChange={(e) => setNewDoc({ ...newDoc, note: e.target.value })}
-                  placeholder="Es. numero tessera, ente..."
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-              </div>
-
               <button
                 onClick={handleAddDoc}
-                disabled={!newDoc.expires_on || uploading}
+                disabled={!newDoc.expires_on || saving}
                 className="w-full bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-30 active:scale-95 transition-transform"
               >
-                Salva documento
+                {saving ? "Salvataggio…" : "Salva documento"}
               </button>
             </div>
           </div>

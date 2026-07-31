@@ -1,6 +1,5 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { CATEGORY_LABELS } from "@/lib/domain";
 
 export function AmmoLevelBadge({ level }) {
   const styles = {

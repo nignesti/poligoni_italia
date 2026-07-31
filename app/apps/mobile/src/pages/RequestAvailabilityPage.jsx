@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getRange } from "@/api/rangesApi";
+import { createBookingRequest } from "@/api/requestsApi";
 import { ArrowLeft, Loader2, Send, CheckCircle2 } from "lucide-react";
 
 export default function RequestAvailabilityPage() {
@@ -8,8 +9,11 @@ export default function RequestAvailabilityPage() {
   const navigate = useNavigate();
   const [range, setRange] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({
+    name: "",
+    email: "",
     requested_date: "",
     requested_time: "",
     message: "",
@@ -27,8 +31,24 @@ export default function RequestAvailabilityPage() {
     })();
   }, [id]);
 
-  const handleSend = () => {
-    setSent(true);
+  const handleSend = async () => {
+    setSending(true);
+    try {
+      await createBookingRequest({
+        rangeId: range.id,
+        name: form.name,
+        email: form.email,
+        requestedFor: new Date(`${form.requested_date}T12:00:00`).toISOString(),
+        message: [form.requested_time && `Orario preferito: ${form.requested_time}.`, form.message]
+          .filter(Boolean)
+          .join(" "),
+      });
+      setSent(true);
+    } catch (e) {
+      console.error(e);
+      alert("Errore nell'invio della richiesta. Riprova.");
+    }
+    setSending(false);
   };
 
   if (loading) {
@@ -56,7 +76,7 @@ export default function RequestAvailabilityPage() {
         <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
         <h2 className="text-lg font-bold text-slate-900 mb-1">Richiesta inviata!</h2>
         <p className="text-sm text-slate-500 text-center mb-6">
-          Abbiamo inoltrato la tua richiesta a {range.name}. Riceverai una risposta via email o WhatsApp.
+          Abbiamo inoltrato la tua richiesta a {range.name}. Riceverai una risposta via email.
         </p>
         <button
           onClick={() => navigate("/")}
@@ -87,6 +107,26 @@ export default function RequestAvailabilityPage() {
         </div>
 
         <div className="space-y-3">
+          <div>
+            <label className="text-xs font-medium text-slate-500">Nome e cognome</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="w-full mt-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-slate-500">Email</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="w-full mt-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </div>
+
           <div>
             <label className="text-xs font-medium text-slate-500">Data desiderata</label>
             <input
@@ -120,10 +160,11 @@ export default function RequestAvailabilityPage() {
 
           <button
             onClick={handleSend}
-            disabled={!form.requested_date}
+            disabled={!form.requested_date || !form.name || !form.email || sending}
             className="w-full bg-slate-900 text-white font-semibold py-3.5 rounded-xl text-sm disabled:opacity-30 active:scale-95 transition-transform flex items-center justify-center gap-2"
           >
-            <Send className="w-4 h-4" /> Invia richiesta
+            {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {sending ? "Invio…" : "Invia richiesta"}
           </button>
         </div>
       </div>

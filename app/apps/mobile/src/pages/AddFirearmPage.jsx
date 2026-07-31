@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { appClient } from "@/api/appClient";
+import { createFirearm } from "@/api/firearmsApi";
 import { ArrowLeft, Loader2, ShieldCheck } from "lucide-react";
 
 export default function AddFirearmPage() {
@@ -18,7 +18,18 @@ export default function AddFirearmPage() {
   const handleSubmit = async () => {
     setSaving(true);
     try {
-      await appClient.entities.Firearm.create(form);
+      const notes = [
+        [form.brand, form.model].filter(Boolean).join(" "),
+        form.notes,
+      ]
+        .filter(Boolean)
+        .join(" — ");
+      await createFirearm({
+        nickname: form.nickname,
+        type: form.type,
+        caliber: form.caliber,
+        notes: notes || null,
+      });
       navigate("/diario");
     } catch (e) {
       console.error(e);

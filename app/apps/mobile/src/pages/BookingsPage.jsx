@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { appClient } from "@/api/appClient";
+import { listBookings, cancelBooking } from "@/api/bookingsApi";
 import { Calendar, QrCode, Loader2, MapPin, Clock, Plus, X } from "lucide-react";
 import { StatusBadge } from "@/components/Badges";
 import { formatDate } from "@/lib/domain";
@@ -17,7 +17,7 @@ export default function BookingsPage() {
 
   const loadBookings = async () => {
     try {
-      const data = await appClient.entities.Booking.filter({}, "-slot_date", 50);
+      const data = await listBookings();
       setBookings(data || []);
     } catch (e) {
       console.error(e);
@@ -34,7 +34,7 @@ export default function BookingsPage() {
 
   const handleCancel = async (id) => {
     try {
-      await appClient.entities.Booking.update(id, { status: "annullata" });
+      await cancelBooking(id);
       loadBookings();
     } catch (e) {
       console.error(e);
@@ -68,7 +68,7 @@ export default function BookingsPage() {
                 onClick={() => navigate("/")}
                 className="mt-3 text-orange-600 text-sm font-medium flex items-center gap-1 justify-center"
               >
-                <Plus className="w-4 h-4" /> Prenota ora
+                <Plus className="w-4 h-4" /> Trova un poligono
               </button>
             </div>
           ) : (
@@ -89,11 +89,13 @@ export default function BookingsPage() {
                   <div className="flex items-center gap-4 text-xs text-slate-600 mb-3">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                      {formatDate(b.slot_date)}
+                      {formatDate(b.slot_start)}
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5 text-slate-400" />
-                      {b.slot_start} - {b.slot_end}
+                      {new Date(b.slot_start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
+                      {" - "}
+                      {new Date(b.slot_end).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
                     </div>
                   </div>
 
@@ -130,7 +132,8 @@ export default function BookingsPage() {
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-slate-900 text-sm truncate">{b.range_name}</h3>
                       <p className="text-xs text-slate-500">
-                        {formatDate(b.slot_date)} · {b.slot_start}
+                        {formatDate(b.slot_start)} ·{" "}
+                        {new Date(b.slot_start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>
                     <StatusBadge status={b.status} />
@@ -174,7 +177,8 @@ export default function BookingsPage() {
             <p className="text-center font-mono text-sm font-bold text-slate-900 mb-1">{qrBooking.qr_token}</p>
             <p className="text-center text-sm text-slate-600">{qrBooking.range_name}</p>
             <p className="text-center text-xs text-slate-400">
-              {formatDate(qrBooking.slot_date)} · {qrBooking.slot_start}
+              {formatDate(qrBooking.slot_start)} ·{" "}
+              {new Date(qrBooking.slot_start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
             </p>
             <p className="text-xs text-center text-slate-400 mt-3">
               Mostra questo codice al banco di segreteria
