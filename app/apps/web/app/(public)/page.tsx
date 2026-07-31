@@ -159,10 +159,12 @@ export default async function HomePage() {
               <Link
                 key={region.slug}
                 href={`/poligoni/${region.slug}`}
-                className="flex items-center justify-between rounded-control border border-hairline bg-surface-sunken px-5 py-4 hover:border-accent hover:bg-accent-wash"
+                className="flex items-center justify-between gap-3 rounded-panel border border-hairline bg-surface px-5 py-4 shadow-panel transition-all hover:-translate-y-0.5 hover:border-accent"
               >
                 <span className="font-medium text-ink">{region.name}</span>
-                <span className="text-sm text-ink-muted">{region.count}</span>
+                <span className="rounded-full bg-accent-wash px-2.5 py-1 text-xs font-semibold text-accent">
+                  {region.count}
+                </span>
               </Link>
             ))}
           </div>
