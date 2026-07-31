@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { listDocuments, createDocument } from "@/api/documentsApi";
-import { User, FileText, AlertTriangle, ChevronRight, Loader2, Plus, Shield, Download, X, Award } from "lucide-react";
+import { supabase } from "@/api/supabaseClient";
+import { useAuth } from "@/lib/useAuth";
+import { User, FileText, AlertTriangle, ChevronRight, Loader2, Plus, Shield, Download, LogOut, X, Award } from "lucide-react";
 import { computeDocumentAlerts, DOCUMENT_LABELS, formatDate } from "@/lib/domain";
 
 // Le etichette locali includono "tessera_socio", non presente nell'enum
@@ -8,6 +11,8 @@ import { computeDocumentAlerts, DOCUMENT_LABELS, formatDate } from "@/lib/domain
 const SELECTABLE_DOCUMENT_TYPES = Object.keys(DOCUMENT_LABELS).filter((t) => t !== "tessera_socio");
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddDoc, setShowAddDoc] = useState(false);
@@ -16,6 +21,11 @@ export default function ProfilePage() {
   useEffect(() => {
     loadData();
   }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
 
   const loadData = async () => {
     try {
@@ -81,7 +91,7 @@ export default function ProfilePage() {
           </div>
           <div>
             <h1 className="text-lg font-bold">Tiratore</h1>
-            <p className="text-sm text-slate-300">Profilo su questo dispositivo</p>
+            <p className="text-sm text-slate-300">{user?.email}</p>
           </div>
         </div>
       </div>
@@ -178,10 +188,17 @@ export default function ProfilePage() {
             <span className="flex-1 text-left text-sm text-slate-700">Esporta i miei dati</span>
             <ChevronRight className="w-4 h-4 text-slate-300" />
           </button>
-          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors">
+          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50">
             <Shield className="w-5 h-5 text-slate-400" />
             <span className="flex-1 text-left text-sm text-slate-700">Privacy e dati</span>
             <ChevronRight className="w-4 h-4 text-slate-300" />
+          </button>
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 p-4 hover:bg-red-50 transition-colors text-red-600"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="flex-1 text-left text-sm font-medium">Esci</span>
           </button>
         </div>
 

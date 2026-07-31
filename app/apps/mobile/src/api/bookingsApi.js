@@ -1,12 +1,13 @@
 import { supabase } from '@/api/supabaseClient';
-import { getDeviceId } from '@/lib/deviceId';
+import { getCurrentUserId } from '@/lib/currentUser';
 
-/** Prenotazioni del dispositivo corrente, con nome/comune della struttura. */
+/** Prenotazioni dell'utente autenticato, con nome/comune della struttura. */
 export async function listBookings() {
+  const userId = await getCurrentUserId();
   const { data, error } = await supabase
     .from('bookings')
     .select('*, ranges(name, comune)')
-    .eq('user_id', getDeviceId())
+    .eq('user_id', userId)
     .order('slot_start', { ascending: false })
     .limit(50);
   if (error) throw error;

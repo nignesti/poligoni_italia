@@ -1,12 +1,13 @@
 import { supabase } from '@/api/supabaseClient';
-import { getDeviceId } from '@/lib/deviceId';
+import { getCurrentUserId } from '@/lib/currentUser';
 
-/** Sessioni di tiro del dispositivo corrente. */
+/** Sessioni di tiro dell'utente autenticato. */
 export async function listSessions() {
+  const userId = await getCurrentUserId();
   const { data, error } = await supabase
     .from('sessions')
     .select('*')
-    .eq('user_id', getDeviceId())
+    .eq('user_id', userId)
     .order('started_at', { ascending: false })
     .limit(50);
   if (error) throw error;
@@ -14,16 +15,17 @@ export async function listSessions() {
 }
 
 /**
- * Colpi per arma di tutte le sessioni del dispositivo — usato per calcolare
+ * Colpi per arma di tutte le sessioni dell'utente — usato per calcolare
  * il totale colpi per arma nel Diario, dato che `firearms` non ha una
  * colonna contatore (Piano §4.4: il totale si ricostruisce dai movimenti,
  * mai un contatore scritto direttamente).
  */
 export async function listSessionShots() {
+  const userId = await getCurrentUserId();
   const { data, error } = await supabase
     .from('session_shots')
     .select('firearm_id, rounds_fired, sessions!inner(user_id)')
-    .eq('sessions.user_id', getDeviceId());
+    .eq('sessions.user_id', userId);
   if (error) throw error;
   return data || [];
 }
@@ -35,10 +37,11 @@ export async function listSessionShots() {
  * colpi/calibro per arma.
  */
 export async function createSession({ rangeName, startedAt, durationMin, distanceM, firearmId, caliber, roundsFired, notes }) {
+  const userId = await getCurrentUserId();
   const { data: session, error } = await supabase
     .from('sessions')
     .insert({
-      user_id: getDeviceId(),
+      user_id: userId,
       range_name_manual: rangeName,
       started_at: startedAt,
       duration_min: durationMin,

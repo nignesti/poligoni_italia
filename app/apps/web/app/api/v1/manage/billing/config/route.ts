@@ -1,27 +1,26 @@
 /**
- * GET  /api/v1/manage/billing/config?rangeId=&userId=
+ * GET  /api/v1/manage/billing/config?rangeId=
  * POST /api/v1/manage/billing/config
  *
  * Dati fiscali del gestore per la fatturazione (Piano_Sviluppo_App.md §6.1,
- * task 69).
- *
- * ⚠️  `userId` arriva nella richiesta invece che da una sessione verificata:
- * l'autenticazione Supabase (Piano §7.3 task 13) non è ancora integrata in
- * nessuna rotta del sito. Va sostituito con l'utente autenticato prima del
- * rilascio pubblico di questa rotta.
+ * task 69). L'utente è quello della sessione, mai un id passato dal client.
  */
 import { type NextRequest } from 'next/server';
-import { billingConfigQuerySchema, manageBillingConfigRequestSchema } from '@poligoni/schemas/billing';
+import { billingConfigQuerySchema, upsertManagerBillingConfigSchema } from '@poligoni/schemas/billing';
 import { validateFiscalCode, validateVATNumber } from '@poligoni/core/billing';
 import { badRequest, json, notFound, validate } from '../../../../_utils';
 import { getBillingConfig, upsertBillingConfig } from '@poligoni/db/queries/billing';
+import { requireManagerOf } from '@/lib/authGuard';
 
 export async function GET(request: NextRequest) {
   const params = Object.fromEntries(request.nextUrl.searchParams.entries());
   const parsed = validate(billingConfigQuerySchema, params);
   if ('error' in parsed) return parsed.error;
 
-  const config = await getBillingConfig(parsed.data.rangeId, parsed.data.userId);
+  const auth = await requireManagerOf(parsed.data.rangeId);
+  if ('error' in auth) return auth.error;
+
+  const config = await getBillingConfig(parsed.data.rangeId, auth.userId);
   if (!config) return notFound('Configurazione di fatturazione non trovata');
 
   return json(config);
@@ -29,10 +28,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
-  const parsed = validate(manageBillingConfigRequestSchema, body);
+  const parsed = validate(upsertManagerBillingConfigSchema, body);
   if ('error' in parsed) return parsed.error;
 
-  const { rangeId, userId, ...data } = parsed.data;
+  const { rangeId, ...data } = parsed.data;
+
+  const auth = await requireManagerOf(rangeId);
+  if ('error' in auth) return auth.error;
 
   if (data.vatNumber && !validateVATNumber(data.vatNumber)) {
     return badRequest('Partita IVA non valida');
@@ -41,6 +43,6 @@ export async function POST(request: NextRequest) {
     return badRequest('Codice fiscale non valido');
   }
 
-  const config = await upsertBillingConfig(rangeId, userId, data);
+  const config = await upsertBillingConfig(rangeId, auth.userId, data);
   return json(config, 201);
 }

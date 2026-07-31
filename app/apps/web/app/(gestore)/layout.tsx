@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 // ---------------------------------------------------------------------------
 // Dashboard Gestore — Layout (Piano §7.3)
@@ -25,7 +26,21 @@ export default function GestoreLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUserEmail(data.user?.email ?? null));
+  }, []);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push('/gestore/login');
+    router.refresh();
+  };
 
     // Login e rivendicazione hanno layout minimal (no sidebar)
   const isMinimal = pathname === '/gestore/login' || pathname === '/gestore/rivendica';
@@ -90,7 +105,14 @@ export default function GestoreLayout({
           </button>
           <div className="gest-topbar-right">
             <span className="gest-range-name">TSN Milano</span>
-            <div className="gest-avatar">G</div>
+            <button
+              className="gest-avatar"
+              onClick={handleLogout}
+              title={userEmail ? `Esci (${userEmail})` : 'Esci'}
+              aria-label="Esci"
+            >
+              {userEmail ? userEmail.charAt(0).toUpperCase() : 'G'}
+            </button>
           </div>
         </header>
         <div className="gest-content">{children}</div>
@@ -207,6 +229,7 @@ export default function GestoreLayout({
           width: 36px;
           height: 36px;
           border-radius: 50%;
+          border: none;
           background: var(--color-green-600);
           color: white;
           display: flex;
@@ -214,7 +237,10 @@ export default function GestoreLayout({
           justify-content: center;
           font-weight: 700;
           font-size: 0.875rem;
+          cursor: pointer;
+          transition: background 0.15s;
         }
+        .gest-avatar:hover { background: var(--color-green-700); }
         .gest-content {
           padding: var(--space-8);
         }

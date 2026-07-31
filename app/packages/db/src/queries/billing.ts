@@ -3,9 +3,9 @@
  * route `/api/v1/manage/billing/*` (apps/web).
  *
  * ⚠️  Nessuna di queste funzioni verifica che il chiamante sia autorizzato a
- * gestire `rangeId`: l'autenticazione Supabase (Piano §7.3 task 13) non è
- * ancora integrata in nessuna rotta del sito. La verifica va aggiunta nella
- * route handler quando l'autenticazione esisterà — vedi commento nelle route.
+ * gestire `rangeId`: usano Drizzle su connessione diretta (DATABASE_URL),
+ * non il client Supabase, quindi non attraversano Row Level Security.
+ * La verifica sta nella route handler — vedi apps/web/lib/authGuard.ts.
  */
 import { and, asc, count, desc, eq, gte, lte } from 'drizzle-orm';
 import { calculateNextRenewalDate, calculateVAT, calculateDueDate, generateInvoiceNumber, ITALIAN_VAT_RATE } from '@poligoni/core/billing';
@@ -25,6 +25,17 @@ export async function listActivePlans() {
 // ---------------------------------------------------------------------------
 // Abbonamento
 // ---------------------------------------------------------------------------
+
+/** rangeId collegato a un abbonamento — per verificare l'autorizzazione prima di scrivere. Null se non esiste. */
+export async function getRangeIdForSubscription(rangeSubscriptionId: string): Promise<string | null> {
+  const db = getDb();
+  const [row] = await db
+    .select({ rangeId: rangeSubscriptions.rangeId })
+    .from(rangeSubscriptions)
+    .where(eq(rangeSubscriptions.id, rangeSubscriptionId))
+    .limit(1);
+  return row?.rangeId ?? null;
+}
 
 /** Abbonamento attivo di una struttura, con il piano già risolto. Null se assente. */
 export async function getActiveSubscriptionForRange(rangeId: string) {

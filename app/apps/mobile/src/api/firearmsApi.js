@@ -1,16 +1,17 @@
 import { supabase } from '@/api/supabaseClient';
-import { getDeviceId } from '@/lib/deviceId';
+import { getCurrentUserId } from '@/lib/currentUser';
 
 /**
- * Armi del dispositivo corrente. Nessuna colonna marca/modello nello schema
+ * Armi dell'utente autenticato. Nessuna colonna marca/modello nello schema
  * (Piano §4.4 — solo tipo, calibro, soprannome, note: niente matricole né
  * dati che possano identificare un'arma specifica).
  */
 export async function listFirearms() {
+  const userId = await getCurrentUserId();
   const { data, error } = await supabase
     .from('firearms')
     .select('*')
-    .eq('user_id', getDeviceId())
+    .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(50);
   if (error) throw error;
@@ -18,8 +19,9 @@ export async function listFirearms() {
 }
 
 export async function createFirearm({ nickname, type, caliber, notes }) {
+  const userId = await getCurrentUserId();
   const { error } = await supabase.from('firearms').insert({
-    user_id: getDeviceId(),
+    user_id: userId,
     nickname,
     type,
     caliber,

@@ -36,6 +36,20 @@
       "when": 1785513765484,
       "tag": "0006_gestore_billing",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1785520000000,
+      "tag": "0007_auth_sync_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1785520000001,
+      "tag": "0008_row_level_security",
+      "breakpoints": true
     }
   ]
 }

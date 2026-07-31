@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import ScrollToTop from './components/ScrollToTop';
 import MobileLayout from '@/components/MobileLayout';
+import AuthGate from '@/components/AuthGate';
 import SearchPage from '@/pages/SearchPage';
 import RangeDetailPage from '@/pages/RangeDetailPage';
 import BookingPage from '@/pages/BookingPage';
@@ -14,6 +15,8 @@ import AmmoPage from '@/pages/AmmoPage';
 import AddFirearmPage from '@/pages/AddFirearmPage';
 import ProfilePage from '@/pages/ProfilePage';
 import RequestAvailabilityPage from '@/pages/RequestAvailabilityPage';
+import LoginPage from '@/pages/LoginPage';
+import AuthCallbackPage from '@/pages/AuthCallbackPage';
 // Add page imports here
 
 function App() {
@@ -22,17 +25,27 @@ function App() {
       <Router>
         <ScrollToTop />
         <Routes>
+          {/* Pubbliche: nessun account richiesto */}
+          <Route path="/accedi" element={<LoginPage />} />
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          <Route path="/poligono/:id" element={<RangeDetailPage />} />
+          <Route path="/richiedi/:id" element={<RequestAvailabilityPage />} />
+          <Route path="/prenota/:id" element={<BookingPage />} />
+
           <Route element={<MobileLayout />}>
             <Route path="/" element={<SearchPage />} />
-            <Route path="/prenotazioni" element={<BookingsPage />} />
-            <Route path="/diario" element={<DiaryPage />} />
-            <Route path="/munizioni" element={<AmmoPage />} />
-            <Route path="/profilo" element={<ProfilePage />} />
+            {/* Account richiesto: dati personali del tiratore */}
+            <Route element={<AuthGate />}>
+              <Route path="/prenotazioni" element={<BookingsPage />} />
+              <Route path="/diario" element={<DiaryPage />} />
+              <Route path="/munizioni" element={<AmmoPage />} />
+              <Route path="/profilo" element={<ProfilePage />} />
+            </Route>
           </Route>
-          <Route path="/poligono/:id" element={<RangeDetailPage />} />
-          <Route path="/prenota/:id" element={<BookingPage />} />
-          <Route path="/richiedi/:id" element={<RequestAvailabilityPage />} />
-          <Route path="/armi/aggiungi" element={<AddFirearmPage />} />
+          <Route element={<AuthGate />}>
+            <Route path="/armi/aggiungi" element={<AddFirearmPage />} />
+          </Route>
+
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>

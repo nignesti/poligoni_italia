@@ -140,17 +140,6 @@ export const upsertManagerBillingConfigSchema = managerBillingConfigSchema.omit(
 
 export type UpsertManagerBillingConfig = z.infer<typeof upsertManagerBillingConfigSchema>;
 
-/**
- * `userId` è nel corpo della richiesta, non ricavato da una sessione:
- * l'autenticazione Supabase (Piano §7.3 task 13) non è ancora integrata
- * in nessuna rotta del sito. Da rivedere quando lo sarà.
- */
-export const manageBillingConfigRequestSchema = upsertManagerBillingConfigSchema.extend({
-  userId: uuidSchema,
-});
-
-export type ManageBillingConfigRequest = z.infer<typeof manageBillingConfigRequestSchema>;
-
 export const subscriptionQuerySchema = z.object({
   rangeId: uuidSchema,
 });
@@ -159,7 +148,6 @@ export type SubscriptionQuery = z.infer<typeof subscriptionQuerySchema>;
 
 export const billingConfigQuerySchema = z.object({
   rangeId: uuidSchema,
-  userId: uuidSchema,
 });
 
 export type BillingConfigQuery = z.infer<typeof billingConfigQuerySchema>;
