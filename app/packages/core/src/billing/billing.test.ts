@@ -100,9 +100,11 @@ describe('validateFiscalCode', () => {
     expect(validateFiscalCode('12345678901')).toBe(true);
   });
 
-  it('rifiuta un codice non valido', () => {
+  it('rifiuta un codice vuoto o non valido', () => {
+    expect(validateFiscalCode('')).toBe(false);
     expect(validateFiscalCode('INVALID')).toBe(false);
     expect(validateFiscalCode('123456')).toBe(false);
+    expect(validateFiscalCode('RSSMRA85L01A0010')).toBe(false);
   });
 });
 
