@@ -3,6 +3,7 @@ packages:
   - "apps/*"
 allowBuilds:
   # Dipendenza di vitest: compila il binario nativo in fase di installazione.
+  core-js: true
   esbuild: true
   sharp: true
   # Downloader del binario nativo precompilato per la risoluzione moduli di ESLint (eslint-config-next).

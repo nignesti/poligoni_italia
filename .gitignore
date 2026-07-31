@@ -22,3 +22,6 @@ google_places_cache.json
 poligoni_italia.json
 poligoni_italia_arricchito.json
 stato-dati-poligoni.md
+
+# CSV temporanei di verifica (targetfun batch validation output)
+app/packages/db/scripts/out/
