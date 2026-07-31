@@ -125,6 +125,21 @@ const TSN_MAIN: [name: string, comune: string, sigla: string, regione: string][]
   ['TSN Vercelli', 'Vercelli', 'VC', 'Piemonte'],
 ];
 
+/**
+ * Siti ufficiali verificati a mano (ricerca + fetch diretto della pagina),
+ * non dal censimento originale. Popolati incrementalmente: assente qui non
+ * significa "senza sito", significa "non ancora verificato".
+ */
+const TSN_WEBSITES: Record<string, string> = {
+  'TSN Milano': 'https://www.tsnmilano.it/',
+  'TSN Roma': 'https://tsnroma.it/',
+  'TSN Torino': 'https://www.tsntorino.it/',
+  'TSN Napoli': 'https://tsnnapoli.it/',
+  'TSN Firenze': 'https://www.tsnfirenze.it/',
+  'TSN Catania': 'https://www.tsncatania.it/',
+  'TSN Perugia': 'https://www.tsn-perugia.it/',
+};
+
 const tsnRows: CensusRow[] = TSN_MAIN.map(([name, comune, sigla, regione]) => ({
   name,
   comune,
@@ -132,6 +147,7 @@ const tsnRows: CensusRow[] = TSN_MAIN.map(([name, comune, sigla, regione]) => ({
   regione,
   type: 'tsn' as const,
   source: 'censimento_unasci_2026',
+  ...(TSN_WEBSITES[name] ? { website: TSN_WEBSITES[name] } : {}),
 }));
 
 /** FITAV e FITDS: solo le voci con comune reale (le altre erano "da verificare"). */
@@ -144,6 +160,7 @@ const fitavFitdsRows: CensusRow[] = [
     type: 'tiro_a_volo',
     address: 'Loc. Basia',
     phone: '030 99902000',
+    website: 'https://trapconcaverde.it/',
     source: 'censimento_fitav_2026',
   },
   {
@@ -154,6 +171,7 @@ const fitavFitdsRows: CensusRow[] = [
     type: 'dinamico',
     address: 'Via di Caserino 33',
     phone: '347 6951232',
+    website: 'https://poligonilafolce.it/',
     source: 'censimento_fitds_2026',
   },
 ];
@@ -353,6 +371,7 @@ const privateRows: CensusRow[] = [
     provinciaSigla: 'PV',
     regione: 'Lombardia',
     type: 'privato',
+    website: 'https://www.conradshootingclub.it/',
     source: 'censimento_armietiro_2026',
   },
   {

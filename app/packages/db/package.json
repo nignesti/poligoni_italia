@@ -24,7 +24,8 @@
     "db:check": "drizzle-kit check",
     "db:drop": "drizzle-kit drop",
     "db:geocode": "tsx scripts/geocode-census.ts",
-    "db:seed": "tsx scripts/run-seed.ts"
+    "db:seed": "tsx scripts/run-seed.ts",
+    "db:seed:hours": "tsx scripts/run-seed-hours.ts"
   },
   "dependencies": {
     "@poligoni/core": "workspace:*",
