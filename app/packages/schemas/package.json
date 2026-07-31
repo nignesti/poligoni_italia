@@ -7,13 +7,15 @@
   "exports": {
     ".": "./src/index.ts",
     "./common": "./src/common.ts",
+    "./billing": "./src/billing.ts",
     "./ranges": "./src/ranges.ts",
     "./bookings": "./src/bookings.ts",
     "./sessions": "./src/sessions.ts",
     "./firearms": "./src/firearms.ts",
     "./ammo": "./src/ammo.ts",
     "./documents": "./src/documents.ts",
-    "./gpg": "./src/gpg.ts"
+    "./gpg": "./src/gpg.ts",
+    "./premium": "./src/premium.ts"
   },
   "dependencies": {
     "zod": "^3.24.4"

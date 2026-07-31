@@ -22,6 +22,20 @@
       "when": 1785411271866,
       "tag": "0002_indexes_constraints_seed",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1785512478849,
+      "tag": "0004_pass_pro_subscriptions",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1785513765484,
+      "tag": "0006_gestore_billing",
+      "breakpoints": true
     }
   ]
 }

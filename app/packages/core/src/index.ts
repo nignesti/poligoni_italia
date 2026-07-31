@@ -11,7 +11,9 @@
 
 export * as ammo from './ammo/index.js';
 export * as ballistics from './ballistics/index.js';
+export * as billing from './billing/index.js';
 export * as gpg from './gpg/index.js';
 export * as documents from './documents/index.js';
 export * as booking from './booking/index.js';
+export * as premium from './premium/index.js';
 export * as slug from './slug/index.js';

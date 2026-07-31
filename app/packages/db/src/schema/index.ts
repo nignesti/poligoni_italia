@@ -8,3 +8,5 @@ export * from './users.js';
 export * from './bookings.js';
 export * from './sessions.js';
 export * from './ammo.js';
+export * from './billing.js';
+export * from './premium.js';

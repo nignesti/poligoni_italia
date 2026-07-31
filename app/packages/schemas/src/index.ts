@@ -8,6 +8,7 @@
  */
 
 export * from './common.js';
+export * from './billing.js';
 export * from './ranges.js';
 export * from './bookings.js';
 export * from './sessions.js';
@@ -15,3 +16,4 @@ export * from './firearms.js';
 export * from './ammo.js';
 export * from './documents.js';
 export * from './gpg.js';
+export * from './premium.js';

@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { href: '/gestore/listino', label: 'Listino e servizi', icon: '💰' },
   { href: '/gestore/chiusure', label: 'Chiusure e gare', icon: '🔒' },
   { href: '/gestore/richieste', label: 'Richieste', icon: '📨' },
+  { href: '/gestore/premium', label: 'Piano Premium', icon: '⭐' },
 ];
 
 export default function GestoreLayout({

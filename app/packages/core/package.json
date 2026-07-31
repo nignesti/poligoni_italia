@@ -8,9 +8,11 @@
     ".": "./src/index.ts",
     "./ammo": "./src/ammo/index.ts",
     "./ballistics": "./src/ballistics/index.ts",
+    "./billing": "./src/billing/index.ts",
     "./gpg": "./src/gpg/index.ts",
     "./documents": "./src/documents/index.ts",
     "./booking": "./src/booking/index.ts",
+    "./premium": "./src/premium/index.ts",
     "./slug": "./src/slug/index.ts"
   },
   "scripts": {
