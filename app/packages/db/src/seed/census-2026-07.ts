@@ -135,7 +135,10 @@ const TSN_WEBSITES: Record<string, string> = {
   'TSN Roma': 'https://tsnroma.it/',
   'TSN Torino': 'https://www.tsntorino.it/',
   'TSN Napoli': 'https://tsnnapoli.it/',
-  'TSN Firenze': 'https://www.tsnfirenze.it/',
+  // Il sito ufficiale (tsnfirenze.it) esiste ma la pagina orari non era
+  // raggiungibile in fase di verifica; l'Instagram, confermato dall'utente
+  // insieme agli orari, è il canale attivo.
+  'TSN Firenze': 'https://www.instagram.com/tsnfirenze/',
   'TSN Catania': 'https://www.tsncatania.it/',
   'TSN Perugia': 'https://www.tsn-perugia.it/',
 };
@@ -238,6 +241,9 @@ const privateRows: CensusRow[] = [
     type: 'privato',
     address: 'Via Gobba 9',
     phone: '0423 567639',
+    // sportgun.it non risolve (dominio irraggiungibile in fase di verifica);
+    // pagina Facebook confermata dall'utente come canale attivo.
+    website: 'https://www.facebook.com/profile.php?id=100063769710774',
     source: 'censimento_armietiro_2026',
   },
   {

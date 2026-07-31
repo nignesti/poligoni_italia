@@ -15,3 +15,10 @@ coverage/
 
 .expo/
 *.log
+
+# Output rigenerabili dello scraping Google Places (maps_scraping.py) e dei
+# report di copertura dati — mai la fonte di verità, sempre ricreabili.
+google_places_cache.json
+poligoni_italia.json
+poligoni_italia_arricchito.json
+stato-dati-poligoni.md
