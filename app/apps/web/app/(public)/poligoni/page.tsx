@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Container } from '@/components/Container';
-import { regionCounts } from '@/lib/fixtures';
+import { regionCounts } from '@/lib/ranges';
 
 export const metadata: Metadata = {
   title: 'Poligoni di tiro per regione',
@@ -10,8 +10,8 @@ export const metadata: Metadata = {
     'Esplora i poligoni di tiro sportivo in Italia, organizzati per regione. Orari, contatti e disponibilità delle linee di tiro.',
 };
 
-export default function RegioniIndexPage() {
-  const regions = regionCounts();
+export default async function RegioniIndexPage() {
+  const regions = await regionCounts();
 
   return (
     <>

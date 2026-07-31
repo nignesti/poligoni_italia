@@ -2,11 +2,11 @@
  * GET /api/v1/ranges/:slug
  *
  * Dettaglio struttura (Piano_Sviluppo_App.md §6.1).
- * Pubblica, con cache. In produzione: query Drizzle su Supabase.
+ * Pubblica, con cache.
  */
 import { type NextRequest } from 'next/server';
 import { badRequest, json, notFound, withCache } from '../../../_utils';
-import { findRangeBySlug } from '@/lib/fixtures';
+import { findRangeBySlug } from '@/lib/ranges';
 
 export async function GET(
   _request: NextRequest,
@@ -19,7 +19,7 @@ export async function GET(
     return badRequest('Slug non valido');
   }
 
-  const range = findRangeBySlug(slug);
+  const range = await findRangeBySlug(slug);
   if (!range) {
     return notFound('Poligono non trovato');
   }

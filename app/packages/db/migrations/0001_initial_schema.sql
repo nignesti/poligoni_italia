@@ -74,7 +74,7 @@ CREATE TABLE "ranges" (
 	"provincia" text NOT NULL,
 	"regione" text NOT NULL,
 	"cap" text,
-	"location" "geography(Point,4326)" NOT NULL,
+	"location" geography(Point,4326) NOT NULL,
 	"phone" text,
 	"email" text,
 	"website" text,
@@ -104,7 +104,7 @@ CREATE TABLE "users" (
 	"phone" text,
 	"display_name" text,
 	"role" "user_role" DEFAULT 'tiratore' NOT NULL,
-	"home_location" "geography(Point,4326)",
+	"home_location" geography(Point,4326),
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint

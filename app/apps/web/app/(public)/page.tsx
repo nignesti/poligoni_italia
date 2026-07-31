@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { MapPin, CalendarCheck, NotePencil, Scales } from '@phosphor-icons/react/ssr';
 import { Container } from '@/components/Container';
-import { regionCounts } from '@/lib/fixtures';
+import { regionCounts } from '@/lib/ranges';
 
 // ---------------------------------------------------------------------------
 // Homepage - statica, ottimizzata per SEO. Header e footer arrivano dal
@@ -32,8 +32,8 @@ const FEATURES = [
   },
 ];
 
-export default function HomePage() {
-  const regions = regionCounts();
+export default async function HomePage() {
+  const regions = await regionCounts();
 
   return (
     <>

@@ -4,28 +4,18 @@ import { notFound } from 'next/navigation';
 import { CaretRight } from '@phosphor-icons/react/ssr';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Container } from '@/components/Container';
-import { DEMO_RANGES, rangesByProvincia } from '@/lib/fixtures';
-import { slugify } from '@/lib/slugify';
+import { distinctRegioneProvinciaPairs, rangesByProvincia } from '@/lib/ranges';
 import { RANGE_TYPE_LABEL } from '@/lib/format';
 
-export function generateStaticParams() {
-  const seen = new Set<string>();
-  return DEMO_RANGES.filter((range) => {
-    const key = `${range.regione}::${range.provincia}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  }).map((range) => ({
-    regione: slugify(range.regione),
-    provincia: slugify(range.provincia),
-  }));
+export async function generateStaticParams() {
+  return distinctRegioneProvinciaPairs();
 }
 
 export async function generateMetadata(
   props: { params: Promise<{ regione: string; provincia: string }> },
 ): Promise<Metadata> {
   const { provincia } = await props.params;
-  const ranges = rangesByProvincia(provincia);
+  const ranges = await rangesByProvincia(provincia);
   if (ranges.length === 0) return { title: 'Provincia non trovata' };
 
   const label = ranges[0]!.provincia;
@@ -40,7 +30,7 @@ export default async function ProvinciaPage(
   props: { params: Promise<{ regione: string; provincia: string }> },
 ) {
   const { regione, provincia } = await props.params;
-  const ranges = rangesByProvincia(provincia);
+  const ranges = await rangesByProvincia(provincia);
   if (ranges.length === 0) notFound();
 
   const regioneLabel = ranges[0]!.regione;

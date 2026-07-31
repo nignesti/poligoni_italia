@@ -11,7 +11,9 @@
     "./schema/users": "./src/schema/users.ts",
     "./schema/bookings": "./src/schema/bookings.ts",
     "./schema/sessions": "./src/schema/sessions.ts",
-    "./schema/ammo": "./src/schema/ammo.ts"
+    "./schema/ammo": "./src/schema/ammo.ts",
+    "./client": "./src/client.ts",
+    "./queries/ranges": "./src/queries/ranges.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -27,11 +29,11 @@
   "dependencies": {
     "@poligoni/core": "workspace:*",
     "@poligoni/schemas": "workspace:*",
-    "drizzle-orm": "^0.43.1"
+    "drizzle-orm": "^0.43.1",
+    "postgres": "^3.4.5"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.0",
-    "postgres": "^3.4.5",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^2.1.8"

@@ -3,17 +3,18 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Container } from '@/components/Container';
-import { provinceCountsInRegion, regionCounts, regionNameFromSlug } from '@/lib/fixtures';
+import { provinceCountsInRegion, regionCounts, regionNameFromSlug } from '@/lib/ranges';
 
-export function generateStaticParams() {
-  return regionCounts().map((r) => ({ regione: r.slug }));
+export async function generateStaticParams() {
+  const regions = await regionCounts();
+  return regions.map((r) => ({ regione: r.slug }));
 }
 
 export async function generateMetadata(
   props: { params: Promise<{ regione: string }> },
 ): Promise<Metadata> {
   const { regione } = await props.params;
-  const name = regionNameFromSlug(regione);
+  const name = await regionNameFromSlug(regione);
   if (!name) return { title: 'Regione non trovata' };
 
   return {
@@ -26,10 +27,10 @@ export default async function RegionePage(
   props: { params: Promise<{ regione: string }> },
 ) {
   const { regione } = await props.params;
-  const name = regionNameFromSlug(regione);
+  const name = await regionNameFromSlug(regione);
   if (!name) notFound();
 
-  const province = provinceCountsInRegion(regione);
+  const province = await provinceCountsInRegion(regione);
 
   return (
     <>

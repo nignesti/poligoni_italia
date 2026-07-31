@@ -11,8 +11,7 @@ import {
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Container } from '@/components/Container';
 import { StatusPill } from '@/components/StatusPill';
-import { DEMO_RANGES, findRangeBySlug } from '@/lib/fixtures';
-import { slugify } from '@/lib/slugify';
+import { allRegioneProvinciaSlugParams, findRangeBySlug } from '@/lib/ranges';
 import {
   DISCIPLINE_LABEL,
   RANGE_TYPE_LABEL,
@@ -27,19 +26,15 @@ import {
 // .toLowerCase() (bug che rompeva le rotte con regioni/province accentate
 // o con spazi, es. "Reggio Emilia"). Vedi lib/slugify.ts.
 // ---------------------------------------------------------------------------
-export function generateStaticParams() {
-  return DEMO_RANGES.map((range) => ({
-    regione: slugify(range.regione),
-    provincia: slugify(range.provincia),
-    slug: range.slug,
-  }));
+export async function generateStaticParams() {
+  return allRegioneProvinciaSlugParams();
 }
 
 export async function generateMetadata(
   props: { params: Promise<{ slug: string }> },
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const range = findRangeBySlug(slug);
+  const range = await findRangeBySlug(slug);
   if (!range) return { title: 'Poligono non trovato' };
 
   return {
@@ -49,7 +44,10 @@ export async function generateMetadata(
       `Poligono di tiro a ${range.comune}, ${range.provincia}.`,
     openGraph: {
       title: range.name,
-      description: `Poligono di tiro a ${range.comune}, con ${range.lines.length} linee disponibili.`,
+      description:
+        range.lines.length > 0
+          ? `Poligono di tiro a ${range.comune}, con ${range.lines.length} linee disponibili.`
+          : `Poligono di tiro a ${range.comune}.`,
       type: 'article',
       locale: 'it_IT',
     },
@@ -66,7 +64,7 @@ export default async function RangePage(
   props: { params: Promise<{ regione: string; provincia: string; slug: string }> },
 ) {
   const { regione, provincia, slug } = await props.params;
-  const range = findRangeBySlug(slug);
+  const range = await findRangeBySlug(slug);
   if (!range) notFound();
 
   const status = todayStatus(range.hours, new Date());
@@ -115,7 +113,9 @@ export default async function RangePage(
             </span>
             <h1 className="mt-3 text-2xl font-semibold text-ink md:text-3xl">{range.name}</h1>
             <p className="mt-2 text-ink-muted">
-              {range.address}, {range.cap} {range.comune} ({range.provincia})
+              {range.address && `${range.address}, `}
+              {range.cap && `${range.cap} `}
+              {range.comune} ({range.provincia})
             </p>
             <div className="mt-3">
               <StatusPill open={status.open} label={status.label} />
@@ -161,55 +161,59 @@ export default async function RangePage(
             </section>
           )}
 
-          {/* Orari */}
-          <section>
-            <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
-              Orari di apertura
-            </h2>
-            <dl className="mt-4 flex flex-col gap-2 text-sm">
-              {hourGroups.map((group) => (
-                <div key={group.days.join()} className="flex justify-between">
-                  <dt className="text-ink-muted">{formatDayRange(group.days)}</dt>
-                  <dd className="font-medium text-ink">
-                    {group.opensAt} - {group.closesAt}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-
-          {/* Linee di tiro */}
-          <section>
-            <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
-              Linee di tiro
-            </h2>
-            <div className="mt-4 flex flex-col gap-3">
-              {range.lines.map((line) => (
-                <div key={line.name} className="rounded-panel border border-hairline bg-surface-sunken p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="font-medium text-ink">{line.name}</h3>
-                    <span className="flex items-center gap-1.5 text-xs text-ink-muted">
-                      {line.isIndoor ? (
-                        <House size={14} aria-hidden />
-                      ) : (
-                        <CloudSun size={14} aria-hidden />
-                      )}
-                      {line.isIndoor ? 'Coperta' : 'Scoperta'}
-                    </span>
+          {/* Orari - assente per le strutture solo censite, non verificate */}
+          {hourGroups.length > 0 && (
+            <section>
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+                Orari di apertura
+              </h2>
+              <dl className="mt-4 flex flex-col gap-2 text-sm">
+                {hourGroups.map((group) => (
+                  <div key={group.days.join()} className="flex justify-between">
+                    <dt className="text-ink-muted">{formatDayRange(group.days)}</dt>
+                    <dd className="font-medium text-ink">
+                      {group.opensAt} - {group.closesAt}
+                    </dd>
                   </div>
-                  <p className="mt-2 text-sm text-ink-muted">
-                    <span className="font-medium text-ink">Calibri:</span> {line.calibers.join(', ')}
-                  </p>
-                  {line.disciplines.length > 0 && (
-                    <p className="mt-1 text-sm text-ink-muted">
-                      <span className="font-medium text-ink">Discipline:</span>{' '}
-                      {line.disciplines.map((d) => DISCIPLINE_LABEL[d]).join(', ')}
+                ))}
+              </dl>
+            </section>
+          )}
+
+          {/* Linee di tiro - assenti per le strutture solo censite, non verificate */}
+          {range.lines.length > 0 && (
+            <section>
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+                Linee di tiro
+              </h2>
+              <div className="mt-4 flex flex-col gap-3">
+                {range.lines.map((line) => (
+                  <div key={line.name} className="rounded-panel border border-hairline bg-surface-sunken p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="font-medium text-ink">{line.name}</h3>
+                      <span className="flex items-center gap-1.5 text-xs text-ink-muted">
+                        {line.isIndoor ? (
+                          <House size={14} aria-hidden />
+                        ) : (
+                          <CloudSun size={14} aria-hidden />
+                        )}
+                        {line.isIndoor ? 'Coperta' : 'Scoperta'}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm text-ink-muted">
+                      <span className="font-medium text-ink">Calibri:</span> {line.calibers.join(', ')}
                     </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
+                    {line.disciplines.length > 0 && (
+                      <p className="mt-1 text-sm text-ink-muted">
+                        <span className="font-medium text-ink">Discipline:</span>{' '}
+                        {line.disciplines.map((d) => DISCIPLINE_LABEL[d]).join(', ')}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Listino */}
           {range.pricing.length > 0 && (

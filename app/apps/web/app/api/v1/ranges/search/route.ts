@@ -2,14 +2,17 @@
  * GET /api/v1/ranges/search?lat&lng&radius&calibers&disciplines&indoor&openNow&type&limit
  *
  * Ricerca poligoni per raggio geografico (Piano_Sviluppo_App.md §6.1).
- * Pubblica, con cache. In produzione: query PostGIS con Drizzle.
+ * Pubblica, con cache.
+ *
+ * Filtro per raggio in JavaScript (Haversine), non con ST_DWithin in SQL:
+ * a 81 strutture il costo è trascurabile e si evita di duplicare la
+ * geometria di filtro in due posti. Da rivalutare se il censimento cresce
+ * di ordini di grandezza.
  */
 import { type NextRequest } from 'next/server';
 import { rangeSearchQuerySchema } from '@poligoni/schemas/ranges';
 import { json, methodNotAllowed, validate, withCache } from '../../../_utils';
-import { DEMO_RANGES, toSearchResult } from '@/lib/fixtures';
-
-const MOCK_RESULTS = DEMO_RANGES.map(toSearchResult);
+import { listRangeSummaries, toSearchResult } from '@/lib/ranges';
 
 /** Distanza approssimativa in km con formula Haversine. */
 function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -34,7 +37,10 @@ export async function GET(request: NextRequest) {
   const { lat, lng, radius, calibers, disciplines, indoor, type, limit } = parsed.data;
   void disciplines; // In produzione: filtro per disciplina dalle linee
 
-  const results = MOCK_RESULTS
+  const summaries = await listRangeSummaries();
+  const allResults = summaries.map(toSearchResult);
+
+  const results = allResults
     .map((r) => ({
       ...r,
       distanceKm: Math.round(haversineKm(lat, lng, r.lat, r.lng) * 10) / 10,
