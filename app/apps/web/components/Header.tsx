@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Target } from '@phosphor-icons/react/ssr';
+import { MagnifyingGlass, Target } from '@phosphor-icons/react/ssr';
 import { Container } from './Container';
 
 /**
@@ -10,6 +10,12 @@ import { Container } from './Container';
  * pratiche in un settore vigilato (BP §6.1). Altezza 64px, una sola riga,
  * un solo intento di CTA ("Aggiungi la tua struttura", coerente ovunque nel
  * sito - vedi §4.5 della skill sul divieto di CTA duplicate).
+ *
+ * Sotto il breakpoint `md` la nav testuale (Cerca poligoni, Guide) sparisce
+ * per spazio: "Cerca poligoni" resta raggiungibile via un'icona dedicata
+ * invece di sparire del tutto (era l'unico link perso su mobile, prima di
+ * questa modifica - un menu hamburger per due soli link sarebbe stato
+ * sovradimensionato rispetto al problema).
  */
 export function Header() {
   return (
@@ -29,12 +35,22 @@ export function Header() {
           </Link>
         </nav>
 
-        <Link
-          href="/gestori"
-          className="rounded-control border border-hairline-strong px-3.5 py-2 text-sm font-medium text-ink hover:border-accent hover:text-accent"
-        >
-          Aggiungi la tua struttura
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/cerca"
+            aria-label="Cerca poligoni"
+            className="flex h-9 w-9 items-center justify-center rounded-control text-ink-muted hover:text-ink md:hidden"
+          >
+            <MagnifyingGlass size={20} weight="bold" aria-hidden />
+          </Link>
+
+          <Link
+            href="/gestori"
+            className="rounded-control border border-hairline-strong px-3.5 py-2 text-sm font-medium text-ink hover:border-accent hover:text-accent"
+          >
+            Aggiungi la tua struttura
+          </Link>
+        </div>
       </Container>
     </header>
   );

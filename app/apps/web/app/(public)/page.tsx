@@ -16,8 +16,8 @@ const FEATURES = [
     icon: MapPin,
   },
   {
-    title: 'Prenota la tua linea',
-    description: 'Vedi la disponibilità reale e prenota lo slot senza telefonare.',
+    title: 'Richiedi la tua linea',
+    description: 'Confronta orari e disponibilità e invia una richiesta senza telefonare.',
     icon: CalendarCheck,
   },
   {
@@ -38,27 +38,21 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#1a1a1a] to-[#000000]">
+      <section className="bg-gradient-to-br from-[var(--surface-dark-from)] to-[var(--surface-dark-to)]">
         <Container className="py-20 text-center md:py-24">
           <h1 className="mx-auto max-w-2xl text-4xl font-bold leading-tight text-white md:text-5xl">
-            Trova un poligono, prenota senza telefonare
+            Trova un poligono, richiedi la tua linea senza telefonare
           </h1>
           <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/80">
             Orari, calibri e disponibilità aggiornati. Confronta le strutture vicino a te e
-            prenota la tua linea in pochi minuti.
+            invia una richiesta di prenotazione in pochi minuti.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/cerca"
-              className="rounded-control bg-[#0066b1] px-6 py-3 text-sm font-semibold text-white hover:bg-[#004a87]"
+              className="rounded-control bg-accent px-6 py-3 text-sm font-semibold text-accent-ink hover:bg-accent-hover"
             >
               Cerca un poligono
-            </Link>
-            <Link
-              href="/gestori"
-              className="rounded-control border border-white/40 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
-            >
-              Aggiungi la tua struttura
             </Link>
           </div>
         </Container>
@@ -114,13 +108,21 @@ export default async function HomePage() {
               </Link>
             ))}
           </div>
+
+          <p className="mt-8 text-center text-sm text-ink-muted">
+            Copertura in crescita: gestisci un poligono in una regione con poche strutture?{' '}
+            <Link href="/gestori" className="font-medium text-accent hover:text-accent-hover">
+              Sii il primo a comparire qui
+            </Link>
+            .
+          </p>
         </Container>
       </section>
 
       {/* CTA gestori */}
       <section className="bg-surface-sunken py-20">
         <Container>
-          <div className="rounded-panel bg-gradient-to-br from-[#1a1a1a] to-[#000000] px-8 py-14 text-center">
+          <div className="rounded-panel bg-gradient-to-br from-[var(--surface-dark-from)] to-[var(--surface-dark-to)] px-8 py-14 text-center">
             <h2 className="text-3xl font-semibold text-white">Gestisci un poligono?</h2>
             <p className="mx-auto mt-3 max-w-md text-white/80">
               Porta la tua struttura online in pochi minuti. Gestisci orari, prezzi e prenotazioni
@@ -128,7 +130,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/gestori"
-              className="mt-7 inline-block rounded-control bg-[#0066b1] px-6 py-3 text-sm font-semibold text-white hover:bg-[#004a87]"
+              className="mt-7 inline-block rounded-control bg-accent px-6 py-3 text-sm font-semibold text-accent-ink hover:bg-accent-hover"
             >
               Aggiungi la tua struttura
             </Link>

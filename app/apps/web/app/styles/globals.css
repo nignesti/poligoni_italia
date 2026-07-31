@@ -3,18 +3,19 @@
 /* ==========================================================================
    Poligoni Italia - Token di design
    ==========================================================================
-   Overhaul da CSS custom a Tailwind v4 (Piano_Sviluppo_App.md §2.1). Brand
-   PRESERVATO dalla versione precedente: verde foresta come accento, stone
+   Overhaul da CSS custom a Tailwind v4 (Piano_Sviluppo_App.md §2.1). Stone
    caldo come neutro, Inter come font. Vedi redesign audit del 30/07/2026.
 
    Dials: VARIANCE 5 / MOTION 3 / DENSITY 4. Sotto la baseline per scelta
    esplicita: settore vigilato, pubblico che cerca informazioni pratiche
    (BP §6.1 - tono "sobrio, tecnico, non spettacolarizzato").
 
-   ACCENTO UNICO: verde (#1b5e20 di brand). Il token "earth" (bronzo/ocra)
-   della v1 non era usato in nessuna pagina ed è stato rimosso: un secondo
-   accento non necessario, nella stessa famiglia cromatica che le linee guida
-   di design considerano generica per i brand italiani artigianali.
+   ACCENTO UNICO: blu (#0066b1, ispirazione BMW) — confermato come direzione
+   definitiva dopo /impeccable critique del 31/07/2026 (sostituisce il verde
+   #1b5e20 della v1). Applicato ovunque tramite token, incluse le superfici
+   gestore ancora sulla scala di compatibilità in fondo a questo file: i nomi
+   delle variabili restano "--color-green-*" per non rompere i riferimenti
+   nei file (gestore) non ancora migrati a Tailwind, ma i VALORI sono ora blu.
    Rosso e ambra restano riservati allo stato semantico (errore, scadenza),
    mai come accento decorativo.
 
@@ -47,6 +48,13 @@
   --accent-hover: #004a87;
   --accent-ink: #ffffff;
   --accent-wash: #e8f2ff;
+
+  /* Superficie scura decorativa (hero, banner CTA) - sempre scura a
+     prescindere dal tema chiaro/scuro della pagina. Un solo token invece di
+     hex ripetuti: prima di questa modifica "#1a1a1a"→"#000000" comparivano
+     hardcoded in due punti di page.tsx, con rischio di divergenza futura. */
+  --surface-dark-from: #1a1a1a;
+  --surface-dark-to: #000000;
 
   /* Stato semantico - non decorativo */
   --state-error: #b91c1c;
@@ -182,16 +190,19 @@
   --space-20: 5rem;
   --space-24: 6rem;
 
-  --color-green-50: #f0f7f0;
-  --color-green-100: #d9eed9;
-  --color-green-200: #b5ddb5;
-  --color-green-300: #85c485;
-  --color-green-400: #52a652;
-  --color-green-500: #2e7d32;
-  --color-green-600: #1b5e20;
-  --color-green-700: #145214;
-  --color-green-800: #0d3b0d;
-  --color-green-900: #082408;
+  /* Rimappati a blu (era verde #1b5e20): il nome resta "green" per non
+     rompere i riferimenti var(--color-green-N) nei file (gestore) non ancora
+     migrati a Tailwind — vedi nota in testa al file. */
+  --color-green-50: #e8f2ff;
+  --color-green-100: #cce6ff;
+  --color-green-200: #99ccff;
+  --color-green-300: #5cadf2;
+  --color-green-400: #3d9aff;
+  --color-green-500: #1a7fd6;
+  --color-green-600: #0066b1;
+  --color-green-700: #004a87;
+  --color-green-800: #003561;
+  --color-green-900: #001f3d;
 
   --color-gray-50: #fafaf9;
   --color-gray-100: #f5f5f4;
@@ -248,22 +259,22 @@
 }
 
 .btn-primary {
-  background-color: #0066b1;
-  color: white;
+  background-color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .btn-primary:hover {
-  background-color: #004a87;
+  background-color: var(--accent-hover);
 }
 
 .btn-secondary {
   background-color: white;
-  color: #0066b1;
-  border: 2px solid #0066b1;
+  color: var(--accent);
+  border: 2px solid var(--accent);
 }
 
 .btn-secondary:hover {
-  background-color: #e8f2ff;
+  background-color: var(--accent-wash);
 }
 
 .btn-ghost {
