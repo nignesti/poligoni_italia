@@ -1,5 +1,13 @@
 import Link from 'next/link';
-import { MapPin, CalendarCheck, NotePencil, Scales } from '@phosphor-icons/react/ssr';
+import {
+  MapPin,
+  CalendarCheck,
+  NotePencil,
+  Scales,
+  MagnifyingGlass,
+  ListChecks,
+  PaperPlaneTilt,
+} from '@phosphor-icons/react/ssr';
 import { Container } from '@/components/Container';
 import { regionCounts } from '@/lib/ranges';
 
@@ -7,6 +15,24 @@ import { regionCounts } from '@/lib/ranges';
 // Homepage - statica, ottimizzata per SEO. Header e footer arrivano dal
 // layout condiviso di questo route group (Piano_Sviluppo_App.md §7.1).
 // ---------------------------------------------------------------------------
+
+const STEPS = [
+  {
+    title: 'Cerca',
+    description: 'Filtra per posizione, tipo di struttura e disciplina.',
+    icon: MagnifyingGlass,
+  },
+  {
+    title: 'Confronta',
+    description: 'Guarda orari, linee disponibili e listino sulla scheda struttura.',
+    icon: ListChecks,
+  },
+  {
+    title: 'Richiedi la linea',
+    description: 'Invia la richiesta al gestore senza dover telefonare.',
+    icon: PaperPlaneTilt,
+  },
+];
 
 const FEATURES = [
   {
@@ -85,6 +111,35 @@ export default async function HomePage() {
               </article>
             ))}
           </div>
+        </Container>
+      </section>
+
+      {/* Come funziona */}
+      <section className="py-20">
+        <Container className="grid gap-12 md:grid-cols-2 md:items-center">
+          <div>
+            <h2 className="text-3xl font-semibold text-ink">Come funziona</h2>
+            <p className="mt-3 text-ink-muted">
+              Tre passaggi, senza dover chiamare per sapere se c&apos;è una linea libera.
+            </p>
+          </div>
+
+          <ol className="flex flex-col gap-6">
+            {STEPS.map((step, i) => (
+              <li key={step.title} className="flex gap-4">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-wash text-sm font-semibold text-accent">
+                  {i + 1}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <step.icon size={18} className="text-accent" aria-hidden />
+                    <h3 className="font-semibold text-ink">{step.title}</h3>
+                  </div>
+                  <p className="mt-1 text-sm text-ink-muted">{step.description}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </Container>
       </section>
 

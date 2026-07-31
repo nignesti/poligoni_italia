@@ -53,8 +53,8 @@ export function SearchClient({ ranges }: { ranges: RangeSummary[] }) {
       <div className="border-b border-hairline bg-surface-sunken py-10">
         <Container>
           <h1 className="text-2xl font-semibold text-ink md:text-3xl">Cerca un poligono</h1>
-          <form onSubmit={handleSubmit} className="mt-6 flex max-w-2xl flex-col gap-3 sm:flex-row">
-            <div className="relative flex-1">
+          <form onSubmit={handleSubmit} className="mt-6 max-w-2xl">
+            <div className="relative">
               <MagnifyingGlass
                 size={18}
                 className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-faint"
@@ -68,18 +68,25 @@ export function SearchClient({ ranges }: { ranges: RangeSummary[] }) {
                 className="w-full rounded-control border border-hairline-strong bg-surface py-3 pl-11 pr-4 text-sm text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
               />
             </div>
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value as RangeType | '')}
-              className="rounded-control border border-hairline-strong bg-surface px-4 py-3 text-sm text-ink focus:border-accent focus:outline-none"
-            >
-              {TYPE_FILTERS.map((f) => (
-                <option key={f.value} value={f.value}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
           </form>
+
+          <div role="group" aria-label="Filtra per tipo" className="mt-4 flex flex-wrap gap-2">
+            {TYPE_FILTERS.map((f) => (
+              <button
+                key={f.value}
+                type="button"
+                aria-pressed={typeFilter === f.value}
+                onClick={() => setTypeFilter(f.value)}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                  typeFilter === f.value
+                    ? 'bg-accent text-accent-ink'
+                    : 'border border-hairline-strong text-ink-muted hover:border-accent hover:text-accent'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
         </Container>
       </div>
 

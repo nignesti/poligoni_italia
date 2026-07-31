@@ -7,6 +7,7 @@ import {
   Globe,
   House,
   CloudSun,
+  NavigationArrow,
 } from '@phosphor-icons/react/ssr';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Container } from '@/components/Container';
@@ -257,6 +258,31 @@ export default async function RangePage(
             </section>
           )}
         </div>
+
+        {/* Mappa */}
+        <section className="border-t border-hairline py-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold text-ink">Dove si trova</h2>
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${range.location.lat},${range.location.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-medium text-accent hover:text-accent-hover"
+            >
+              <NavigationArrow size={16} aria-hidden />
+              Indicazioni stradali
+            </a>
+          </div>
+          <div className="mt-4 overflow-hidden rounded-panel border border-hairline">
+            <iframe
+              title={`Mappa di ${range.name}`}
+              src={`https://www.google.com/maps?q=${range.location.lat},${range.location.lng}&z=15&output=embed`}
+              className="h-80 w-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </section>
 
         {/* CTA prenotazione */}
         <div className="border-t border-hairline py-10 text-center">
