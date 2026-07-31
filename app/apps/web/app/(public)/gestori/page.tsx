@@ -97,26 +97,28 @@ export default function GestoriPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#0d3b0d] to-[#1b5e20]">
+      <section className="bg-gradient-to-br from-[var(--surface-dark-from)] to-[var(--surface-dark-to)]">
         <Container className="py-20 text-center">
-          <h1 className="mx-auto max-w-xl text-4xl font-bold leading-tight text-white">
+          <h1 className="mx-auto max-w-2xl text-4xl font-bold leading-tight text-white md:text-5xl">
             Porta il tuo poligono online
           </h1>
           <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/80">
             La dashboard gratuita per gestire orari, prezzi e prenotazioni. Nuovi tiratori ti
             trovano ogni giorno su Google.
           </p>
-          <a
-            href="#piani"
-            className="mt-8 inline-block rounded-control bg-white px-6 py-3 text-sm font-semibold text-[#1b5e20] hover:bg-white/90"
-          >
-            Vedi i piani
-          </a>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="#piani"
+              className="rounded-control bg-accent px-6 py-3 text-sm font-semibold text-accent-ink hover:bg-accent-hover"
+            >
+              Vedi i piani
+            </Link>
+          </div>
         </Container>
       </section>
 
       {/* Benefici */}
-      <section className="py-20">
+      <section className="bg-surface-sunken py-20">
         <Container>
           <div className="mx-auto max-w-xl text-center">
             <h2 className="text-3xl font-semibold text-ink">
@@ -153,10 +155,10 @@ export default function GestoriPage() {
             {PLANS.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative flex flex-col gap-6 rounded-panel border bg-surface p-8 ${
+                className={`relative flex flex-col gap-6 rounded-panel bg-surface p-8 shadow-panel ${
                   plan.highlighted
-                    ? 'border-accent shadow-panel lg:-translate-y-2'
-                    : 'border-hairline'
+                    ? 'border border-accent'
+                    : 'border border-hairline'
                 }`}
               >
                 {plan.highlighted && (
@@ -181,7 +183,7 @@ export default function GestoriPage() {
                 </ul>
                 <a
                   href="mailto:info@poligoniitalia.it"
-                  className={`mt-auto rounded-control px-5 py-2.5 text-center text-sm font-semibold ${
+                  className={`mt-auto rounded-control px-6 py-3 text-center text-sm font-semibold ${
                     plan.highlighted
                       ? 'bg-accent text-accent-ink hover:bg-accent-hover'
                       : 'border border-hairline-strong text-ink hover:border-accent hover:text-accent'
