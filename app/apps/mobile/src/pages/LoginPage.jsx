@@ -1,46 +1,34 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { supabase } from "@/api/supabaseClient";
 import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const location = useLocation();
   const next = location.state?.next || "/profilo";
 
-  const [step, setStep] = useState("email"); // email | code
+  const [emailSent, setEmailSent] = useState(false);
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleSendCode = async (e) => {
+  const handleSendLink = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { shouldCreateUser: true },
+      options: {
+        shouldCreateUser: true,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+      },
     });
     setLoading(false);
     if (error) {
-      setError("Non siamo riusciti a inviare il codice. Riprova.");
+      setError("Non siamo riusciti a inviare il link di accesso. Riprova.");
       return;
     }
-    setStep("code");
-  };
-
-  const handleVerifyCode = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    const { error } = await supabase.auth.verifyOtp({ email, token: code, type: "email" });
-    setLoading(false);
-    if (error) {
-      setError("Codice non valido o scaduto. Controlla e riprova.");
-      return;
-    }
-    navigate(next, { replace: true });
+    setEmailSent(true);
   };
 
   const handleGoogleLogin = async () => {
@@ -66,14 +54,14 @@ export default function LoginPage() {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
-        {step === "email" ? (
+        {!emailSent ? (
           <>
             <h2 className="font-semibold text-slate-900 mb-1">Accedi</h2>
             <p className="text-sm text-slate-500 mb-5">
-              Ti mandiamo un codice via email, senza password.
+              Ti mandiamo un link per accedere, senza password.
             </p>
 
-            <form onSubmit={handleSendCode} className="space-y-3">
+            <form onSubmit={handleSendLink} className="space-y-3">
               <input
                 type="email"
                 value={email}
@@ -90,7 +78,7 @@ export default function LoginPage() {
                 className="w-full bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-50 active:scale-95 transition-transform flex items-center justify-center gap-2"
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                {loading ? "Invio…" : "Invia codice"}
+                {loading ? "Invio…" : "Invia link di accesso"}
               </button>
             </form>
 
@@ -114,41 +102,17 @@ export default function LoginPage() {
           <>
             <h2 className="font-semibold text-slate-900 mb-1">Controlla la tua email</h2>
             <p className="text-sm text-slate-500 mb-5">
-              Abbiamo mandato un codice a <strong>{email}</strong>.
+              Abbiamo inviato un link di accesso a <strong>{email}</strong>. Aprilo per entrare.
             </p>
-
-            <form onSubmit={handleVerifyCode} className="space-y-3">
-              <input
-                type="text"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                placeholder="123456"
-                required
-                disabled={loading}
-                autoFocus
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-center text-lg tracking-[0.3em] font-mono focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-              {error && <p className="text-xs text-red-600">{error}</p>}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-50 active:scale-95 transition-transform flex items-center justify-center gap-2"
-              >
-                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                {loading ? "Verifica…" : "Verifica e accedi"}
-              </button>
-            </form>
 
             <button
               type="button"
               onClick={() => {
-                setStep("email");
-                setCode("");
+                setEmailSent(false);
+                setEmail("");
                 setError(null);
               }}
-              className="w-full text-center text-xs text-orange-600 font-medium mt-4"
+              className="w-full text-center text-xs text-orange-600 font-medium"
             >
               Usa un'altra email
             </button>
