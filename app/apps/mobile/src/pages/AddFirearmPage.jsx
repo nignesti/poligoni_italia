@@ -52,7 +52,7 @@ export default function AddFirearmPage() {
         <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2 mb-4">
           <ShieldCheck className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
           <p className="text-xs text-green-800 leading-relaxed">
-            L'arma si registra per tipo e calibro, senza numeri di matricola né documenti di detenzione. I tuoi dati sono privati e mai usati per targeting pubblicitario.
+            L'arma si registra per tipo e calibro, senza numeri di matricola né documenti di detenzione. La tua armeria resta solo su questo dispositivo: non la inviamo né la conserviamo sui nostri server.
           </p>
         </div>
 

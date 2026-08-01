@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { listSessions, listSessionShots, createSession, deleteSession } from "@/api/sessionsApi";
 import { listFirearms, deleteFirearm } from "@/api/firearmsApi";
 import { createAmmoMovement } from "@/api/ammoApi";
-import { Crosshair, Plus, Loader2, Calendar, Trash2, X } from "lucide-react";
-import { formatDate } from "@/lib/domain";
+import { Crosshair, Plus, Loader2, Calendar, Trash2, X, ShieldCheck, Timer, Award, ChevronRight } from "lucide-react";
+import { formatDate, LOCAL_ONLY_DISCLAIMER, evaluateBadges } from "@/lib/domain";
 
 export default function DiaryPage() {
   const navigate = useNavigate();
@@ -32,7 +32,8 @@ export default function DiaryPage() {
   };
 
   const roundsByFirearm = shots.reduce((acc, s) => {
-    acc[s.firearm_id] = (acc[s.firearm_id] || 0) + (s.rounds_fired || 0);
+    const key = s.firearm_label || s.caliber;
+    acc[key] = (acc[key] || 0) + (s.rounds_fired || 0);
     return acc;
   }, {});
 
@@ -54,12 +55,13 @@ export default function DiaryPage() {
 
   const handleAddSession = async () => {
     try {
+      const selectedFirearm = firearms.find((f) => f.id === newSession.firearm_id);
       const session = await createSession({
         rangeName: newSession.range_name,
         startedAt: new Date(newSession.started_at).toISOString(),
         durationMin: Number(newSession.duration_min),
         distanceM: Number(newSession.distance_m),
-        firearmId: newSession.firearm_id || null,
+        firearmLabel: selectedFirearm?.nickname || null,
         caliber: newSession.caliber,
         roundsFired: Number(newSession.rounds_fired),
         notes: newSession.notes,
@@ -120,6 +122,9 @@ export default function DiaryPage() {
   }
 
   const totalRounds = shots.reduce((sum, s) => sum + (s.rounds_fired || 0), 0);
+  const distinctCalibers = new Set(shots.map((s) => s.caliber).filter(Boolean)).size;
+  const badges = evaluateBadges({ totalRounds, sessionCount: sessions.length, distinctCalibers });
+  const unlockedBadges = badges.filter((b) => b.unlocked).length;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -173,6 +178,40 @@ export default function DiaryPage() {
             >
               <Plus className="w-4 h-4" /> Nuova sessione
             </button>
+
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <button
+                onClick={() => navigate("/cronografo")}
+                className="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 text-left active:scale-95 transition-transform"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center">
+                    <Timer className="w-4 h-4 text-orange-500" />
+                  </div>
+                  <span className="text-[9px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded uppercase tracking-wider">
+                    Pro
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-slate-900">Cronografo</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Tempi di reazione e split</p>
+              </button>
+
+              <button
+                onClick={() => navigate("/medaglie")}
+                className="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 text-left active:scale-95 transition-transform"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
+                    <Award className="w-4 h-4 text-orange-600" />
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-300" />
+                </div>
+                <p className="text-sm font-semibold text-slate-900">Medaglie</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  {unlockedBadges} / {badges.length} sbloccate
+                </p>
+              </button>
+            </div>
 
             {sessions.length === 0 ? (
               <div className="bg-white rounded-2xl p-6 text-center border border-slate-100">
@@ -229,6 +268,11 @@ export default function DiaryPage() {
               <Plus className="w-4 h-4" /> Aggiungi arma
             </button>
 
+            <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2 mb-4">
+              <ShieldCheck className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-green-800 leading-relaxed">{LOCAL_ONLY_DISCLAIMER}</p>
+            </div>
+
             {firearms.length === 0 ? (
               <div className="bg-white rounded-2xl p-6 text-center border border-slate-100">
                 <p className="text-sm text-slate-500">Nessun'arma registrata</p>
@@ -262,7 +306,7 @@ export default function DiaryPage() {
                     </div>
                     <div className="mt-2 pt-2 border-t border-slate-50 flex items-center justify-between">
                       <span className="text-xs text-slate-400">Colpi totali</span>
-                      <span className="text-sm font-bold text-slate-900">{roundsByFirearm[f.id] || 0}</span>
+                      <span className="text-sm font-bold text-slate-900">{roundsByFirearm[f.nickname] || 0}</span>
                     </div>
                   </div>
                 ))}

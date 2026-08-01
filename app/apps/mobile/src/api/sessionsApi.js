@@ -16,27 +16,28 @@ export async function listSessions() {
 
 /**
  * Colpi per arma di tutte le sessioni dell'utente — usato per calcolare
- * il totale colpi per arma nel Diario, dato che `firearms` non ha una
- * colonna contatore (Piano §4.4: il totale si ricostruisce dai movimenti,
- * mai un contatore scritto direttamente).
+ * il totale colpi per arma nel Diario. `firearm_label` è lo snapshot
+ * testuale del soprannome dell'arma inserito al momento della sessione:
+ * l'armeria (`firearms`) è dato solo-locale, non c'è più un riferimento a
+ * una riga server da cui ricavarlo.
  */
 export async function listSessionShots() {
   const userId = await getCurrentUserId();
   const { data, error } = await supabase
     .from('session_shots')
-    .select('firearm_id, rounds_fired, sessions!inner(user_id)')
+    .select('firearm_label, caliber, rounds_fired, sessions!inner(user_id)')
     .eq('sessions.user_id', userId);
   if (error) throw error;
   return data || [];
 }
 
 /**
- * Crea una sessione e, se è stata indicata un'arma, la relativa riga di
- * colpi sparati. `session_shots.firearm_id` è NOT NULL: senza arma
- * selezionata la sessione si registra comunque, solo senza il dettaglio
- * colpi/calibro per arma.
+ * Crea una sessione e, se sono stati indicati calibro e colpi, la relativa
+ * riga di colpi sparati. L'arma è identificata solo da un'etichetta di
+ * testo locale (`firearmLabel`), mai da un riferimento al database: senza
+ * arma selezionata la sessione si registra comunque, solo senza etichetta.
  */
-export async function createSession({ rangeName, startedAt, durationMin, distanceM, firearmId, caliber, roundsFired, notes }) {
+export async function createSession({ rangeName, startedAt, durationMin, distanceM, firearmLabel, caliber, roundsFired, notes }) {
   const userId = await getCurrentUserId();
   const { data: session, error } = await supabase
     .from('sessions')
@@ -54,10 +55,10 @@ export async function createSession({ rangeName, startedAt, durationMin, distanc
     .single();
   if (error) throw error;
 
-  if (firearmId && roundsFired) {
+  if (caliber && roundsFired) {
     const { error: shotsError } = await supabase.from('session_shots').insert({
       session_id: session.id,
-      firearm_id: firearmId,
+      firearm_label: firearmLabel || null,
       caliber,
       rounds_fired: roundsFired,
     });

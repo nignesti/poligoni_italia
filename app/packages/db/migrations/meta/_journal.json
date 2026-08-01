@@ -50,6 +50,13 @@
       "when": 1785520000001,
       "tag": "0008_row_level_security",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1785520000002,
+      "tag": "0009_session_shots_local_firearms",
+      "breakpoints": true
     }
   ]
 }

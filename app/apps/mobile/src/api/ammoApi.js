@@ -1,23 +1,17 @@
-import { supabase } from '@/api/supabaseClient';
-import { getCurrentUserId } from '@/lib/currentUser';
+import { listLocal, insertLocal } from '@/lib/localStore';
 
-/** Movimenti munizioni dell'utente autenticato — l'inventario è la somma dei movimenti. */
+/**
+ * Movimenti munizioni — dati solo-locali, mai trasmessi ai nostri server.
+ * L'inventario è la somma dei movimenti, calcolata client-side.
+ */
 export async function listAmmoMovements() {
-  const userId = await getCurrentUserId();
-  const { data, error } = await supabase
-    .from('ammo_movements')
-    .select('*')
-    .eq('user_id', userId)
-    .order('occurred_at', { ascending: false })
-    .limit(100);
-  if (error) throw error;
-  return data || [];
+  return [...listLocal('ammo_movements')].sort(
+    (a, b) => new Date(b.occurred_at) - new Date(a.occurred_at)
+  );
 }
 
 export async function createAmmoMovement({ caliber, category, delta, reason, sessionId }) {
-  const userId = await getCurrentUserId();
-  const { error } = await supabase.from('ammo_movements').insert({
-    user_id: userId,
+  return insertLocal('ammo_movements', {
     caliber,
     category,
     delta,
@@ -25,5 +19,4 @@ export async function createAmmoMovement({ caliber, category, delta, reason, ses
     occurred_at: new Date().toISOString(),
     session_id: sessionId || null,
   });
-  if (error) throw error;
 }

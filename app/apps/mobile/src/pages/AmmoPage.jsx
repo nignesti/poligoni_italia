@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { listAmmoMovements, createAmmoMovement } from "@/api/ammoApi";
-import { Boxes, Plus, Loader2, AlertTriangle, X, ArrowDown, ArrowUp } from "lucide-react";
+import { Boxes, Plus, Loader2, AlertTriangle, ShieldCheck, X, ArrowDown, ArrowUp } from "lucide-react";
 import {
   evaluateAmmoLimits,
   computeInventoryByCategory,
   AMMO_DISCLAIMER,
+  LOCAL_ONLY_DISCLAIMER,
   LEGAL_AMMO_LIMITS,
 } from "@/lib/domain";
 import { AmmoLevelBadge, ProgressBar } from "@/components/Badges";
@@ -79,10 +80,16 @@ export default function AmmoPage() {
       </div>
 
       <div className="px-4 py-4 space-y-4">
-        {/* Disclaimer */}
+        {/* Disclaimer legale */}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
           <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
           <p className="text-xs text-amber-800 leading-relaxed">{AMMO_DISCLAIMER}</p>
+        </div>
+
+        {/* Disclaimer privacy */}
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2">
+          <ShieldCheck className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-green-800 leading-relaxed">{LOCAL_ONLY_DISCLAIMER}</p>
         </div>
 
         {/* Status cards */}

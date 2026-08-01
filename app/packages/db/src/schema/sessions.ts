@@ -60,15 +60,21 @@ export const sessions = pgTable('sessions', {
 
 /**
  * Colpi sparati per sessione.
+ *
+ * `firearmId` non è più popolato dal client: l'armeria (tabella `firearms`)
+ * è diventata dato solo-locale sul dispositivo dell'utente, mai trasmesso al
+ * server (scelta di prodotto). `firearmLabel` conserva lo snapshot testuale
+ * del soprannome dell'arma al momento della sessione, senza collegamento a
+ * una riga server che potrebbe non esistere più. La colonna e la FK restano
+ * per compatibilità storica ma sono opzionali.
  */
 export const sessionShots = pgTable('session_shots', {
   id: uuid('id').primaryKey().defaultRandom(),
   sessionId: uuid('session_id')
     .notNull()
     .references(() => sessions.id, { onDelete: 'cascade' }),
-  firearmId: uuid('firearm_id')
-    .notNull()
-    .references(() => firearms.id),
+  firearmId: uuid('firearm_id').references(() => firearms.id),
+  firearmLabel: text('firearm_label'),
   caliber: text('caliber').notNull(),
   roundsFired: integer('rounds_fired').notNull(),
 });

@@ -4,6 +4,12 @@
 export const AMMO_DISCLAIMER =
   "Strumento di ausilio al calcolo. Non costituisce certificazione di conformità: la responsabilità della detenzione resta del detentore.";
 
+export const LOCAL_ONLY_DISCLAIMER =
+  "Questi dati restano solo su questo dispositivo. Non li inviamo né li conserviamo sui nostri server.";
+
+export const CRONOGRAFO_DISCLAIMER =
+  "Stima basata sul microfono del dispositivo: la precisione dipende dal rumore ambientale e dall'hardware. Non è uno strumento di misura certificato, pensato per allenamento personale.";
+
 export const LEGAL_AMMO_LIMITS = [
   {
     category: "arma_corta",
@@ -219,6 +225,29 @@ export const BOOKING_STATUS_LABELS = {
   completata: "Completata",
   no_show: "Non presentato",
 };
+
+// Medaglie — traguardi calcolati dai dati del diario, nessuno stato salvato:
+// lo sblocco è sempre ricalcolato da colpi/sessioni/calibri registrati.
+export const BADGE_DEFINITIONS = [
+  { id: "primi_colpi", label: "Primi colpi", description: "Registra la tua prima sessione", icon: "target", metric: "sessions", threshold: 1 },
+  { id: "colpi_100", label: "100 colpi", description: "Supera i 100 colpi sparati totali", icon: "flame", metric: "rounds", threshold: 100 },
+  { id: "colpi_500", label: "500 colpi", description: "Supera i 500 colpi sparati totali", icon: "flame", metric: "rounds", threshold: 500 },
+  { id: "colpi_1000", label: "1.000 colpi", description: "Supera i 1.000 colpi sparati totali", icon: "flame", metric: "rounds", threshold: 1000 },
+  { id: "colpi_5000", label: "5.000 colpi", description: "Supera i 5.000 colpi sparati totali", icon: "flame", metric: "rounds", threshold: 5000 },
+  { id: "sessioni_10", label: "10 sessioni", description: "Registra 10 sessioni di tiro", icon: "calendar", metric: "sessions", threshold: 10 },
+  { id: "sessioni_50", label: "50 sessioni", description: "Registra 50 sessioni di tiro", icon: "calendar", metric: "sessions", threshold: 50 },
+  { id: "multi_calibro", label: "Poliedrico", description: "Registra sessioni con 3 calibri diversi", icon: "layers", metric: "calibers", threshold: 3 },
+];
+
+export function evaluateBadges({ totalRounds = 0, sessionCount = 0, distinctCalibers = 0 }) {
+  const metrics = { rounds: totalRounds, sessions: sessionCount, calibers: distinctCalibers };
+  return BADGE_DEFINITIONS.map((b) => {
+    const value = metrics[b.metric] || 0;
+    const unlocked = value >= b.threshold;
+    const progress = b.threshold > 0 ? Math.min(100, Math.round((value / b.threshold) * 100)) : 0;
+    return { ...b, value, unlocked, progress };
+  });
+}
 
 export function formatEuro(cents) {
   if (!cents) return "—";

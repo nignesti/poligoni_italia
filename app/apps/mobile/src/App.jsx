@@ -13,6 +13,8 @@ import BookingsPage from '@/pages/BookingsPage';
 import DiaryPage from '@/pages/DiaryPage';
 import AmmoPage from '@/pages/AmmoPage';
 import AddFirearmPage from '@/pages/AddFirearmPage';
+import CronografoPage from '@/pages/CronografoPage';
+import MedagliePage from '@/pages/MedagliePage';
 import ProfilePage from '@/pages/ProfilePage';
 import RequestAvailabilityPage from '@/pages/RequestAvailabilityPage';
 import LoginPage from '@/pages/LoginPage';
@@ -44,6 +46,8 @@ function App() {
           </Route>
           <Route element={<AuthGate />}>
             <Route path="/armi/aggiungi" element={<AddFirearmPage />} />
+            <Route path="/cronografo" element={<CronografoPage />} />
+            <Route path="/medaglie" element={<MedagliePage />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

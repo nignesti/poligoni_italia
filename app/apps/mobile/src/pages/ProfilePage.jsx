@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { listDocuments, createDocument } from "@/api/documentsApi";
+import { exportLocalData, importLocalData } from "@/lib/localStore";
 import { supabase } from "@/api/supabaseClient";
 import { useAuth } from "@/lib/useAuth";
-import { User, FileText, AlertTriangle, ChevronRight, Loader2, Plus, Shield, Download, LogOut, X, Award } from "lucide-react";
+import { User, FileText, AlertTriangle, ChevronRight, Loader2, Plus, Shield, Download, Upload, LogOut, X, Award } from "lucide-react";
 import { computeDocumentAlerts, DOCUMENT_LABELS, formatDate } from "@/lib/domain";
 
 // Le etichette locali includono "tessera_socio", non presente nell'enum
@@ -17,6 +18,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [showAddDoc, setShowAddDoc] = useState(false);
   const [saving, setSaving] = useState(false);
+  const importInputRef = useRef(null);
 
   useEffect(() => {
     loadData();
@@ -38,6 +40,32 @@ export default function ProfilePage() {
   };
 
   const alerts = computeDocumentAlerts(docs);
+
+  const handleExportBackup = () => {
+    const data = exportLocalData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `poligoni-italia-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      importLocalData(JSON.parse(text));
+      alert("Backup ripristinato. Riapri Armeria, Munizioni o Documenti per vedere i dati.");
+      loadData();
+    } catch (err) {
+      console.error(err);
+      alert("File di backup non valido");
+    }
+    e.target.value = "";
+  };
 
   const [newDoc, setNewDoc] = useState({
     type: "porto_armi_tav",
@@ -176,18 +204,42 @@ export default function ProfilePage() {
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mt-2 flex items-start gap-2">
             <Shield className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-blue-800 leading-relaxed">
-              Si salvano solo le date di scadenza, non i documenti originali. Nessun dato sanitario viene archiviato.
+              Si salvano solo le date di scadenza, non i documenti originali. I tuoi documenti restano solo su questo dispositivo: non li inviamo né li conserviamo sui nostri server.
             </p>
           </div>
         </div>
 
         {/* Menu */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50">
+          <button
+            onClick={handleExportBackup}
+            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50"
+          >
             <Download className="w-5 h-5 text-slate-400" />
-            <span className="flex-1 text-left text-sm text-slate-700">Esporta i miei dati</span>
+            <div className="flex-1 text-left">
+              <span className="block text-sm text-slate-700">Esporta dati locali</span>
+              <span className="block text-[11px] text-slate-400 mt-0.5">Armeria, munizioni, documenti — file di backup</span>
+            </div>
             <ChevronRight className="w-4 h-4 text-slate-300" />
           </button>
+          <button
+            onClick={() => importInputRef.current?.click()}
+            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50"
+          >
+            <Upload className="w-5 h-5 text-slate-400" />
+            <div className="flex-1 text-left">
+              <span className="block text-sm text-slate-700">Importa backup</span>
+              <span className="block text-[11px] text-slate-400 mt-0.5">Ripristina da un file esportato in precedenza</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-slate-300" />
+          </button>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept="application/json"
+            className="hidden"
+            onChange={handleImportFile}
+          />
           <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50">
             <Shield className="w-5 h-5 text-slate-400" />
             <span className="flex-1 text-left text-sm text-slate-700">Privacy e dati</span>
