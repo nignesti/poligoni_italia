@@ -4,12 +4,15 @@ import { listBookings, cancelBooking } from "@/api/bookingsApi";
 import { Calendar, QrCode, Loader2, MapPin, Clock, Plus, X } from "lucide-react";
 import { StatusBadge } from "@/components/Badges";
 import { formatDate } from "@/lib/domain";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 
 export default function BookingsPage() {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [qrBooking, setQrBooking] = useState(null);
+
+  useBodyScrollLock(!!qrBooking);
 
   useEffect(() => {
     loadBookings();

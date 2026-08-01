@@ -5,6 +5,7 @@ import { listFirearms, deleteFirearm } from "@/api/firearmsApi";
 import { createAmmoMovement } from "@/api/ammoApi";
 import { Crosshair, Plus, Loader2, Calendar, Trash2, X, ShieldCheck, Timer, Award, ChevronRight } from "lucide-react";
 import { formatDate, LOCAL_ONLY_DISCLAIMER, evaluateBadges } from "@/lib/domain";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 
 export default function DiaryPage() {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ export default function DiaryPage() {
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [view, setView] = useState("sessions"); // sessions | firearms
+
+  useBodyScrollLock(showAdd);
 
   useEffect(() => {
     loadData();
@@ -334,7 +337,7 @@ export default function DiaryPage() {
       {showAdd && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center" onClick={() => setShowAdd(false)}>
           <div
-            className="bg-white rounded-t-3xl p-5 max-w-md w-full max-h-[85vh] overflow-y-auto"
+            className="bg-white rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">

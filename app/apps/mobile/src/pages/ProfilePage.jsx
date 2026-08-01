@@ -6,6 +6,7 @@ import { supabase } from "@/api/supabaseClient";
 import { useAuth } from "@/lib/useAuth";
 import { User, FileText, AlertTriangle, ChevronRight, Loader2, Plus, Shield, Download, Upload, LogOut, X, Award } from "lucide-react";
 import { computeDocumentAlerts, DOCUMENT_LABELS, formatDate } from "@/lib/domain";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 
 // Le etichette locali includono "tessera_socio", non presente nell'enum
 // document_type dello schema (Piano §4.2): esclusa dalle opzioni selezionabili.
@@ -19,6 +20,8 @@ export default function ProfilePage() {
   const [showAddDoc, setShowAddDoc] = useState(false);
   const [saving, setSaving] = useState(false);
   const importInputRef = useRef(null);
+
+  useBodyScrollLock(showAddDoc);
 
   useEffect(() => {
     loadData();
@@ -266,7 +269,10 @@ export default function ProfilePage() {
       {/* Add doc modal */}
       {showAddDoc && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center" onClick={() => setShowAddDoc(false)}>
-          <div className="bg-white rounded-t-3xl p-5 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="bg-white rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-slate-900">Aggiungi documento</h3>
               <button onClick={() => setShowAddDoc(false)}>

@@ -9,12 +9,15 @@ import {
   LEGAL_AMMO_LIMITS,
 } from "@/lib/domain";
 import { AmmoLevelBadge, ProgressBar } from "@/components/Badges";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 
 export default function AmmoPage() {
   const [movements, setMovements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  useBodyScrollLock(showAdd);
 
   useEffect(() => {
     loadData();
@@ -162,7 +165,7 @@ export default function AmmoPage() {
       {showAdd && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center" onClick={() => setShowAdd(false)}>
           <div
-            className="bg-white rounded-t-3xl p-5 max-w-md w-full"
+            className="bg-white rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
