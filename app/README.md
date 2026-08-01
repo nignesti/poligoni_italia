@@ -12,6 +12,34 @@ business plan e poi riflessa qui. Non decisa qui.
 
 Node ≥ 20 e pnpm 11 (`corepack enable pnpm`).
 
+## Database locale PostgreSQL
+
+Il backend è stato portato su PostgreSQL locale. La connessione di default è:
+
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/poligoni_italia
+```
+
+Se il tuo ruolo locale o la password differiscono, aggiorna il valore nei file:
+
+- `app/packages/db/.env`
+- `app/apps/web/.env.local`
+
+Prima di lanciare l'app, crea il database e l'estensione PostGIS:
+
+```bash
+createdb poligoni_italia
+psql -d poligoni_italia -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+```
+
+Quindi applica lo schema e i seed:
+
+```bash
+cd app
+pnpm --filter @poligoni/db db:push
+pnpm --filter @poligoni/db db:seed
+```
+
 ## Comandi
 
 ```bash
