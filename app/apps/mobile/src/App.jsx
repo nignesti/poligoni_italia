@@ -15,6 +15,7 @@ import AmmoPage from '@/pages/AmmoPage';
 import AddFirearmPage from '@/pages/AddFirearmPage';
 import CronografoPage from '@/pages/CronografoPage';
 import MedagliePage from '@/pages/MedagliePage';
+import TargetsPage from '@/pages/TargetsPage';
 import ProfilePage from '@/pages/ProfilePage';
 import RequestAvailabilityPage from '@/pages/RequestAvailabilityPage';
 import LoginPage from '@/pages/LoginPage';
@@ -48,6 +49,7 @@ function App() {
             <Route path="/armi/aggiungi" element={<AddFirearmPage />} />
             <Route path="/cronografo" element={<CronografoPage />} />
             <Route path="/medaglie" element={<MedagliePage />} />
+            <Route path="/bersagli" element={<TargetsPage />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

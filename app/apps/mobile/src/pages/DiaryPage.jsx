@@ -213,6 +213,20 @@ export default function DiaryPage() {
               </button>
             </div>
 
+            <button
+              onClick={() => navigate("/bersagli")}
+              className="w-full flex items-center gap-3 bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 text-left active:scale-95 transition-transform mb-4"
+            >
+              <div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                <Crosshair className="w-4.5 h-4.5 text-orange-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-slate-900">Bersagli</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Marca i fori e vedi le statistiche del gruppo</p>
+              </div>
+              <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
+            </button>
+
             {sessions.length === 0 ? (
               <div className="bg-white rounded-2xl p-6 text-center border border-slate-100">
                 <Crosshair className="w-8 h-8 text-slate-300 mx-auto mb-2" />

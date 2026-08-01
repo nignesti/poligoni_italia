@@ -82,15 +82,21 @@ export const sessionShots = pgTable('session_shots', {
 // ---------------------------------------------------------------------------
 // Bersagli
 // ---------------------------------------------------------------------------
+/**
+ * Bersagli. `firearmId`/`storageRef` non sono più garantiti: l'armeria è
+ * dato solo-locale (come `session_shots.firearmId`, vedi migrazione 0009) e
+ * la marcatura fori v1 non prevede upload foto, solo un diagramma. Restano
+ * come colonne opzionali per compatibilità storica e per un eventuale
+ * upload foto futuro.
+ */
 export const targets = pgTable('targets', {
   id: uuid('id').primaryKey().defaultRandom(),
   sessionId: uuid('session_id')
     .notNull()
     .references(() => sessions.id, { onDelete: 'cascade' }),
-  firearmId: uuid('firearm_id')
-    .notNull()
-    .references(() => firearms.id),
-  storageRef: text('storage_ref').notNull(),
+  firearmId: uuid('firearm_id').references(() => firearms.id),
+  firearmLabel: text('firearm_label'),
+  storageRef: text('storage_ref'),
   targetType: text('target_type'),
   distanceMeters: integer('distance_m'),
   scoringMode: targetScoringMode('scoring_mode').notNull().default('manuale'),

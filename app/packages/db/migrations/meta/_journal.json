@@ -57,6 +57,13 @@
       "when": 1785520000002,
       "tag": "0009_session_shots_local_firearms",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1785520000003,
+      "tag": "0010_targets_local_firearms_optional_photo",
+      "breakpoints": true
     }
   ]
 }

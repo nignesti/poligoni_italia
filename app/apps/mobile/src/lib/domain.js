@@ -10,6 +10,20 @@ export const LOCAL_ONLY_DISCLAIMER =
 export const CRONOGRAFO_DISCLAIMER =
   "Stima basata sul microfono del dispositivo: la precisione dipende dal rumore ambientale e dall'hardware. Non è uno strumento di misura certificato, pensato per allenamento personale.";
 
+export const TARGET_DISCLAIMER =
+  "Diagramma di riferimento, non in scala con un bersaglio ufficiale. Le statistiche (gruppo, MOA) sono un ausilio personale, non una misura certificata.";
+
+export const TARGET_TYPES = [
+  { value: "issf_25m", label: "ISSF 25m" },
+  { value: "silhouette", label: "Silhouette" },
+  { value: "generico", label: "Generico" },
+];
+
+// Diametro di riferimento del diagramma, in mm — puramente indicativo
+// (vedi TARGET_DISCLAIMER), serve solo a dare una scala al tocco sullo
+// schermo.
+export const TARGET_DIAGRAM_DIAMETER_MM = 200;
+
 export const LEGAL_AMMO_LIMITS = [
   {
     category: "arma_corta",
