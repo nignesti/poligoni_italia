@@ -200,21 +200,20 @@ export default async function HomePage() {
       {/* App mobile */}
       <section className="border-t border-hairline py-20">
         <Container>
-          <div className="rounded-panel bg-accent px-8 py-12 text-center">
-            <h2 className="text-2xl font-black uppercase tracking-tight text-accent-ink md:text-3xl">
-              Porta i poligoni in tasca
+          <div className="rounded-panel border-2 border-accent bg-surface-sunken px-8 py-12 text-center">
+            <h2 className="text-2xl font-black uppercase tracking-tight text-ink md:text-3xl">
+              App in arrivo
             </h2>
-            <p className="mx-auto mt-3 max-w-md text-accent-ink/85">
-              L&apos;app mobile è in arrivo. A breve sugli store — nel frattempo puoi già
-              provarla in anteprima in versione webapp.
+            <p className="mx-auto mt-3 max-w-md text-ink-muted">
+              Provala oggi sul tuo smartphone, gratis.
             </p>
             <a
               href="https://poligoni-app.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-7 inline-block rounded-control bg-accent-ink px-6 py-3 text-sm font-bold uppercase tracking-wide text-accent hover:bg-white"
+              className="mt-7 inline-block rounded-control bg-accent px-6 py-3 text-sm font-bold uppercase tracking-wide text-accent-ink hover:bg-accent-hover"
             >
-              Provala in anteprima in versione webapp
+              Apri la webapp
             </a>
           </div>
         </Container>
