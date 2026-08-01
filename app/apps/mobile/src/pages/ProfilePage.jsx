@@ -216,7 +216,7 @@ export default function ProfilePage() {
         <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
           <button
             onClick={handleExportBackup}
-            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:bg-slate-950 transition-colors border-b border-slate-50 dark:border-slate-800"
+            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border-b border-slate-50 dark:border-slate-800"
           >
             <Download className="w-5 h-5 text-slate-400 dark:text-slate-500" />
             <div className="flex-1 text-left">
@@ -227,7 +227,7 @@ export default function ProfilePage() {
           </button>
           <button
             onClick={() => importInputRef.current?.click()}
-            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:bg-slate-950 transition-colors border-b border-slate-50 dark:border-slate-800"
+            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border-b border-slate-50 dark:border-slate-800"
           >
             <Upload className="w-5 h-5 text-slate-400 dark:text-slate-500" />
             <div className="flex-1 text-left">
@@ -243,14 +243,14 @@ export default function ProfilePage() {
             className="hidden"
             onChange={handleImportFile}
           />
-          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:bg-slate-950 transition-colors border-b border-slate-50 dark:border-slate-800">
+          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border-b border-slate-50 dark:border-slate-800">
             <Shield className="w-5 h-5 text-slate-400 dark:text-slate-500" />
             <span className="flex-1 text-left text-sm text-slate-700 dark:text-slate-300">Privacy e dati</span>
             <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600" />
           </button>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 p-4 hover:bg-red-50 dark:bg-red-950 transition-colors text-red-600 dark:text-red-400"
+            className="w-full flex items-center gap-3 p-4 hover:bg-red-50 dark:hover:bg-red-950 transition-colors text-red-600 dark:text-red-400"
           >
             <LogOut className="w-5 h-5" />
             <span className="flex-1 text-left text-sm font-medium">Esci</span>
@@ -268,9 +268,9 @@ export default function ProfilePage() {
 
       {/* Add doc modal */}
       {showAddDoc && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center" onClick={() => setShowAddDoc(false)}>
+        <div className="fixed inset-0 z-[100] bg-black/50 flex items-end justify-center" onClick={() => setShowAddDoc(false)}>
           <div
-            className="bg-white dark:bg-slate-900 rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
+            className="bg-white dark:bg-slate-900 rounded-t-3xl p-5 pb-safe max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">

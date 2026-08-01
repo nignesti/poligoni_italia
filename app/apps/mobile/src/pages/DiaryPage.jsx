@@ -335,9 +335,9 @@ export default function DiaryPage() {
 
       {/* Add session modal */}
       {showAdd && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center" onClick={() => setShowAdd(false)}>
+        <div className="fixed inset-0 z-[100] bg-black/50 flex items-end justify-center" onClick={() => setShowAdd(false)}>
           <div
-            className="bg-white dark:bg-slate-900 rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
+            className="bg-white dark:bg-slate-900 rounded-t-3xl p-5 pb-safe max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">

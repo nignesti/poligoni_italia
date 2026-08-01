@@ -89,4 +89,30 @@
   body {
     @apply bg-background text-foreground font-body;
   }
+
+  /* I campi di form non ereditano il colore del testo dal contenitore: senza
+     una regola esplicita il valore digitato resta nero anche su fondo scuro,
+     risultando illeggibile in dark mode (il placeholder invece si vede,
+     perché ha un colore di default suo). */
+  @media (prefers-color-scheme: dark) {
+    input,
+    select,
+    textarea {
+      @apply text-white;
+    }
+
+    /* Il testo selezionato usa di default un fondo chiaro con testo scuro
+       su alcuni browser: in dark mode diventa illeggibile. */
+    ::selection {
+      @apply bg-orange-500 text-white;
+    }
+  }
+}
+
+@layer utilities {
+  /* Spazio per la home indicator di iOS, altrimenti l'ultimo elemento di un
+     bottom sheet finisce sotto la barra di sistema. */
+  .pb-safe {
+    padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  }
 }

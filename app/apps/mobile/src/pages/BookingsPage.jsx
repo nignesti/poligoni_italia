@@ -151,7 +151,7 @@ export default function BookingsPage() {
       {/* QR Modal */}
       {qrBooking && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4"
+          className="fixed inset-0 z-[100] bg-black/60 flex items-end sm:items-center justify-center p-4"
           onClick={() => setQrBooking(null)}
         >
           <div
