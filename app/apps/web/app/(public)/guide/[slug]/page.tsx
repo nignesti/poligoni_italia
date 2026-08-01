@@ -12,7 +12,7 @@ import { GUIDES } from '@/lib/guides';
 function renderInline(text: string): React.ReactNode[] {
   return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
     part.startsWith('**') && part.endsWith('**') ? (
-      <strong key={i} className="font-semibold text-ink">
+      <strong key={i} className="font-bold text-ink">
         {part.slice(2, -2)}
       </strong>
     ) : (
@@ -54,14 +54,19 @@ export default async function GuidePage(
 
       <Container className="py-10 pb-20">
         <article className="max-w-[65ch]">
-          <h1 className="text-2xl font-semibold text-ink md:text-3xl">{guide.title}</h1>
+          <h1 className="text-2xl font-black uppercase tracking-tight text-ink md:text-3xl">
+            {guide.title}
+          </h1>
           <p className="mt-3 text-lg leading-relaxed text-ink-muted">{guide.description}</p>
 
           <div className="mt-8 flex flex-col gap-4">
             {guide.content.map((paragraph, i) => {
               if (paragraph.startsWith('## ')) {
                 return (
-                  <h2 key={i} className="mt-4 border-t border-hairline pt-4 text-xl font-semibold text-ink">
+                  <h2
+                    key={i}
+                    className="mt-4 border-t border-hairline pt-4 text-xl font-black uppercase tracking-tight text-ink"
+                  >
                     {paragraph.replace('## ', '')}
                   </h2>
                 );

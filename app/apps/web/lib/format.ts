@@ -82,7 +82,8 @@ export function formatDayRange(days: string[]): string {
 }
 
 export interface TodayStatus {
-  open: boolean;
+  /** null = nessun orario a sistema per questa struttura, non "chiuso". */
+  open: boolean | null;
   label: string;
   detail: string;
 }
@@ -93,6 +94,13 @@ export interface TodayStatus {
  * e client e genera errori di hydration.
  */
 export function todayStatus(hours: OpeningHours[], now: Date): TodayStatus {
+  // Nessun orario a sistema per nessun giorno: non sappiamo se sia aperta,
+  // non possiamo dire "chiusa" (il censimento non popola ancora range_hours
+  // per la maggior parte delle strutture — vedi packages/db/queries/ranges.ts).
+  if (hours.length === 0) {
+    return { open: null, label: 'Orari non disponibili', detail: '' };
+  }
+
   const isoWeekday = now.getDay() === 0 ? 7 : now.getDay();
   const todayName = WEEKDAYS[isoWeekday - 1]!;
   const today = hours.find((h) => h.day === todayName);

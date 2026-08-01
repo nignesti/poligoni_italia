@@ -1,0 +1,93 @@
+# Guida alla Normativa e alle Discipline di Tiro in Italia
+
+## 1. Limiti di detenzione munizioni – Art. 97 TULPS
+
+La norma di riferimento è l'**art. 97, comma 1, del Regolamento di esecuzione del T.U.L.P.S.** (Regio Decreto 6 maggio 1940, n. 635). 
+
+I limiti massimi di detenzione per un privato munito dei necessari titoli di polizia (porto d'armi o nulla osta all'acquisto) sono:
+
+| Tipologia di munizioni | Limite massimo di detenzione |
+|------------------------|-----------------------------|
+| Cartucce per **fucile da caccia** (a munizione spezzata/pallini o a palla unica) | **1.500** |
+| Cartucce per **arma corta** (pistola o rivoltella) | **200** |
+| Polvere da sparo per ricarica | **5 kg** |
+
+### Obblighi di denuncia
+Conoscere il limite massimo non è sufficiente; è fondamentale rispettare le soglie di denuncia alle autorità competenti (Questura o Comando Carabinieri):
+*   **Cartucce a pallini (spezzata)**: sono esenti da denuncia fino a **1.000 unità**. Dalla 1.001ª alla 1.500ª unità, la detenzione è legittima ma **deve essere obbligatoriamente denunciata**.
+*   **Cartucce a palla unica (anche se da caccia) e cartucce per arma corta**: devono essere **sempre denunciate**, indipendentemente dalla quantità posseduta (anche se si tratta di una sola cartuccia).
+
+### Precisazione importante: le carabine sportive
+Il limite di 1.500 cartucce si applica testualmente alle munizioni per "fucile da caccia". La normativa non menziona esplicitamente le **carabine sportive** (es. calibri .223 Remington, .308 Winchester, .22 LR). 
+Secondo un'interpretazione consolidata e le prassi UITS, per queste armi il limite applicabile è **1.500 cartucce**, in quanto non rientrano nella categoria "arma corta". Tuttavia, alcune Questure applicano ancora in modo discrezionale il limite delle 200 unità alle armi lunghe non classificate esplicitamente come "da caccia". Si consiglia vivamente di verificare l'orientamento del proprio Ufficio Armi di competenza.
+
+### Testo normativo di riferimento
+> **Art. 97 R.D. 6 maggio 1940, n. 635 (Regolamento di esecuzione del TULPS) – Comma 1**
+> "Possono tenersi in deposito o trasportarsi nello Stato, senza la licenza di cui agli articoli 50 e 51 del testo unico, millecinquecento cartucce da fucile da caccia caricate a polvere e duecento cartucce cariche per pistola o rivoltella, nonché chilogrammi cinque di polvere da sparo."
+
+---
+
+## 2. Documenti richiesti – Checklist
+
+La documentazione varia a seconda del contesto e dello status del richiedente.
+
+### Iscrizione al TSN (Tiro a Segno Nazionale – Sezione UITS)
+
+**Checklist per iscrizione al TSN (senza porto d'armi):**
+1. Certificato medico di idoneità all'attività sportiva non agonistica con specifica "per tiro a segno" (rilasciato dal medico di famiglia o medico sportivo).
+2. Foto formato tessera (1).
+3. Documento di identità in corso di validità.
+4. Codice fiscale.
+5. Frequenza della lezione obbligatoria con istruttore (maneggio armi e basi del tiro).
+
+**Checklist per iscrizione al TSN (già in possesso di porto d'armi):**
+1. Fotocopia del porto d'armi e del cedolino allegato (fronte e retro).
+2. Foto formato tessera (1).
+
+**Checklist per iscrizione al TSN (finalizzata alla richiesta del porto d'armi):**
+1. Certificato medico rilasciato in marca da bollo dall'ufficiale sanitario della ASL o medico convenzionato.
+2. Foto formato tessera (1).
+3. Documento di identità e codice fiscale.
+4. Superamento del corso teorico-pratico con test e prove di tiro (protocollo standard: 50 colpi con arma lunga e 50 colpi con arma corta, tipicamente in calibro .22 LR).
+
+### Accesso a un poligono privato
+Per l'accesso a una struttura privata, la documentazione richiesta è generalmente:
+1. Porto d'armi (o nulla osta all'acquisto) in corso di validità.
+2. Documento di identità valido.
+3. Tessera federale (es. FITDS, FITAV) se richiesta dalla specifica disciplina o dalla struttura.
+4. Certificato medico sportivo (agonistico o non agonistico, a seconda dei requisiti del poligono).
+5. Libretto di custodia (denuncia) delle armi, se si portano armi proprie.
+
+> **Nota sui minori**: Per l'accesso dei minorenni è sempre richiesta la presenza fisica e il **consenso scritto** (spesso accompagnato da copia del documento di identità) di un genitore o tutore legale, nel rigoroso rispetto dei limiti di età previsti dalla federazione di riferimento (es. dai 13 anni in su per le discipline FITDS con armi ad aria compressa).
+
+---
+
+## 3. Descrizioni delle discipline
+
+| Disciplina | Struttura di riferimento | Descrizione |
+|------------|---------------------------|-------------|
+| **Tiro a segno statico** | Sezione TSN (UITS) | Tiro su bersaglio fisso a distanza definita (10 m per aria compressa, 25 m e 50 m per armi a fuoco). Comprende discipline ISSF (olimpiche) e non ISSF. Precisione, stabilità e controllo del grilletto sono gli elementi centrali. |
+| **IPSC / Tiro pratico** | Poligono privato (FITDS) | Disciplina che unisce **precisione, potenza e velocità** (motto: *Diligentia, Vis, Celeritas*). Il tiratore completa percorsi di tiro (stage) in movimento, colpendo bersagli statici o mobili nel minor tempo possibile e con il maggior punteggio. Riconosciuta dal CONI come disciplina sportiva associata. |
+| **Tiro a volo** | Campo di tiro a volo (FITAV) | Discipline su **bersagli mobili** (piattelli d'argilla) lanciati da macchine. Specialità principali: **Trap (Fossa Olimpica), Skeet e Double Trap**. Il tiratore deve abbattere i piattelli in volo utilizzando un fucile a canna liscia. |
+| **Long range** | Campo long range (autorizzato) | Tiro a **grandi distanze** (tipicamente oltre i 300-350 m, fino a oltre 1.000 m). Richiede capacità balistiche avanzate, ottiche di precisione e conoscenza approfondita dei fattori ambientali (vento, umidità, effetto Coriolis). Disciplina regolamentata UITS. |
+| **Tiro dinamico** | Campo dinamico | Termine ampio che include l'IPSC e altre discipline affini che combinano **movimento, velocità e precisione**. Il tiratore si sposta tra diverse postazioni, affronta bersagli multipli e deve gestire in sicurezza ricariche tattiche e cambi di arma. |
+
+---
+
+## 4. Fonti normative e istituzionali
+*   **Art. 97 R.E. TULPS** (R.D. 635/1940) e Artt. 50-51 TULPS (R.D. 773/1931).
+*   Circolari e linee guida del **Ministero dell'Interno** (Direzione Centrale della Polizia Criminale).
+*   Regolamenti e FAQ **UITS** (Unione Italiana Tiro a Segno).
+*   Regolamenti e linee guida **FITDS** (Federazione Italiana Tiro Dinamico Sportivo).
+*   Regolamenti e linee guida **FITAV** (Federazione Italiana Tiro a Volo).
+
+---
+
+## 5. Raccomandazioni per l'implementazione su piattaforma (es. "Poligoni Italia")
+
+Per garantire la massima utilità e tutela legale degli utenti della piattaforma, si raccomanda di implementare le seguenti funzionalità:
+
+1. **Disclaimer normativo dinamico**: Inserire un avviso visibile nella sezione normativa, specificando che i limiti di detenzione sono soggetti all'interpretazione delle singole Questure e che è sempre consigliabile verificare con il proprio Ufficio Armi di competenza, specialmente per quanto riguarda le munizioni da carabina sportiva.
+2. **Checklist intelligente**: Adattare la lista dei documenti richiesti in base al profilo utente e alla struttura selezionata (es. mostrare automaticamente l'obbligo di tessera FITDS per l'IPSC o il consenso genitoriale per i minori).
+3. **Promemoria obbligo di denuncia**: Integrare nel profilo utente un gestionale dell'arsenale. Se l'utente registra una quantità di munizioni a pallini superiore a 1.000, o qualsiasi quantità di munizioni a palla unica/per arma corta, visualizzare un alert automatico: *"Attenzione: la quantità inserita supera la soglia di esenzione. Ricorda di regolarizzare la denuncia presso le autorità competenti."*
+4. **Arricchimento schede disciplina**: Nelle pagine dedicate alle discipline, includere link diretti ai regolamenti tecnici ufficiali (UITS, FITDS, FITAV), un'indicazione dei costi medi di accesso per sessione e i requisiti minimi di età per ciascuna pratica.

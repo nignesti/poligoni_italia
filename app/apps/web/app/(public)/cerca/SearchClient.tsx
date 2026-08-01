@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import { MagnifyingGlass, CaretRight } from '@phosphor-icons/react/ssr';
+import { MagnifyingGlass, CaretRight, MapPin } from '@phosphor-icons/react/ssr';
 import { Container } from '@/components/Container';
 import { slugify } from '@/lib/slugify';
 import { RANGE_TYPE_LABEL } from '@/lib/format';
@@ -52,7 +52,9 @@ export function SearchClient({ ranges }: { ranges: RangeSummary[] }) {
     <div className="pb-16">
       <div className="border-b border-hairline bg-surface-sunken py-10">
         <Container>
-          <h1 className="text-2xl font-semibold text-ink md:text-3xl">Cerca un poligono</h1>
+          <h1 className="text-2xl font-black uppercase tracking-tight text-ink md:text-3xl">
+            Cerca un poligono
+          </h1>
           <form onSubmit={handleSubmit} className="mt-6 max-w-2xl">
             <div className="relative">
               <MagnifyingGlass
@@ -77,7 +79,7 @@ export function SearchClient({ ranges }: { ranges: RangeSummary[] }) {
                 type="button"
                 aria-pressed={typeFilter === f.value}
                 onClick={() => setTypeFilter(f.value)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wide transition-colors ${
                   typeFilter === f.value
                     ? 'bg-accent text-accent-ink'
                     : 'border border-hairline-strong text-ink-muted hover:border-accent hover:text-accent'
@@ -103,16 +105,17 @@ export function SearchClient({ ranges }: { ranges: RangeSummary[] }) {
               <Link
                 key={r.slug}
                 href={`/poligoni/${slugify(r.regione)}/${slugify(r.provincia)}/${r.slug}`}
-                className="flex items-center justify-between gap-4 rounded-panel border border-hairline bg-surface px-6 py-5 hover:border-accent hover:shadow-panel"
+                className="flex items-center justify-between gap-4 rounded-panel border border-hairline bg-surface px-6 py-5 transition-colors hover:border-accent hover:shadow-panel"
               >
                 <div>
-                  <h2 className="font-medium text-ink">{r.name}</h2>
-                  <p className="mt-1 text-sm text-ink-muted">
+                  <h2 className="font-bold uppercase tracking-tight text-ink">{r.name}</h2>
+                  <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-muted">
+                    <MapPin size={14} className="shrink-0 text-ink-faint" aria-hidden />
                     {r.comune} ({r.provincia})
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="rounded-full bg-accent-wash px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
+                  <span className="rounded-full bg-accent-wash px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
                     {RANGE_TYPE_LABEL[r.type]}
                   </span>
                   <CaretRight size={18} className="text-ink-faint" aria-hidden />

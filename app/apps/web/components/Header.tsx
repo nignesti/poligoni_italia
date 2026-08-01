@@ -21,9 +21,11 @@ export function Header() {
   return (
     <header className="sticky top-0 z-20 h-16 border-b border-hairline bg-surface">
       <Container className="flex h-full items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-ink">
+        <Link href="/" className="flex items-center gap-2 text-lg font-black uppercase tracking-tight text-ink">
           <Target size={22} weight="bold" className="text-accent" aria-hidden />
-          <span>Poligoni Italia</span>
+          <span>
+            Poligoni<span className="text-accent">Italia</span>
+          </span>
         </Link>
 
         <nav aria-label="Principale" className="hidden items-center gap-6 md:flex">
@@ -46,7 +48,7 @@ export function Header() {
 
           <Link
             href="/gestori"
-            className="rounded-control border border-hairline-strong px-3.5 py-2 text-sm font-medium text-ink hover:border-accent hover:text-accent"
+            className="rounded-control bg-accent px-3.5 py-2 text-sm font-bold uppercase tracking-wide text-accent-ink hover:bg-accent-hover"
           >
             Aggiungi la tua struttura
           </Link>

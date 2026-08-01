@@ -18,7 +18,7 @@ export default async function RegioniIndexPage() {
       <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Regioni' }]} />
 
       <Container className="py-10">
-        <h1 className="text-2xl font-semibold text-ink md:text-3xl">
+        <h1 className="text-2xl font-black uppercase tracking-tight text-ink md:text-3xl">
           Poligoni di tiro per regione
         </h1>
         <p className="mt-2 text-ink-muted">{regions.length} regioni censite</p>
@@ -28,10 +28,12 @@ export default async function RegioniIndexPage() {
             <Link
               key={region.slug}
               href={`/poligoni/${region.slug}`}
-              className="flex items-center justify-between rounded-panel border border-hairline bg-surface px-5 py-4 hover:border-accent hover:shadow-panel"
+              className="flex items-center justify-between rounded-panel border border-hairline bg-surface px-5 py-4 transition-colors hover:border-accent hover:shadow-panel"
             >
-              <span className="font-medium text-ink">{region.name}</span>
-              <span className="text-sm text-ink-muted">{region.count} strutture</span>
+              <span className="font-bold uppercase tracking-tight text-ink">{region.name}</span>
+              <span className="rounded-full bg-accent-wash px-2 py-0.5 font-mono text-xs font-bold text-accent">
+                {region.count}
+              </span>
             </Link>
           ))}
         </div>

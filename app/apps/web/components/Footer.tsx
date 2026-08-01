@@ -7,9 +7,11 @@ export function Footer() {
     <footer className="border-t border-hairline bg-surface-sunken">
       <Container className="grid gap-10 py-14 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
         <div>
-          <Link href="/" className="flex items-center gap-2 font-semibold text-ink">
+          <Link href="/" className="flex items-center gap-2 font-black uppercase tracking-tight text-ink">
             <Target size={20} weight="bold" className="text-accent" aria-hidden />
-            <span>Poligoni Italia</span>
+            <span>
+              Poligoni<span className="text-accent">Italia</span>
+            </span>
           </Link>
           <p className="mt-3 max-w-[32ch] text-sm leading-relaxed text-ink-muted">
             Trova e prenota poligoni di tiro sportivo in Italia.

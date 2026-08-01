@@ -48,7 +48,7 @@ export default async function ProvinciaPage(
 
       <Container className="py-8">
         <header className="pb-6">
-          <h1 className="text-2xl font-semibold text-ink md:text-3xl">
+          <h1 className="text-2xl font-black uppercase tracking-tight text-ink md:text-3xl">
             Poligoni di tiro in provincia di {provinciaLabel}
           </h1>
           <p className="mt-2 text-ink-muted">{ranges.length} strutture trovate</p>
@@ -59,14 +59,14 @@ export default async function ProvinciaPage(
             <Link
               key={r.slug}
               href={`/poligoni/${regione}/${provincia}/${r.slug}`}
-              className="flex items-center justify-between gap-4 rounded-panel border border-hairline bg-surface px-6 py-5 hover:border-accent hover:shadow-panel"
+              className="flex items-center justify-between gap-4 rounded-panel border border-hairline bg-surface px-6 py-5 transition-colors hover:border-accent hover:shadow-panel"
             >
               <div>
-                <h2 className="font-medium text-ink">{r.name}</h2>
+                <h2 className="font-bold uppercase tracking-tight text-ink">{r.name}</h2>
                 <p className="mt-1 text-sm text-ink-muted">{r.comune}</p>
               </div>
               <div className="flex items-center gap-4">
-                <span className="rounded-full bg-accent-wash px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
+                <span className="rounded-full bg-accent-wash px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
                   {RANGE_TYPE_LABEL[r.type]}
                 </span>
                 <CaretRight size={18} className="text-ink-faint" aria-hidden />

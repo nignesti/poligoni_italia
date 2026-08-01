@@ -1,14 +1,24 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Outfit, Space_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import './styles/globals.css';
 
 // Self-hosted da Next in fase di build: nessuna richiesta bloccante a
-// fonts.googleapis.com in produzione (sostituisce il precedente @import nel CSS).
-const inter = Inter({
+// fonts.googleapis.com in produzione (stesso pattern del precedente Inter).
+// Outfit: UI/titoli, pesi larghi per il trattamento maiuscolo aggressivo del
+// redesign dark/rosso. Space Mono: badge, contatori, breadcrumb.
+const outfit = Outfit({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-outfit',
   display: 'swap',
+  weight: ['400', '500', '600', '700', '800', '900'],
+});
+
+const spaceMono = Space_Mono({
+  subsets: ['latin'],
+  variable: '--font-space-mono',
+  display: 'swap',
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
@@ -48,7 +58,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#1b5e20',
+  themeColor: '#09090b',
 };
 
 export default function RootLayout({
@@ -57,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" className={inter.variable}>
+    <html lang="it" className={`${outfit.variable} ${spaceMono.variable} dark`}>
       <body className="bg-surface text-ink font-sans antialiased">
         {children}
         <Analytics />

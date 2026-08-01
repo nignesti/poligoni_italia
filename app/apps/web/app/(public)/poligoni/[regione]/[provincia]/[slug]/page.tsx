@@ -109,10 +109,12 @@ export default async function RangePage(
         {/* Intestazione */}
         <header className="flex flex-wrap items-start justify-between gap-8 border-b border-hairline pb-8">
           <div>
-            <span className="inline-block rounded-full bg-accent-wash px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
+            <span className="inline-block rounded-full bg-accent-wash px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
               {RANGE_TYPE_LABEL[range.type]}
             </span>
-            <h1 className="mt-3 text-2xl font-semibold text-ink md:text-3xl">{range.name}</h1>
+            <h1 className="mt-3 text-2xl font-black uppercase tracking-tight text-ink md:text-3xl">
+              {range.name}
+            </h1>
             <p className="mt-2 text-ink-muted">
               {range.address && `${range.address}, `}
               {range.cap && `${range.cap} `}
@@ -155,7 +157,7 @@ export default async function RangePage(
           {/* Descrizione */}
           {range.description && (
             <section className="md:col-span-2">
-              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-black uppercase tracking-tight text-ink">
                 Descrizione
               </h2>
               <p className="mt-4 leading-relaxed text-ink-muted">{range.description}</p>
@@ -165,7 +167,7 @@ export default async function RangePage(
           {/* Orari - assente per le strutture solo censite, non verificate */}
           {hourGroups.length > 0 && (
             <section>
-              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-black uppercase tracking-tight text-ink">
                 Orari di apertura
               </h2>
               <dl className="mt-4 flex flex-col gap-2 text-sm">
@@ -184,7 +186,7 @@ export default async function RangePage(
           {/* Linee di tiro - assenti per le strutture solo censite, non verificate */}
           {range.lines.length > 0 && (
             <section>
-              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-black uppercase tracking-tight text-ink">
                 Linee di tiro
               </h2>
               <div className="mt-4 flex flex-col gap-3">
@@ -219,7 +221,7 @@ export default async function RangePage(
           {/* Listino */}
           {range.pricing.length > 0 && (
             <section>
-              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-black uppercase tracking-tight text-ink">
                 Listino
               </h2>
               <dl className="mt-4 flex flex-col gap-3 text-sm">
@@ -242,7 +244,7 @@ export default async function RangePage(
           {/* Servizi - solo in positivo: quello che manca non interessa chi legge */}
           {availableServices.length > 0 && (
             <section>
-              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-semibold text-ink">
+              <h2 className="border-b-2 border-accent-wash pb-2 text-lg font-black uppercase tracking-tight text-ink">
                 Servizi
               </h2>
               <ul className="mt-4 flex flex-wrap gap-2">
@@ -262,12 +264,12 @@ export default async function RangePage(
         {/* Mappa */}
         <section className="border-t border-hairline py-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold text-ink">Dove si trova</h2>
+            <h2 className="text-lg font-black uppercase tracking-tight text-ink">Dove si trova</h2>
             <a
               href={`https://www.google.com/maps/dir/?api=1&destination=${range.location.lat},${range.location.lng}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm font-medium text-accent hover:text-accent-hover"
+              className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-accent hover:text-accent-hover"
             >
               <NavigationArrow size={16} aria-hidden />
               Indicazioni stradali
@@ -288,7 +290,7 @@ export default async function RangePage(
         <div className="border-t border-hairline py-10 text-center">
           <Link
             href={`/cerca?range=${range.slug}`}
-            className="inline-block rounded-control bg-accent px-8 py-3 text-sm font-semibold text-accent-ink hover:bg-accent-hover"
+            className="inline-block rounded-control bg-accent px-8 py-3 text-sm font-bold uppercase tracking-wide text-accent-ink hover:bg-accent-hover"
           >
             Verifica disponibilità e prenota
           </Link>

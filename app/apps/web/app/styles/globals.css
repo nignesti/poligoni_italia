@@ -3,103 +3,81 @@
 /* ==========================================================================
    Poligoni Italia - Token di design
    ==========================================================================
-   Overhaul da CSS custom a Tailwind v4 (Piano_Sviluppo_App.md §2.1). Stone
-   caldo come neutro, Inter come font. Vedi redesign audit del 30/07/2026.
+   Redesign dark-first del 01/08/2026 (branch redesign/dark-ferrari-theme):
+   sostituisce lo schema chiaro/stone + accento blu BMW con near-black +
+   rosso Ferrari, direzione confermata esplicitamente dall'utente dopo
+   revisione dei mockup in app/apps/web/BOZZA REDESIGN/. Sito dark-only, non
+   più adattivo al tema di sistema: niente più @media (prefers-color-scheme).
 
-   Dials: VARIANCE 5 / MOTION 3 / DENSITY 4. Sotto la baseline per scelta
-   esplicita: settore vigilato, pubblico che cerca informazioni pratiche
-   (BP §6.1 - tono "sobrio, tecnico, non spettacolarizzato").
+   Dials aggiornati: VARIANCE 7 / MOTION 4 / DENSITY 4. Sopra la baseline
+   precedente per scelta esplicita — l'utente ha chiesto un trattamento
+   tipografico maiuscolo aggressivo, non più il tono sobrio v1.
 
-   ACCENTO UNICO: blu (#0066b1, ispirazione BMW) — confermato come direzione
-   definitiva dopo /impeccable critique del 31/07/2026 (sostituisce il verde
-   #1b5e20 della v1). Applicato ovunque tramite token, incluse le superfici
-   gestore ancora sulla scala di compatibilità in fondo a questo file: i nomi
-   delle variabili restano "--color-green-*" per non rompere i riferimenti
-   nei file (gestore) non ancora migrati a Tailwind, ma i VALORI sono ora blu.
-   Rosso e ambra restano riservati allo stato semantico (errore, scadenza),
-   mai come accento decorativo.
+   ACCENTO UNICO: rosso Ferrari (#f10e34). Ambra e verde restano riservati
+   allo stato semantico (avviso, successo/aperto), mai come accento
+   decorativo. La scala di compatibilità gestore in fondo a questo file
+   (--color-green-*, --color-gray-*) NON è toccata da questo redesign: la
+   dashboard (gestore) è un layout isolato con background esplicito proprio
+   (vedi app/(gestore)/layout.tsx → .gest-layout), fuori dal perimetro
+   pubblico di oggi.
 
-   FONT: Inter, self-hosted via next/font in layout.tsx. Prima arrivava da
-   un @import a Google Fonts nel CSS, bloccante per il rendering.
+   FONT: Outfit (UI/titoli) + Space Mono (badge, contatori, breadcrumb),
+   self-hosted via next/font in layout.tsx, stesso pattern del precedente
+   Inter — nessuna richiesta bloccante a fonts.googleapis.com in produzione.
 
-   SCALA RAGGI - unica, applicata senza eccezioni:
-     control  8px   input, pulsanti squadrati
-     panel    12px  card, immagini, pannelli
-     pill     rounded-full di Tailwind (999px) per badge e pillole
+   SCALA RAGGI - unica, applicata senza eccezioni. Più stretta della v1 per
+   il look "tattico/preciso" richiesto:
+     control  4px   input, pulsanti, badge
+     panel    6px   card, immagini, pannelli
+     pill     rounded-full di Tailwind (999px) per pillole di stato/filtro
    ========================================================================== */
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 
-  /* Superfici */
-  --surface: #ffffff;
-  --surface-sunken: #fafaf9;
-  --surface-raised: #ffffff;
-  --hairline: #e7e5e4;
-  --hairline-strong: #d6d3d1;
+  /* Superfici - near-black, non nero puro */
+  --surface: #09090b;
+  --surface-sunken: #0e0e11;
+  --surface-raised: #1c1c22;
+  --hairline: #22222a;
+  --hairline-strong: #33333d;
 
-  /* Testo - stone caldo, mai nero puro */
-  --ink: #1c1917;
-  --ink-muted: #57534e;
-  --ink-faint: #78716c;
+  /* Testo - quasi bianco, mai bianco puro */
+  --ink: #fafafa;
+  --ink-muted: #a1a1aa;
+  --ink-faint: #71717a;
 
-  /* Accento - blu BMW, unico su tutta la pagina */
-  --accent: #0066b1;
-  --accent-hover: #004a87;
+  /* Accento - rosso Ferrari, unico su tutta la pagina */
+  --accent: #f10e34;
+  --accent-hover: #ff3355;
   --accent-ink: #ffffff;
-  --accent-wash: #e8f2ff;
+  --accent-wash: #2a0e14;
 
-  /* Superficie scura decorativa (hero, banner CTA) - sempre scura a
-     prescindere dal tema chiaro/scuro della pagina. Un solo token invece di
-     hex ripetuti: prima di questa modifica "#1a1a1a"→"#000000" comparivano
-     hardcoded in due punti di page.tsx, con rischio di divergenza futura. */
-  --surface-dark-from: #1a1a1a;
-  --surface-dark-to: #000000;
+  /* Gradiente decorativo per hero/banner ad alto impatto (glow rosso su
+     near-black, non più "sezione scura dentro pagina chiara" della v1 —
+     l'intera pagina è già scura, questo token resta per le sezioni con
+     glow radiale accentuato, es. hero home/gestori). */
+  --surface-dark-from: #1a0509;
+  --surface-dark-to: #09090b;
 
   /* Stato semantico - non decorativo */
-  --state-error: #b91c1c;
-  --state-error-wash: #fef2f2;
-  --state-warning: #b45309;
-  --state-warning-wash: #fffbeb;
-  --state-success: #1b5e20;
+  --state-error: #ef4343;
+  --state-error-wash: #2a1615;
+  --state-warning: #f2b155;
+  --state-warning-wash: #2a2011;
+  --state-success: #22c55e;
+  --state-success-wash: #0f2a1a;
 
   --radius-control: 4px;
-  --radius-panel: 8px;
+  --radius-panel: 6px;
 
-  --shadow-panel: 0 1px 2px 0 rgb(28 25 23 / 0.05), 0 1px 3px 0 rgb(28 25 23 / 0.06);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface: #17150f;
-    --surface-sunken: #100f0b;
-    --surface-raised: #1e1c16;
-    --hairline: #322f27;
-    --hairline-strong: #46423686;
-
-    --ink: #f2f0ec;
-    --ink-muted: #b9b3a6;
-    --ink-faint: #928c7e;
-
-    --accent: #3d9aff;
-    --accent-hover: #5aafff;
-    --accent-ink: #001a4d;
-    --accent-wash: #0d1f38;
-
-    --state-error: #f28b82;
-    --state-error-wash: #2a1615;
-    --state-warning: #f2b155;
-    --state-warning-wash: #2a2011;
-    --state-success: #6fbf73;
-
-    --shadow-panel: 0 1px 2px 0 rgb(0 0 0 / 0.4);
-  }
+  --shadow-panel: 0 1px 2px 0 rgb(0 0 0 / 0.5), 0 1px 3px 0 rgb(0 0 0 / 0.4);
 }
 
 @theme inline {
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+  --font-sans: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --font-mono: var(--font-space-mono), 'JetBrains Mono', ui-monospace, monospace;
 
   --color-surface: var(--surface);
   --color-surface-sunken: var(--surface-sunken);
@@ -121,6 +99,7 @@
   --color-state-warning: var(--state-warning);
   --color-state-warning-wash: var(--state-warning-wash);
   --color-state-success: var(--state-success);
+  --color-state-success-wash: var(--state-success-wash);
 
   --radius-control: var(--radius-control);
   --radius-panel: var(--radius-panel);
@@ -258,23 +237,29 @@
   text-decoration: none;
 }
 
+/* btn-primary/btn-secondary usano la scala --color-green-* (blu, non
+   toccata da questo redesign) invece di --accent/--accent-wash: sono usate
+   solo dalla dashboard (gestore), fuori dal perimetro del redesign
+   dark/rosso pubblico — vedi nota di compatibilità in testa a questo
+   blocco. Non agganciarle a --accent o diventeranno rosse insieme al sito
+   pubblico alla prossima modifica di quel token. */
 .btn-primary {
-  background-color: var(--accent);
-  color: var(--accent-ink);
+  background-color: var(--color-green-600);
+  color: white;
 }
 
 .btn-primary:hover {
-  background-color: var(--accent-hover);
+  background-color: var(--color-green-700);
 }
 
 .btn-secondary {
   background-color: white;
-  color: var(--accent);
-  border: 2px solid var(--accent);
+  color: var(--color-green-600);
+  border: 2px solid var(--color-green-600);
 }
 
 .btn-secondary:hover {
-  background-color: var(--accent-wash);
+  background-color: var(--color-green-50);
 }
 
 .btn-ghost {

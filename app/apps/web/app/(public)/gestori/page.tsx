@@ -10,6 +10,7 @@ import {
   Check,
 } from '@phosphor-icons/react/ssr';
 import { Container } from '@/components/Container';
+import { IconBox } from '@/components/IconBox';
 import { FaqAccordion } from './FaqAccordion';
 
 export const metadata: Metadata = {
@@ -98,22 +99,23 @@ export default function GestoriPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[var(--surface-dark-from)] to-[var(--surface-dark-to)]">
+      <section className="border-b border-hairline bg-gradient-to-br from-[var(--surface-dark-from)] to-[var(--surface-dark-to)]">
         <Container className="py-20 text-center">
-          <h1 className="mx-auto max-w-2xl text-4xl font-extrabold tracking-tight leading-tight text-white md:text-5xl">
+          <span className="inline-block rounded-full border border-accent/30 bg-accent-wash px-3 py-1 text-xs font-bold uppercase tracking-widest text-accent">
+            Per gestori e direttori di tiro
+          </span>
+          <h1 className="mx-auto mt-5 max-w-2xl text-4xl font-black uppercase leading-[0.98] tracking-tight text-ink md:text-5xl">
             Porta il tuo poligono{' '}
-            <span className="box-decoration-clone rounded-lg bg-accent px-2 text-accent-ink">
-              online
-            </span>
+            <span className="box-decoration-clone bg-accent px-2 text-accent-ink">online</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-white/80">
+          <p className="mx-auto mt-6 max-w-md text-lg leading-relaxed text-ink-muted">
             La dashboard gratuita per gestire orari, prezzi e prenotazioni. Nuovi tiratori ti
             trovano ogni giorno su Google.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="#piani"
-              className="rounded-control bg-accent px-6 py-3 text-sm font-semibold text-accent-ink hover:bg-accent-hover"
+              className="rounded-control bg-accent px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-accent-ink hover:bg-accent-hover"
             >
               Vedi i piani
             </Link>
@@ -125,7 +127,7 @@ export default function GestoriPage() {
       <section className="bg-surface-sunken py-20">
         <Container>
           <div className="mx-auto max-w-xl text-center">
-            <h2 className="text-3xl font-semibold text-ink">
+            <h2 className="text-3xl font-black uppercase tracking-tight text-ink">
               Perché aggiungere la tua struttura
             </h2>
             <p className="mt-3 text-ink-muted">
@@ -136,8 +138,10 @@ export default function GestoriPage() {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {BENEFITS.map((b) => (
               <div key={b.title} className="rounded-panel border border-hairline bg-surface p-8 shadow-panel">
-                <b.icon size={26} className="text-accent" aria-hidden />
-                <h3 className="mt-4 text-lg font-semibold text-ink">{b.title}</h3>
+                <IconBox icon={b.icon} />
+                <h3 className="mt-4 text-lg font-bold uppercase tracking-tight text-ink">
+                  {b.title}
+                </h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-muted">{b.description}</p>
               </div>
             ))}
@@ -149,7 +153,9 @@ export default function GestoriPage() {
       <section id="piani" className="bg-surface-sunken py-20">
         <Container>
           <div className="mx-auto max-w-xl text-center">
-            <h2 className="text-3xl font-semibold text-ink">Piani e prezzi</h2>
+            <h2 className="text-3xl font-black uppercase tracking-tight text-ink">
+              Piani e prezzi
+            </h2>
             <p className="mt-3 text-ink-muted">
               Scegli il piano adatto al tuo poligono. Nessun costo di attivazione.
             </p>
@@ -171,7 +177,7 @@ export default function GestoriPage() {
                   </span>
                 )}
                 <div>
-                  <h3 className="text-lg font-semibold text-ink">{plan.name}</h3>
+                  <h3 className="text-lg font-bold uppercase tracking-tight text-ink">{plan.name}</h3>
                   <p className="mt-1">
                     <span className="text-4xl font-black tracking-tight tabular-nums text-ink md:text-5xl">
                       {plan.price}
@@ -189,7 +195,7 @@ export default function GestoriPage() {
                 </ul>
                 <a
                   href="mailto:info@poligoniitalia.it"
-                  className={`mt-auto rounded-control px-6 py-3 text-center text-sm font-semibold ${
+                  className={`mt-auto rounded-control px-6 py-3 text-center text-sm font-bold uppercase tracking-wide ${
                     plan.highlighted
                       ? 'bg-accent text-accent-ink hover:bg-accent-hover'
                       : 'border border-hairline-strong text-ink hover:border-accent hover:text-accent'
@@ -207,7 +213,9 @@ export default function GestoriPage() {
       <section className="py-20">
         <Container>
           <div className="mx-auto max-w-xl text-center">
-            <h2 className="text-3xl font-semibold text-ink">Domande frequenti</h2>
+            <h2 className="text-3xl font-black uppercase tracking-tight text-ink">
+              Domande frequenti
+            </h2>
           </div>
           <div className="mt-12">
             <FaqAccordion />
@@ -219,7 +227,7 @@ export default function GestoriPage() {
       <section className="py-20">
         <Container>
           <div className="rounded-panel border border-hairline bg-surface-sunken px-8 py-12 text-center">
-            <h2 className="text-2xl font-semibold text-ink">Hai domande?</h2>
+            <h2 className="text-2xl font-black uppercase tracking-tight text-ink">Hai domande?</h2>
             <p className="mt-3 text-ink-muted">
               Scrivici a{' '}
               <a href="mailto:info@poligoniitalia.it" className="font-medium text-accent hover:text-accent-hover">

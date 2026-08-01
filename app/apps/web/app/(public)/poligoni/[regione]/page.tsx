@@ -39,7 +39,9 @@ export default async function RegionePage(
       />
 
       <Container className="py-10">
-        <h1 className="text-2xl font-semibold text-ink md:text-3xl">Poligoni di tiro in {name}</h1>
+        <h1 className="text-2xl font-black uppercase tracking-tight text-ink md:text-3xl">
+          Poligoni di tiro in {name}
+        </h1>
         <p className="mt-2 text-ink-muted">{province.length} province con strutture censite</p>
 
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -47,10 +49,12 @@ export default async function RegionePage(
             <Link
               key={p.slug}
               href={`/poligoni/${regione}/${p.slug}`}
-              className="flex items-center justify-between rounded-panel border border-hairline bg-surface px-5 py-4 hover:border-accent hover:shadow-panel"
+              className="flex items-center justify-between rounded-panel border border-hairline bg-surface px-5 py-4 transition-colors hover:border-accent hover:shadow-panel"
             >
-              <span className="font-medium text-ink">{p.name}</span>
-              <span className="text-sm text-ink-muted">{p.count} strutture</span>
+              <span className="font-bold uppercase tracking-tight text-ink">{p.name}</span>
+              <span className="rounded-full bg-accent-wash px-2 py-0.5 font-mono text-xs font-bold text-accent">
+                {p.count}
+              </span>
             </Link>
           ))}
         </div>
