@@ -80,7 +80,7 @@ export default function BookingPage() {
   if (!range) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-slate-500">Struttura non trovata</p>
+        <p className="text-slate-500 dark:text-slate-400">Struttura non trovata</p>
         <button onClick={() => navigate("/")} className="mt-4 text-orange-600 font-medium">
           Torna alla ricerca
         </button>
@@ -90,10 +90,10 @@ export default function BookingPage() {
 
   if (sent) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-6">
-        <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
-        <h2 className="text-lg font-bold text-slate-900 mb-1">Richiesta inviata!</h2>
-        <p className="text-sm text-slate-500 text-center mb-6">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center px-6">
+        <CheckCircle2 className="w-16 h-16 text-green-500 dark:text-green-400 mb-4" />
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Richiesta inviata!</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 text-center mb-6">
           Abbiamo inoltrato la tua richiesta a {range.name}. Riceverai una risposta via email.
         </p>
         <button
@@ -118,14 +118,14 @@ export default function BookingPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24">
-      <div className="bg-white border-b border-slate-100 px-4 py-3 flex items-center gap-3 sticky top-0 z-40">
-        <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center text-slate-600">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-24">
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 px-4 py-3 flex items-center gap-3 sticky top-0 z-40">
+        <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center text-slate-600 dark:text-slate-300">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="font-semibold text-slate-900 text-sm">Richiedi disponibilità</h1>
-          <p className="text-xs text-slate-500">{range.name}</p>
+          <h1 className="font-semibold text-slate-900 dark:text-white text-sm">Richiedi disponibilità</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{range.name}</p>
         </div>
       </div>
 
@@ -134,7 +134,7 @@ export default function BookingPage() {
         {[1, 2, 3].map((s) => (
           <div
             key={s}
-            className={`flex-1 h-1 rounded-full ${s <= step ? "bg-orange-500" : "bg-slate-200"}`}
+            className={`flex-1 h-1 rounded-full ${s <= step ? "bg-orange-500" : "bg-slate-200 dark:bg-slate-700"}`}
           />
         ))}
       </div>
@@ -144,7 +144,7 @@ export default function BookingPage() {
           <>
             {/* Date selector */}
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-2">Data desiderata</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-2">Data desiderata</h3>
               <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4">
                 {dates.map((d) => (
                   <button
@@ -153,12 +153,12 @@ export default function BookingPage() {
                     className={`flex-shrink-0 w-16 py-2 rounded-xl border-2 transition-colors ${
                       selectedDate === d.value
                         ? "border-orange-500 bg-orange-50"
-                        : "border-slate-200 bg-white"
+                        : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
                     }`}
                   >
-                    <p className="text-xs text-slate-500 capitalize">{d.day}</p>
-                    <p className="text-lg font-bold text-slate-900">{d.num}</p>
-                    <p className="text-xs text-slate-400 capitalize">{d.month}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 capitalize">{d.day}</p>
+                    <p className="text-lg font-bold text-slate-900 dark:text-white">{d.num}</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 capitalize">{d.month}</p>
                   </button>
                 ))}
               </div>
@@ -166,7 +166,7 @@ export default function BookingPage() {
 
             {/* Time slots */}
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-2 flex items-center gap-1">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-2 flex items-center gap-1">
                 <Clock className="w-4 h-4" /> Orario preferito
               </h3>
               <div className="grid grid-cols-4 gap-2">
@@ -177,7 +177,7 @@ export default function BookingPage() {
                     className={`py-2 rounded-lg text-sm font-medium border transition-colors ${
                       selectedSlot === slot
                         ? "border-orange-500 bg-orange-500 text-white"
-                        : "border-slate-200 bg-white text-slate-700"
+                        : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300"
                     }`}
                   >
                     {slot}
@@ -188,7 +188,7 @@ export default function BookingPage() {
 
             {/* Duration */}
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-2">Durata</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-2">Durata</h3>
               <div className="grid grid-cols-3 gap-2">
                 {DURATIONS.map((d) => (
                   <button
@@ -196,8 +196,8 @@ export default function BookingPage() {
                     onClick={() => setDuration(d.min)}
                     className={`py-2.5 rounded-lg text-sm font-medium border transition-colors ${
                       duration === d.min
-                        ? "border-orange-500 bg-orange-50 text-orange-700"
-                        : "border-slate-200 bg-white text-slate-700"
+                        ? "border-orange-500 bg-orange-50 text-orange-700 dark:text-orange-300"
+                        : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300"
                     }`}
                   >
                     {d.label}
@@ -219,32 +219,32 @@ export default function BookingPage() {
         {step === 2 && (
           <>
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-2">I tuoi contatti</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-2">I tuoi contatti</h3>
               <div className="space-y-3">
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Nome e cognome"
-                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email"
-                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
             </div>
 
             <div>
-              <h3 className="font-semibold text-slate-900 text-sm mb-2">Note (opzionale)</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-2">Note (opzionale)</h3>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Es. primo accesso, noleggio arma..."
-                className="w-full bg-white border border-slate-200 rounded-xl p-3 text-sm placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 min-h-[80px]"
+                className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm placeholder:text-slate-300 dark:text-slate-600 focus:outline-none focus:ring-2 focus:ring-orange-500 min-h-[80px]"
               />
             </div>
 
@@ -260,26 +260,26 @@ export default function BookingPage() {
 
         {step === 3 && (
           <>
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
-              <h3 className="font-semibold text-slate-900 text-sm">Riepilogo richiesta</h3>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800 space-y-3">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Riepilogo richiesta</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Struttura</span>
-                  <span className="font-medium text-slate-900">{range.name}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Struttura</span>
+                  <span className="font-medium text-slate-900 dark:text-white">{range.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Data</span>
-                  <span className="font-medium text-slate-900">
+                  <span className="text-slate-500 dark:text-slate-400">Data</span>
+                  <span className="font-medium text-slate-900 dark:text-white">
                     {new Date(selectedDate).toLocaleDateString("it-IT", { day: "numeric", month: "long" })}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Orario</span>
-                  <span className="font-medium text-slate-900">{selectedSlot}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Orario</span>
+                  <span className="font-medium text-slate-900 dark:text-white">{selectedSlot}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Durata</span>
-                  <span className="font-medium text-slate-900">{duration} min</span>
+                  <span className="text-slate-500 dark:text-slate-400">Durata</span>
+                  <span className="font-medium text-slate-900 dark:text-white">{duration} min</span>
                 </div>
               </div>
             </div>

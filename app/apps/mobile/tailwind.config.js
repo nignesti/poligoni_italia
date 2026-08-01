@@ -1,7 +1,9 @@
 import tailwindcssAnimate from 'tailwindcss-animate';
 
 export default {
-  darkMode: ['class'],
+  // Segue automaticamente le impostazioni del sistema (nessun toggle in
+  // app): media query prefers-color-scheme, zero JS necessario.
+  darkMode: 'media',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {

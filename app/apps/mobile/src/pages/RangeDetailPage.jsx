@@ -47,7 +47,7 @@ export default function RangeDetailPage() {
   if (!range) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
-        <p className="text-slate-500">Struttura non trovata</p>
+        <p className="text-slate-500 dark:text-slate-400">Struttura non trovata</p>
         <button onClick={() => navigate("/")} className="mt-4 text-orange-600 font-medium">
           Torna alla ricerca
         </button>
@@ -58,7 +58,7 @@ export default function RangeDetailPage() {
   const isBookable = range.status === "partner";
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-24">
       {/* Hero image */}
       {range.image_url && (
         <div className="relative h-48 w-full overflow-hidden">
@@ -89,7 +89,7 @@ export default function RangeDetailPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => navigate(-1)}
-              className="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-600"
+              className="w-9 h-9 rounded-full bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-slate-600 dark:text-slate-300"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -100,63 +100,63 @@ export default function RangeDetailPage() {
         )}
 
         {/* Location */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
           <div className="flex items-start gap-3">
             <MapPin className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-slate-900">{range.address}</p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm font-medium text-slate-900 dark:text-white">{range.address}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 {range.comune}, {range.provincia}
                 {range.cap ? ` (${range.cap})` : ""}
               </p>
-              <p className="text-xs text-slate-400 mt-0.5">{range.regione}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{range.regione}</p>
             </div>
           </div>
         </div>
 
         {/* Description */}
         {range.description && (
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-            <p className="text-sm text-slate-600 leading-relaxed">{range.description}</p>
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{range.description}</p>
           </div>
         )}
 
         {/* Hours */}
         {range.hours_notes && (
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2 mb-2">
-              <Clock className="w-4 h-4 text-slate-400" />
-              <h3 className="font-semibold text-slate-900 text-sm">Orari</h3>
+              <Clock className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Orari</h3>
             </div>
-            <p className="text-sm text-slate-600 whitespace-pre-line">{range.hours_notes}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-line">{range.hours_notes}</p>
           </div>
         )}
 
         {/* Pricing */}
         {range.pricing_notes && (
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2 mb-2">
-              <Euro className="w-4 h-4 text-slate-400" />
-              <h3 className="font-semibold text-slate-900 text-sm">Listino</h3>
+              <Euro className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Listino</h3>
             </div>
-            <p className="text-sm text-slate-600 whitespace-pre-line">{range.pricing_notes}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-line">{range.pricing_notes}</p>
           </div>
         )}
 
         {/* Technical info */}
         {(range.calibers?.length > 0 || range.distances_m?.length > 0 || range.disciplines?.length > 0) && (
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2 mb-3">
-              <Crosshair className="w-4 h-4 text-slate-400" />
-              <h3 className="font-semibold text-slate-900 text-sm">Dati tecnici</h3>
+              <Crosshair className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Dati tecnici</h3>
             </div>
 
             {range.distances_m?.length > 0 && (
               <div className="mb-3">
-                <p className="text-xs text-slate-400 font-medium mb-1">Distanze</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mb-1">Distanze</p>
                 <div className="flex flex-wrap gap-1.5">
                   {range.distances_m.map((d) => (
-                    <span key={d} className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-lg font-medium">
+                    <span key={d} className="text-xs bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-lg font-medium">
                       {d}m
                     </span>
                   ))}
@@ -166,10 +166,10 @@ export default function RangeDetailPage() {
 
             {range.calibers?.length > 0 && (
               <div className="mb-3">
-                <p className="text-xs text-slate-400 font-medium mb-1">Calibri ammessi</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mb-1">Calibri ammessi</p>
                 <div className="flex flex-wrap gap-1.5">
                   {range.calibers.map((c) => (
-                    <span key={c} className="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-lg">
+                    <span key={c} className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-lg">
                       {c}
                     </span>
                   ))}
@@ -179,10 +179,10 @@ export default function RangeDetailPage() {
 
             {range.disciplines?.length > 0 && (
               <div>
-                <p className="text-xs text-slate-400 font-medium mb-1">Discipline</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mb-1">Discipline</p>
                 <div className="flex flex-wrap gap-1.5">
                   {range.disciplines.map((d) => (
-                    <span key={d} className="text-xs bg-orange-50 text-orange-700 px-2 py-0.5 rounded-lg">
+                    <span key={d} className="text-xs bg-orange-50 text-orange-700 dark:text-orange-300 px-2 py-0.5 rounded-lg">
                       {d}
                     </span>
                   ))}
@@ -194,15 +194,15 @@ export default function RangeDetailPage() {
 
         {/* Services */}
         {range.services?.length > 0 && (
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2 mb-3">
-              <Wrench className="w-4 h-4 text-slate-400" />
-              <h3 className="font-semibold text-slate-900 text-sm">Servizi</h3>
+              <Wrench className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Servizi</h3>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {range.services.map((s) => (
-                <div key={s} className="flex items-center gap-1.5 text-sm text-slate-600">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
+                <div key={s} className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-green-500 dark:text-green-400 flex-shrink-0" />
                   {s}
                 </div>
               ))}
@@ -211,17 +211,17 @@ export default function RangeDetailPage() {
         )}
 
         {/* Contacts */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3">
-          <h3 className="font-semibold text-slate-900 text-sm">Contatti</h3>
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800 space-y-3">
+          <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Contatti</h3>
           {range.phone && (
-            <a href={`tel:${range.phone}`} className="flex items-center gap-3 text-sm text-slate-700 hover:text-orange-600">
-              <Phone className="w-4 h-4 text-slate-400" />
+            <a href={`tel:${range.phone}`} className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 hover:text-orange-600">
+              <Phone className="w-4 h-4 text-slate-400 dark:text-slate-500" />
               {range.phone}
             </a>
           )}
           {range.email && (
-            <a href={`mailto:${range.email}`} className="flex items-center gap-3 text-sm text-slate-700 hover:text-orange-600">
-              <Mail className="w-4 h-4 text-slate-400" />
+            <a href={`mailto:${range.email}`} className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 hover:text-orange-600">
+              <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500" />
               {range.email}
             </a>
           )}
@@ -230,9 +230,9 @@ export default function RangeDetailPage() {
               href={range.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 text-sm text-slate-700 hover:text-orange-600"
+              className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 hover:text-orange-600"
             >
-              <Globe className="w-4 h-4 text-slate-400" />
+              <Globe className="w-4 h-4 text-slate-400 dark:text-slate-500" />
               Sito web
               <ExternalLink className="w-3 h-3 ml-auto" />
             </a>
@@ -242,7 +242,7 @@ export default function RangeDetailPage() {
 
       {/* Bottom CTA */}
       <div className="fixed bottom-16 left-0 right-0 max-w-md mx-auto px-4">
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-3 flex gap-2">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-800 p-3 flex gap-2">
           {isBookable ? (
             <button
               onClick={() => navigate(`/prenota/${range.id}`)}

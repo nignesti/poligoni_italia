@@ -53,20 +53,20 @@ export default function BookingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="bg-white px-4 pt-12 pb-4 border-b border-slate-100">
-        <h1 className="text-xl font-bold text-slate-900">Le mie prenotazioni</h1>
-        <p className="text-sm text-slate-500 mt-0.5">Gestisci i tuoi slot e check-in QR</p>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <div className="bg-white dark:bg-slate-900 px-4 pt-12 pb-4 border-b border-slate-100 dark:border-slate-800">
+        <h1 className="text-xl font-bold text-slate-900 dark:text-white">Le mie prenotazioni</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Gestisci i tuoi slot e check-in QR</p>
       </div>
 
       <div className="px-4 py-4 space-y-6">
         {/* Upcoming */}
         <div>
-          <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Prossime</h2>
+          <h2 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Prossime</h2>
           {upcoming.length === 0 ? (
-            <div className="bg-white rounded-2xl p-6 text-center border border-slate-100">
-              <Calendar className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-              <p className="text-sm text-slate-500">Nessuna prenotazione attiva</p>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 text-center border border-slate-100 dark:border-slate-800">
+              <Calendar className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+              <p className="text-sm text-slate-500 dark:text-slate-400">Nessuna prenotazione attiva</p>
               <button
                 onClick={() => navigate("/")}
                 className="mt-3 text-orange-600 text-sm font-medium flex items-center gap-1 justify-center"
@@ -77,11 +77,11 @@ export default function BookingsPage() {
           ) : (
             <div className="space-y-3">
               {upcoming.map((b) => (
-                <div key={b.id} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <div key={b.id} className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-slate-900 text-sm truncate">{b.range_name}</h3>
-                      <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                      <h3 className="font-semibold text-slate-900 dark:text-white text-sm truncate">{b.range_name}</h3>
+                      <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                         <MapPin className="w-3 h-3" />
                         {b.range_comune || "—"}
                       </div>
@@ -89,13 +89,13 @@ export default function BookingsPage() {
                     <StatusBadge status={b.status} />
                   </div>
 
-                  <div className="flex items-center gap-4 text-xs text-slate-600 mb-3">
+                  <div className="flex items-center gap-4 text-xs text-slate-600 dark:text-slate-300 mb-3">
                     <div className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                      <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                       {formatDate(b.slot_start)}
                     </div>
                     <div className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                       {new Date(b.slot_start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
                       {" - "}
                       {new Date(b.slot_end).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
@@ -112,7 +112,7 @@ export default function BookingsPage() {
                     {b.status === "confermata" && (
                       <button
                         onClick={() => handleCancel(b.id)}
-                        className="px-3 py-2.5 bg-red-50 text-red-600 rounded-xl text-xs font-semibold active:scale-95 transition-transform"
+                        className="px-3 py-2.5 bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 rounded-xl text-xs font-semibold active:scale-95 transition-transform"
                       >
                         Annulla
                       </button>
@@ -127,14 +127,14 @@ export default function BookingsPage() {
         {/* Past */}
         {past.length > 0 && (
           <div>
-            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Storico</h2>
+            <h2 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Storico</h2>
             <div className="space-y-2">
               {past.map((b) => (
-                <div key={b.id} className="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 opacity-70">
+                <div key={b.id} className="bg-white dark:bg-slate-900 rounded-2xl p-3 shadow-sm border border-slate-100 dark:border-slate-800 opacity-70">
                   <div className="flex items-center justify-between">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-slate-900 text-sm truncate">{b.range_name}</h3>
-                      <p className="text-xs text-slate-500">
+                      <h3 className="font-medium text-slate-900 dark:text-white text-sm truncate">{b.range_name}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
                         {formatDate(b.slot_start)} ·{" "}
                         {new Date(b.slot_start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
                       </p>
@@ -155,13 +155,13 @@ export default function BookingsPage() {
           onClick={() => setQrBooking(null)}
         >
           <div
-            className="bg-white rounded-3xl p-6 max-w-xs w-full"
+            className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-xs w-full"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-slate-900">Check-in QR</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white">Check-in QR</h3>
               <button onClick={() => setQrBooking(null)}>
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-slate-400 dark:text-slate-500" />
               </button>
             </div>
             <div className="bg-slate-900 rounded-2xl p-8 flex items-center justify-center mb-4">
@@ -171,19 +171,19 @@ export default function BookingsPage() {
                   return (
                     <div
                       key={i}
-                      className={`w-4 h-4 rounded-sm ${(seed + i) % 3 === 0 ? "bg-white" : "bg-slate-900"}`}
+                      className={`w-4 h-4 rounded-sm ${(seed + i) % 3 === 0 ? "bg-white dark:bg-slate-900" : "bg-slate-900"}`}
                     />
                   );
                 })}
               </div>
             </div>
-            <p className="text-center font-mono text-sm font-bold text-slate-900 mb-1">{qrBooking.qr_token}</p>
-            <p className="text-center text-sm text-slate-600">{qrBooking.range_name}</p>
-            <p className="text-center text-xs text-slate-400">
+            <p className="text-center font-mono text-sm font-bold text-slate-900 dark:text-white mb-1">{qrBooking.qr_token}</p>
+            <p className="text-center text-sm text-slate-600 dark:text-slate-300">{qrBooking.range_name}</p>
+            <p className="text-center text-xs text-slate-400 dark:text-slate-500">
               {formatDate(qrBooking.slot_start)} ·{" "}
               {new Date(qrBooking.slot_start).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })}
             </p>
-            <p className="text-xs text-center text-slate-400 mt-3">
+            <p className="text-xs text-center text-slate-400 dark:text-slate-500 mt-3">
               Mostra questo codice al banco di segreteria
             </p>
           </div>

@@ -48,7 +48,7 @@ function TargetDiagram({ holes, onTap, readOnly }) {
       ref={svgRef}
       viewBox={`0 0 ${VIEWBOX} ${VIEWBOX}`}
       onClick={handleClick}
-      className={`w-full aspect-square bg-white rounded-2xl border border-slate-200 ${
+      className={`w-full aspect-square bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 ${
         readOnly ? "" : "cursor-crosshair"
       }`}
     >
@@ -77,33 +77,33 @@ function TargetDiagram({ holes, onTap, readOnly }) {
 function StatsCard({ stats }) {
   if (!stats) return null;
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 grid grid-cols-2 gap-3">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-3">
       <div>
-        <p className="text-[10px] text-slate-400 uppercase tracking-wider">Colpi</p>
-        <p className="text-lg font-bold text-slate-900">{stats.shots}</p>
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Colpi</p>
+        <p className="text-lg font-bold text-slate-900 dark:text-white">{stats.shots}</p>
       </div>
       <div>
-        <p className="text-[10px] text-slate-400 uppercase tracking-wider">Raggio medio</p>
-        <p className="text-lg font-bold text-slate-900">{stats.meanRadius} mm</p>
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Raggio medio</p>
+        <p className="text-lg font-bold text-slate-900 dark:text-white">{stats.meanRadius} mm</p>
       </div>
       <div>
-        <p className="text-[10px] text-slate-400 uppercase tracking-wider">Extreme spread</p>
-        <p className="text-lg font-bold text-slate-900">{stats.extremeSpread} mm</p>
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Extreme spread</p>
+        <p className="text-lg font-bold text-slate-900 dark:text-white">{stats.extremeSpread} mm</p>
       </div>
       <div>
-        <p className="text-[10px] text-slate-400 uppercase tracking-wider">Deviazione std.</p>
-        <p className="text-lg font-bold text-slate-900">{stats.standardDeviation} mm</p>
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Deviazione std.</p>
+        <p className="text-lg font-bold text-slate-900 dark:text-white">{stats.standardDeviation} mm</p>
       </div>
       <div>
-        <p className="text-[10px] text-slate-400 uppercase tracking-wider">Deriva / alzo</p>
-        <p className="text-sm font-semibold text-slate-900">
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Deriva / alzo</p>
+        <p className="text-sm font-semibold text-slate-900 dark:text-white">
           {stats.windage} / {stats.elevation} mm
         </p>
       </div>
       {stats.groupSizeMOA !== undefined && (
         <div>
-          <p className="text-[10px] text-slate-400 uppercase tracking-wider">Gruppo</p>
-          <p className="text-sm font-semibold text-slate-900">{stats.groupSizeMOA} MOA</p>
+          <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Gruppo</p>
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">{stats.groupSizeMOA} MOA</p>
         </div>
       )}
     </div>
@@ -112,11 +112,11 @@ function StatsCard({ stats }) {
 
 function Header({ navigate, title, onBack }) {
   return (
-    <div className="bg-white border-b border-slate-100 px-4 py-3 flex items-center gap-3 sticky top-0 z-40">
-      <button onClick={onBack || (() => navigate(-1))} className="w-8 h-8 flex items-center justify-center text-slate-600">
+    <div className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 px-4 py-3 flex items-center gap-3 sticky top-0 z-40">
+      <button onClick={onBack || (() => navigate(-1))} className="w-8 h-8 flex items-center justify-center text-slate-600 dark:text-slate-300">
         <ArrowLeft className="w-5 h-5" />
       </button>
-      <h1 className="font-semibold text-slate-900 text-sm">{title}</h1>
+      <h1 className="font-semibold text-slate-900 dark:text-white text-sm">{title}</h1>
     </div>
   );
 }
@@ -249,11 +249,11 @@ export default function TargetsPage() {
 
   if (phase === "list") {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <Header navigate={navigate} title="Bersagli" />
         <div className="px-4 py-4 space-y-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
-            <p className="text-xs text-blue-800 leading-relaxed">{TARGET_DISCLAIMER}</p>
+          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-3">
+            <p className="text-xs text-blue-800 dark:text-blue-200 leading-relaxed">{TARGET_DISCLAIMER}</p>
           </div>
 
           <button
@@ -264,10 +264,10 @@ export default function TargetsPage() {
           </button>
 
           {history.length === 0 ? (
-            <div className="bg-white rounded-2xl p-6 text-center border border-slate-100">
-              <CrosshairIcon className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-              <p className="text-sm text-slate-500">Nessun bersaglio marcato</p>
-              <p className="text-xs text-slate-400 mt-1">Marca i fori dopo una sessione per vedere le statistiche del gruppo</p>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 text-center border border-slate-100 dark:border-slate-800">
+              <CrosshairIcon className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+              <p className="text-sm text-slate-500 dark:text-slate-400">Nessun bersaglio marcato</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Marca i fori dopo una sessione per vedere le statistiche del gruppo</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -275,13 +275,13 @@ export default function TargetsPage() {
                 <button
                   key={t.id}
                   onClick={() => openDetail(t)}
-                  className="w-full text-left bg-white rounded-xl p-3 shadow-sm border border-slate-100"
+                  className="w-full text-left bg-white dark:bg-slate-900 rounded-xl p-3 shadow-sm border border-slate-100 dark:border-slate-800"
                 >
-                  <p className="text-sm font-medium text-slate-900">
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">
                     {TARGET_TYPES.find((tt) => tt.value === t.target_type)?.label || t.target_type || "Bersaglio"}
                     {t.distance_m ? ` · ${t.distance_m}m` : ""}
                   </p>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-400 dark:text-slate-500">
                     {t.session_range_name ? `${t.session_range_name} · ` : ""}
                     {formatDate(t.created_at)}
                   </p>
@@ -296,13 +296,13 @@ export default function TargetsPage() {
 
   if (phase === "setup") {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <Header navigate={navigate} title="Nuovo bersaglio" onBack={() => setPhase("list")} />
         <div className="px-4 py-4 space-y-4">
           {sessions.length === 0 ? (
-            <div className="bg-white rounded-2xl p-6 text-center border border-slate-100">
-              <p className="text-sm text-slate-500">Nessuna sessione registrata</p>
-              <p className="text-xs text-slate-400 mt-1 mb-3">Il bersaglio va collegato a una sessione del diario</p>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 text-center border border-slate-100 dark:border-slate-800">
+              <p className="text-sm text-slate-500 dark:text-slate-400">Nessuna sessione registrata</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 mb-3">Il bersaglio va collegato a una sessione del diario</p>
               <button
                 onClick={() => navigate("/diario")}
                 className="bg-orange-600 text-white font-semibold py-2.5 px-4 rounded-xl text-sm"
@@ -313,11 +313,11 @@ export default function TargetsPage() {
           ) : (
             <>
               <div>
-                <label className="text-xs font-medium text-slate-500">Sessione</label>
+                <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Sessione</label>
                 <select
                   value={sessionId}
                   onChange={(e) => setSessionId(e.target.value)}
-                  className="w-full mt-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
                   {sessions.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -329,11 +329,11 @@ export default function TargetsPage() {
 
               {firearms.length > 0 && (
                 <div>
-                  <label className="text-xs font-medium text-slate-500">Arma (opzionale)</label>
+                  <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Arma (opzionale)</label>
                   <select
                     value={firearmLabel}
                     onChange={(e) => setFirearmLabel(e.target.value)}
-                    className="w-full mt-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
                     <option value="">Nessuna</option>
                     {firearms.map((f) => (
@@ -346,14 +346,14 @@ export default function TargetsPage() {
               )}
 
               <div>
-                <label className="text-xs font-medium text-slate-500">Tipo bersaglio</label>
+                <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Tipo bersaglio</label>
                 <div className="flex flex-wrap gap-1.5 mt-1">
                   {TARGET_TYPES.map((t) => (
                     <button
                       key={t.value}
                       onClick={() => setTargetType(t.value)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                        targetType === t.value ? "bg-orange-600 text-white" : "bg-white border border-slate-200 text-slate-600"
+                        targetType === t.value ? "bg-orange-600 text-white" : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"
                       }`}
                     >
                       {t.label}
@@ -363,12 +363,12 @@ export default function TargetsPage() {
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-500">Distanza (m)</label>
+                <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Distanza (m)</label>
                 <input
                   type="number"
                   value={distanceM}
                   onChange={(e) => setDistanceM(e.target.value)}
-                  className="w-full mt-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
@@ -387,17 +387,17 @@ export default function TargetsPage() {
 
   if (phase === "marking") {
     return (
-      <div className="min-h-screen bg-slate-50 pb-6">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-6">
         <Header navigate={navigate} title="Marca i fori" onBack={() => setPhase("setup")} />
         <div className="px-4 py-4 space-y-4">
-          <p className="text-xs text-slate-500">Tocca il bersaglio per segnare un foro. {holes.length} colpo/i registrato/i.</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Tocca il bersaglio per segnare un foro. {holes.length} colpo/i registrato/i.</p>
           <TargetDiagram holes={holes} onTap={handleTap} />
 
           {holes.length > 0 && (
             <div className="space-y-2">
               {holes.map((h, i) => (
-                <div key={i} className="flex items-center gap-2 bg-white rounded-xl p-2.5 shadow-sm border border-slate-100">
-                  <span className="text-xs text-slate-400 w-16 flex-shrink-0">
+                <div key={i} className="flex items-center gap-2 bg-white dark:bg-slate-900 rounded-xl p-2.5 shadow-sm border border-slate-100 dark:border-slate-800">
+                  <span className="text-xs text-slate-400 dark:text-slate-500 w-16 flex-shrink-0">
                     {h.x}, {h.y} mm
                   </span>
                   <input
@@ -405,9 +405,9 @@ export default function TargetsPage() {
                     value={h.score}
                     onChange={(e) => updateScore(i, e.target.value)}
                     placeholder="punteggio"
-                    className="flex-1 min-w-0 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="flex-1 min-w-0 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
-                  <button onClick={() => removeHole(i)} className="p-1 text-slate-300 hover:text-red-500 flex-shrink-0">
+                  <button onClick={() => removeHole(i)} className="p-1 text-slate-300 dark:text-slate-600 hover:text-red-500 dark:text-red-400 flex-shrink-0">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
@@ -419,7 +419,7 @@ export default function TargetsPage() {
             <button
               onClick={() => setHoles([])}
               disabled={holes.length === 0}
-              className="flex items-center justify-center gap-1.5 bg-white border border-slate-200 text-slate-600 font-medium py-3 px-4 rounded-xl text-sm disabled:opacity-30"
+              className="flex items-center justify-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium py-3 px-4 rounded-xl text-sm disabled:opacity-30"
             >
               <RotateCcw className="w-4 h-4" /> Svuota
             </button>
@@ -439,7 +439,7 @@ export default function TargetsPage() {
 
   if (phase === "result") {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <Header navigate={navigate} title="Bersaglio salvato" onBack={reset} />
         <div className="px-4 py-4 space-y-4">
           <TargetDiagram holes={holes} readOnly />
@@ -458,7 +458,7 @@ export default function TargetsPage() {
   if (phase === "detail") {
     const stats = detailHoles.length > 0 ? computeGroupStats(detailHoles, detailTarget?.distance_m) : null;
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <Header navigate={navigate} title="Bersaglio" onBack={() => setPhase("list")} />
         <div className="px-4 py-4 space-y-4">
           {detailLoading ? (
@@ -471,7 +471,7 @@ export default function TargetsPage() {
               <StatsCard stats={stats} />
               <button
                 onClick={handleDeleteDetail}
-                className="w-full flex items-center justify-center gap-2 bg-white border border-red-200 text-red-600 font-medium py-3 rounded-xl text-sm"
+                className="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-900 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 font-medium py-3 rounded-xl text-sm"
               >
                 <Trash2 className="w-4 h-4" /> Elimina bersaglio
               </button>

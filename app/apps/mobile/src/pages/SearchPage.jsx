@@ -60,30 +60,30 @@ export default function SearchPage() {
   }, [ranges]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Header */}
       <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white px-4 pt-12 pb-6 rounded-b-3xl">
         <div className="flex items-center gap-2 mb-1">
           <Target className="w-6 h-6 text-orange-500" strokeWidth={2.5} />
           <h1 className="text-xl font-bold tracking-tight">Poligoni Italia</h1>
         </div>
-        <p className="text-slate-300 text-sm mb-4">Trova e prenota poligoni di tiro in Italia</p>
+        <p className="text-slate-300 dark:text-slate-600 text-sm mb-4">Trova e prenota poligoni di tiro in Italia</p>
 
         {/* Search bar */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Cerca per nome, città o provincia..."
-            className="w-full bg-white text-slate-900 rounded-xl pl-9 pr-4 py-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl pl-9 pr-4 py-3 text-sm placeholder:text-slate-400 dark:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
         </div>
 
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="mt-3 flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
+          className="mt-3 flex items-center gap-2 text-sm text-slate-300 dark:text-slate-600 hover:text-white transition-colors"
         >
           <Filter className="w-4 h-4" />
           Filtri
@@ -93,14 +93,14 @@ export default function SearchPage() {
         {showFilters && (
           <div className="mt-3 space-y-3 bg-slate-800/50 rounded-xl p-3">
             <div>
-              <label className="text-xs text-slate-400 font-medium">Tipo struttura</label>
+              <label className="text-xs text-slate-400 dark:text-slate-500 font-medium">Tipo struttura</label>
               <div className="flex flex-wrap gap-1.5 mt-1">
                 {Object.entries(RANGE_TYPE_LABELS).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => setFilters({ ...filters, type: key })}
                     className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
-                      filters.type === key ? "bg-orange-600 text-white" : "bg-slate-700 text-slate-300"
+                      filters.type === key ? "bg-orange-600 text-white" : "bg-slate-700 text-slate-300 dark:text-slate-600"
                     }`}
                   >
                     {label}
@@ -109,7 +109,7 @@ export default function SearchPage() {
                 <button
                   onClick={() => setFilters({ ...filters, type: "all" })}
                   className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
-                    filters.type === "all" ? "bg-orange-600 text-white" : "bg-slate-700 text-slate-300"
+                    filters.type === "all" ? "bg-orange-600 text-white" : "bg-slate-700 text-slate-300 dark:text-slate-600"
                   }`}
                 >
                   Tutti
@@ -121,7 +121,7 @@ export default function SearchPage() {
               <button
                 onClick={() => setFilters({ ...filters, indoor: !filters.indoor })}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                  filters.indoor ? "bg-orange-600 text-white" : "bg-slate-700 text-slate-300"
+                  filters.indoor ? "bg-orange-600 text-white" : "bg-slate-700 text-slate-300 dark:text-slate-600"
                 }`}
               >
                 Indoor
@@ -129,7 +129,7 @@ export default function SearchPage() {
               <button
                 onClick={() => setFilters({ ...filters, outdoor: !filters.outdoor })}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                  filters.outdoor ? "bg-orange-600 text-white" : "bg-slate-700 text-slate-300"
+                  filters.outdoor ? "bg-orange-600 text-white" : "bg-slate-700 text-slate-300 dark:text-slate-600"
                 }`}
               >
                 Outdoor
@@ -137,7 +137,7 @@ export default function SearchPage() {
             </div>
 
             <div>
-              <label className="text-xs text-slate-400 font-medium">Calibro</label>
+              <label className="text-xs text-slate-400 dark:text-slate-500 font-medium">Calibro</label>
               <select
                 value={filters.caliber}
                 onChange={(e) => setFilters({ ...filters, caliber: e.target.value })}
@@ -158,7 +158,7 @@ export default function SearchPage() {
       {/* Results */}
       <div className="px-4 py-4">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             {loading ? "Caricamento…" : `${filtered.length} strutture trovate`}
           </p>
           {!loading && filtered.length > 0 && (
@@ -193,7 +193,7 @@ export default function SearchPage() {
               <button
                 key={range.id}
                 onClick={() => navigate(`/poligono/${range.id}`)}
-                className="w-full bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 text-left active:scale-[0.98] transition-transform"
+                className="w-full bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 text-left active:scale-[0.98] transition-transform"
               >
                 {range.image_url && (
                   <div className="h-32 w-full overflow-hidden">
@@ -208,8 +208,8 @@ export default function SearchPage() {
                 <div className="p-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-slate-900 text-sm truncate">{range.name}</h3>
-                      <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                      <h3 className="font-semibold text-slate-900 dark:text-white text-sm truncate">{range.name}</h3>
+                      <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                         <MapPin className="w-3 h-3 flex-shrink-0" />
                         <span className="truncate">
                           {range.comune}, {range.provincia}
@@ -222,27 +222,27 @@ export default function SearchPage() {
                   {(range.calibers?.length || range.distances_m?.length) > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       {(range.calibers || []).slice(0, 3).map((c) => (
-                        <span key={c} className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">
+                        <span key={c} className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded">
                           {c}
                         </span>
                       ))}
                       {(range.distances_m || []).slice(0, 2).map((d) => (
-                        <span key={d} className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">
+                        <span key={d} className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded">
                           {d}m
                         </span>
                       ))}
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-50">
-                    <span className="text-xs text-slate-400">
+                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-50 dark:border-slate-800">
+                    <span className="text-xs text-slate-400 dark:text-slate-500">
                       {range.status === "partner" ? (
-                        <span className="text-green-600 font-medium">✓ Prenotabile</span>
+                        <span className="text-green-600 dark:text-green-400 font-medium">✓ Prenotabile</span>
                       ) : (
                         "Info disponibili"
                       )}
                     </span>
-                    <ChevronRight className="w-4 h-4 text-slate-300" />
+                    <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600" />
                   </div>
                 </div>
               </button>
@@ -250,7 +250,7 @@ export default function SearchPage() {
 
             {filtered.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-slate-400 text-sm">Nessuna struttura trovata</p>
+                <p className="text-slate-400 dark:text-slate-500 text-sm">Nessuna struttura trovata</p>
               </div>
             )}
           </div>

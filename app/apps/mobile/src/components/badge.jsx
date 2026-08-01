@@ -3,10 +3,10 @@ import { cn } from "@/lib/utils";
 
 export function AmmoLevelBadge({ level }) {
   const styles = {
-    ok: "bg-green-100 text-green-700",
-    attenzione: "bg-yellow-100 text-yellow-700",
-    limite: "bg-orange-100 text-orange-700",
-    oltre: "bg-red-100 text-red-700",
+    ok: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300",
+    attenzione: "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300",
+    limite: "bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300",
+    oltre: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300",
   };
   const labels = {
     ok: "Nei limiti",
@@ -30,11 +30,11 @@ export function RangeTypeBadge({ type }) {
     long_range: "Long Range",
   };
   const styles = {
-    tsn: "bg-blue-100 text-blue-700",
-    privato: "bg-purple-100 text-purple-700",
-    tiro_a_volo: "bg-teal-100 text-teal-700",
-    dinamico: "bg-orange-100 text-orange-700",
-    long_range: "bg-indigo-100 text-indigo-700",
+    tsn: "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300",
+    privato: "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300",
+    tiro_a_volo: "bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300",
+    dinamico: "bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300",
+    long_range: "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300",
   };
   return (
     <span className={cn("inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold", styles[type])}>
@@ -52,11 +52,11 @@ export function StatusBadge({ status }) {
     no_show: "No-show",
   };
   const styles = {
-    richiesta: "bg-yellow-100 text-yellow-700",
-    confermata: "bg-green-100 text-green-700",
-    annullata: "bg-red-100 text-red-700",
-    completata: "bg-slate-200 text-slate-600",
-    no_show: "bg-red-100 text-red-700",
+    richiesta: "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300",
+    confermata: "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300",
+    annullata: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300",
+    completata: "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300",
+    no_show: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300",
   };
   return (
     <span className={cn("inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold", styles[status])}>
@@ -74,7 +74,7 @@ export function ProgressBar({ value, max, level }) {
     oltre: "bg-red-500",
   };
   return (
-    <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+    <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
       <div
         className={cn("h-full rounded-full transition-all", colors[level] || colors.ok)}
         style={{ width: `${percent}%` }}

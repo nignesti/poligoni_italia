@@ -73,36 +73,36 @@ export default function AmmoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white px-4 pt-12 pb-6 rounded-b-3xl">
         <div className="flex items-center gap-2 mb-1">
           <Boxes className="w-6 h-6 text-orange-500" />
           <h1 className="text-xl font-bold">Munizioni</h1>
         </div>
-        <p className="text-sm text-slate-300">Limiti di detenzione — art. 97 TULPS</p>
+        <p className="text-sm text-slate-300 dark:text-slate-600">Limiti di detenzione — art. 97 TULPS</p>
       </div>
 
       <div className="px-4 py-4 space-y-4">
         {/* Disclaimer legale */}
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
-          <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-800 leading-relaxed">{AMMO_DISCLAIMER}</p>
+        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-xl p-3 flex items-start gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed">{AMMO_DISCLAIMER}</p>
         </div>
 
         {/* Disclaimer privacy */}
-        <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2">
-          <ShieldCheck className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-green-800 leading-relaxed">{LOCAL_ONLY_DISCLAIMER}</p>
+        <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-xl p-3 flex items-start gap-2">
+          <ShieldCheck className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-green-800 dark:text-green-200 leading-relaxed">{LOCAL_ONLY_DISCLAIMER}</p>
         </div>
 
         {/* Status cards */}
         <div className="space-y-3">
           {statuses.map((s) => (
-            <div key={s.category} className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+            <div key={s.category} className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <h3 className="font-semibold text-slate-900 text-sm">{s.label}</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <h3 className="font-semibold text-slate-900 dark:text-white text-sm">{s.label}</h3>
+                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                     {s.quantity} / {s.limit} {s.unit}
                   </p>
                 </div>
@@ -111,10 +111,10 @@ export default function AmmoPage() {
 
               <ProgressBar value={s.quantity} max={s.limit} level={s.level} />
 
-              <p className={`text-xs mt-2 ${s.level === "oltre" ? "text-red-600 font-medium" : "text-slate-500"}`}>
+              <p className={`text-xs mt-2 ${s.level === "oltre" ? "text-red-600 dark:text-red-400 font-medium" : "text-slate-500 dark:text-slate-400"}`}>
                 {s.message}
               </p>
-              <p className="text-[10px] text-slate-300 mt-1">{s.legalReference}</p>
+              <p className="text-[10px] text-slate-300 dark:text-slate-600 mt-1">{s.legalReference}</p>
             </div>
           ))}
         </div>
@@ -130,27 +130,27 @@ export default function AmmoPage() {
         {/* Recent movements */}
         {movements.length > 0 && (
           <div>
-            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Movimenti recenti</h2>
+            <h2 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Movimenti recenti</h2>
             <div className="space-y-2">
               {movements.slice(0, 15).map((m) => (
-                <div key={m.id} className="bg-white rounded-xl p-3 shadow-sm border border-slate-100 flex items-center gap-3">
+                <div key={m.id} className="bg-white dark:bg-slate-900 rounded-xl p-3 shadow-sm border border-slate-100 dark:border-slate-800 flex items-center gap-3">
                   <div
                     className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                      m.delta > 0 ? "bg-green-50" : "bg-red-50"
+                      m.delta > 0 ? "bg-green-50 dark:bg-green-950" : "bg-red-50 dark:bg-red-950"
                     }`}
                   >
                     {m.delta > 0 ? (
-                      <ArrowDown className="w-4 h-4 text-green-600" />
+                      <ArrowDown className="w-4 h-4 text-green-600 dark:text-green-400" />
                     ) : (
-                      <ArrowUp className="w-4 h-4 text-red-600" />
+                      <ArrowUp className="w-4 h-4 text-red-600 dark:text-red-400" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 truncate">
+                    <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
                       {m.caliber} · {m.delta > 0 ? "+" : ""}
                       {m.delta}
                     </p>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-400 dark:text-slate-500">
                       {m.reason} · {new Date(m.occurred_at).toLocaleDateString("it-IT")}
                     </p>
                   </div>
@@ -165,23 +165,23 @@ export default function AmmoPage() {
       {showAdd && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center" onClick={() => setShowAdd(false)}>
           <div
-            className="bg-white rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
+            className="bg-white dark:bg-slate-900 rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-slate-900">Movimento munizioni</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white">Movimento munizioni</h3>
               <button onClick={() => setShowAdd(false)}>
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-slate-400 dark:text-slate-500" />
               </button>
             </div>
 
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-medium text-slate-500">Categoria</label>
+                <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Categoria</label>
                 <select
                   value={newMovement.category}
                   onChange={(e) => setNewMovement({ ...newMovement, category: e.target.value })}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full mt-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
                   {LEGAL_AMMO_LIMITS.map((l) => (
                     <option key={l.category} value={l.category}>
@@ -192,33 +192,33 @@ export default function AmmoPage() {
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-500">Calibro</label>
+                <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Calibro</label>
                 <input
                   type="text"
                   value={newMovement.caliber}
                   onChange={(e) => setNewMovement({ ...newMovement, caliber: e.target.value })}
                   placeholder="9x21, 22LR, 12 gauge..."
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full mt-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs font-medium text-slate-500">Quantità</label>
+                  <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Quantità</label>
                   <input
                     type="number"
                     value={newMovement.delta}
                     onChange={(e) => setNewMovement({ ...newMovement, delta: e.target.value })}
-                    className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full mt-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
-                  <p className="text-[10px] text-slate-400 mt-0.5">Negativo per consumo</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Negativo per consumo</p>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-500">Motivo</label>
+                  <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Motivo</label>
                   <select
                     value={newMovement.reason}
                     onChange={(e) => setNewMovement({ ...newMovement, reason: e.target.value })}
-                    className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full mt-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
                     <option value="acquisto">Acquisto</option>
                     <option value="consumo_sessione">Consumo sessione</option>

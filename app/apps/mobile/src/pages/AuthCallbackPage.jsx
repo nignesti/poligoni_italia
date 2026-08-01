@@ -36,7 +36,7 @@ export default function AuthCallbackPage() {
   }, [navigate, next]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
       <Loader2 className="w-6 h-6 text-orange-500 animate-spin" />
     </div>
   );

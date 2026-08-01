@@ -80,7 +80,7 @@ export default function RangeMap({ ranges, onSelect, userPos }) {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-260px)] min-h-[400px] rounded-2xl overflow-hidden border border-slate-200">
+    <div className="relative w-full h-[calc(100vh-260px)] min-h-[400px] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
       <MapContainer
         ref={mapRef}
         center={center}
@@ -98,9 +98,9 @@ export default function RangeMap({ ranges, onSelect, userPos }) {
             <Popup>
               <div className="min-w-[160px]">
                 <div className="flex items-start justify-between gap-2 mb-1">
-                  <strong className="text-sm text-slate-900">{r.name}</strong>
+                  <strong className="text-sm text-slate-900 dark:text-white">{r.name}</strong>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-slate-500 mb-1.5">
+                <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                   <MapPin className="w-3 h-3" />
                   {r.comune}, {r.provincia}
                 </div>
@@ -138,19 +138,19 @@ export default function RangeMap({ ranges, onSelect, userPos }) {
       <button
         onClick={handleLocate}
         disabled={locating}
-        className="absolute top-3 right-3 z-[1000] bg-white shadow-md rounded-lg p-2.5 hover:bg-slate-50 active:scale-95 transition-all disabled:opacity-50"
+        className="absolute top-3 right-3 z-[1000] bg-white dark:bg-slate-900 shadow-md rounded-lg p-2.5 hover:bg-slate-50 dark:bg-slate-950 active:scale-95 transition-all disabled:opacity-50"
         title="Trova la mia posizione"
       >
         {locating ? (
           <Loader2 className="w-5 h-5 text-orange-600 animate-spin" />
         ) : (
-          <Locate className={`w-5 h-5 ${localUserPos ? "text-blue-600" : "text-slate-700"}`} />
+          <Locate className={`w-5 h-5 ${localUserPos ? "text-blue-600 dark:text-blue-400" : "text-slate-700 dark:text-slate-300"}`} />
         )}
       </button>
 
       {mapped.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-50/80 z-[1000] pointer-events-none">
-          <p className="text-sm text-slate-400">Nessuna struttura mappabile</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-50 dark:bg-slate-950/80 z-[1000] pointer-events-none">
+          <p className="text-sm text-slate-400 dark:text-slate-500">Nessuna struttura mappabile</p>
         </div>
       )}
     </div>

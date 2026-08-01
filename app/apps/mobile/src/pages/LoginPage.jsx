@@ -45,19 +45,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center px-6 py-12">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center px-6 py-12">
       <div className="text-center mb-8">
         <div className="w-14 h-14 rounded-2xl bg-orange-500 flex items-center justify-center mx-auto mb-3">
           <span className="text-white text-2xl">🎯</span>
         </div>
-        <h1 className="text-xl font-bold text-slate-900">Poligoni Italia</h1>
+        <h1 className="text-xl font-bold text-slate-900 dark:text-white">Poligoni Italia</h1>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-5">
         {!emailSent ? (
           <>
-            <h2 className="font-semibold text-slate-900 mb-1">Accedi</h2>
-            <p className="text-sm text-slate-500 mb-5">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-1">Accedi</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
               Ti mandiamo un link per accedere, senza password.
             </p>
 
@@ -69,9 +69,9 @@ export default function LoginPage() {
                 placeholder="La tua email"
                 required
                 disabled={loading}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
-              {error && <p className="text-xs text-red-600">{error}</p>}
+              {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
               <button
                 type="submit"
                 disabled={loading}
@@ -82,17 +82,17 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <div className="flex items-center gap-3 my-5 text-xs text-slate-400">
-              <div className="flex-1 h-px bg-slate-200" />
+            <div className="flex items-center gap-3 my-5 text-xs text-slate-400 dark:text-slate-500">
+              <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
               oppure
-              <div className="flex-1 h-px bg-slate-200" />
+              <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
             </div>
 
             <button
               type="button"
               onClick={handleGoogleLogin}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2.5 border border-slate-200 rounded-xl py-3 text-sm font-medium text-slate-700 disabled:opacity-50 active:scale-95 transition-transform"
+              className="w-full flex items-center justify-center gap-2.5 border border-slate-200 dark:border-slate-700 rounded-xl py-3 text-sm font-medium text-slate-700 dark:text-slate-300 disabled:opacity-50 active:scale-95 transition-transform"
             >
               <GoogleIcon />
               Continua con Google
@@ -100,8 +100,8 @@ export default function LoginPage() {
           </>
         ) : (
           <>
-            <h2 className="font-semibold text-slate-900 mb-1">Controlla la tua email</h2>
-            <p className="text-sm text-slate-500 mb-5">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-1">Controlla la tua email</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
               Abbiamo inviato un link di accesso a <strong>{email}</strong>. Aprilo per entrare.
             </p>
 
@@ -120,7 +120,7 @@ export default function LoginPage() {
         )}
       </div>
 
-      <p className="text-center text-xs text-slate-400 mt-6">
+      <p className="text-center text-xs text-slate-400 dark:text-slate-500 mt-6">
         Strumento sportivo. Nessuna intermediazione su armi o munizioni.
       </p>
     </div>

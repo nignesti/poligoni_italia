@@ -90,11 +90,11 @@ export default function ProfilePage() {
   };
 
   const alertStyles = {
-    scaduto: "bg-red-50 border-red-200 text-red-700",
-    urgente: "bg-red-50 border-red-200 text-red-700",
-    prossimo: "bg-orange-50 border-orange-200 text-orange-700",
-    attenzione: "bg-yellow-50 border-yellow-200 text-yellow-700",
-    ok: "bg-green-50 border-green-200 text-green-700",
+    scaduto: "bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300",
+    urgente: "bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300",
+    prossimo: "bg-orange-50 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300",
+    attenzione: "bg-yellow-50 dark:bg-yellow-950 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-300",
+    ok: "bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300",
   };
 
   const alertLabels = {
@@ -114,7 +114,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white px-4 pt-12 pb-6 rounded-b-3xl">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center">
@@ -122,7 +122,7 @@ export default function ProfilePage() {
           </div>
           <div>
             <h1 className="text-lg font-bold">Tiratore</h1>
-            <p className="text-sm text-slate-300">{user?.email}</p>
+            <p className="text-sm text-slate-300 dark:text-slate-600">{user?.email}</p>
           </div>
         </div>
       </div>
@@ -133,24 +133,24 @@ export default function ProfilePage() {
           <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-4 text-white">
             <div className="flex items-center gap-2 mb-3">
               <Award className="w-4 h-4 text-orange-500" />
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-300">Riepilogo documenti</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-300 dark:text-slate-600">Riepilogo documenti</h2>
             </div>
             <div className="grid grid-cols-3 gap-2">
               <div className="text-center">
                 <p className="text-2xl font-bold">{alerts.length}</p>
-                <p className="text-[10px] text-slate-400 mt-0.5">Totali</p>
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Totali</p>
               </div>
               <div className="text-center border-x border-slate-700">
                 <p className="text-2xl font-bold text-green-400">
                   {alerts.filter((d) => d.alertLevel === "ok").length}
                 </p>
-                <p className="text-[10px] text-slate-400 mt-0.5">Validi</p>
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Validi</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-red-400">
                   {alerts.filter((d) => d.alertLevel === "scaduto" || d.alertLevel === "urgente" || d.alertLevel === "prossimo").length}
                 </p>
-                <p className="text-[10px] text-slate-400 mt-0.5">In scadenza</p>
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">In scadenza</p>
               </div>
             </div>
             {alerts.some((d) => d.alertLevel === "scaduto") && (
@@ -167,7 +167,7 @@ export default function ProfilePage() {
         {/* Documents */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Documenti e scadenze</h2>
+            <h2 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Documenti e scadenze</h2>
             <button
               onClick={() => setShowAddDoc(true)}
               className="text-orange-600 text-xs font-medium flex items-center gap-0.5"
@@ -177,10 +177,10 @@ export default function ProfilePage() {
           </div>
 
           {alerts.length === 0 ? (
-            <div className="bg-white rounded-2xl p-4 text-center border border-slate-100">
-              <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-              <p className="text-sm text-slate-500">Nessun documento registrato</p>
-              <p className="text-xs text-slate-400 mt-0.5">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 text-center border border-slate-100 dark:border-slate-800">
+              <FileText className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+              <p className="text-sm text-slate-500 dark:text-slate-400">Nessun documento registrato</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                 Aggiungi le date di scadenza per ricevere avvisi
               </p>
             </div>
@@ -204,37 +204,37 @@ export default function ProfilePage() {
             </div>
           )}
 
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mt-2 flex items-start gap-2">
-            <Shield className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-blue-800 leading-relaxed">
+          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-3 mt-2 flex items-start gap-2">
+            <Shield className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-blue-800 dark:text-blue-200 leading-relaxed">
               Si salvano solo le date di scadenza, non i documenti originali. I tuoi documenti restano solo su questo dispositivo: non li inviamo né li conserviamo sui nostri server.
             </p>
           </div>
         </div>
 
         {/* Menu */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
           <button
             onClick={handleExportBackup}
-            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50"
+            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:bg-slate-950 transition-colors border-b border-slate-50 dark:border-slate-800"
           >
-            <Download className="w-5 h-5 text-slate-400" />
+            <Download className="w-5 h-5 text-slate-400 dark:text-slate-500" />
             <div className="flex-1 text-left">
-              <span className="block text-sm text-slate-700">Esporta dati locali</span>
-              <span className="block text-[11px] text-slate-400 mt-0.5">Armeria, munizioni, documenti — file di backup</span>
+              <span className="block text-sm text-slate-700 dark:text-slate-300">Esporta dati locali</span>
+              <span className="block text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Armeria, munizioni, documenti — file di backup</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-300" />
+            <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600" />
           </button>
           <button
             onClick={() => importInputRef.current?.click()}
-            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50"
+            className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:bg-slate-950 transition-colors border-b border-slate-50 dark:border-slate-800"
           >
-            <Upload className="w-5 h-5 text-slate-400" />
+            <Upload className="w-5 h-5 text-slate-400 dark:text-slate-500" />
             <div className="flex-1 text-left">
-              <span className="block text-sm text-slate-700">Importa backup</span>
-              <span className="block text-[11px] text-slate-400 mt-0.5">Ripristina da un file esportato in precedenza</span>
+              <span className="block text-sm text-slate-700 dark:text-slate-300">Importa backup</span>
+              <span className="block text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Ripristina da un file esportato in precedenza</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-300" />
+            <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600" />
           </button>
           <input
             ref={importInputRef}
@@ -243,14 +243,14 @@ export default function ProfilePage() {
             className="hidden"
             onChange={handleImportFile}
           />
-          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 transition-colors border-b border-slate-50">
-            <Shield className="w-5 h-5 text-slate-400" />
-            <span className="flex-1 text-left text-sm text-slate-700">Privacy e dati</span>
-            <ChevronRight className="w-4 h-4 text-slate-300" />
+          <button className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:bg-slate-950 transition-colors border-b border-slate-50 dark:border-slate-800">
+            <Shield className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+            <span className="flex-1 text-left text-sm text-slate-700 dark:text-slate-300">Privacy e dati</span>
+            <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600" />
           </button>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 p-4 hover:bg-red-50 transition-colors text-red-600"
+            className="w-full flex items-center gap-3 p-4 hover:bg-red-50 dark:bg-red-950 transition-colors text-red-600 dark:text-red-400"
           >
             <LogOut className="w-5 h-5" />
             <span className="flex-1 text-left text-sm font-medium">Esci</span>
@@ -259,8 +259,8 @@ export default function ProfilePage() {
 
         {/* Footer */}
         <div className="text-center pt-4">
-          <p className="text-xs text-slate-400">Poligoni Italia v1.0</p>
-          <p className="text-[10px] text-slate-300 mt-1">
+          <p className="text-xs text-slate-400 dark:text-slate-500">Poligoni Italia v1.0</p>
+          <p className="text-[10px] text-slate-300 dark:text-slate-600 mt-1">
             Strumento sportivo. Nessuna intermediazione su armi o munizioni.
           </p>
         </div>
@@ -270,23 +270,23 @@ export default function ProfilePage() {
       {showAddDoc && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center" onClick={() => setShowAddDoc(false)}>
           <div
-            className="bg-white rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
+            className="bg-white dark:bg-slate-900 rounded-t-3xl p-5 max-w-md w-full max-h-[85dvh] overflow-y-auto overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-slate-900">Aggiungi documento</h3>
+              <h3 className="font-bold text-slate-900 dark:text-white">Aggiungi documento</h3>
               <button onClick={() => setShowAddDoc(false)}>
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-slate-400 dark:text-slate-500" />
               </button>
             </div>
 
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-medium text-slate-500">Tipo documento</label>
+                <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Tipo documento</label>
                 <select
                   value={newDoc.type}
                   onChange={(e) => setNewDoc({ ...newDoc, type: e.target.value })}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full mt-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
                   {SELECTABLE_DOCUMENT_TYPES.map((key) => (
                     <option key={key} value={key}>
@@ -297,12 +297,12 @@ export default function ProfilePage() {
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-500">Data di scadenza</label>
+                <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Data di scadenza</label>
                 <input
                   type="date"
                   value={newDoc.expires_on}
                   onChange={(e) => setNewDoc({ ...newDoc, expires_on: e.target.value })}
-                  className="w-full mt-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full mt-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
