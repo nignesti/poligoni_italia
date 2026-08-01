@@ -3,6 +3,8 @@
 
 > Documento operativo interno. Complementare a `Business_Plan_Poligoni_Italia_v2.md`, che resta la fonte unica per **cosa** si costruisce e **in che ordine**. Questo documento possiede solo il **come**.
 
+> ⚠️ **Aggiornamento 01/08/2026 — leggere prima del resto.** A pochi giorni dalla stesura di questo documento, la velocità di sviluppo osservata ha reso obsoleto il modello di budget a giornate/settimane-uomo e alcune decisioni di architettura sono state prese scrivendo codice invece che sulla carta. Vedi **"Aggiornamento del piano — 01/08/2026"** in fondo al documento per il quadro completo: quella sezione ha priorità su §1.2, sulla riga "App mobile" di §2.1, su §12 e su §14 ovunque siano in contraddizione.
+
 ---
 
 ## INDICE
@@ -59,6 +61,8 @@ Il rischio di due documenti separati è che divergano. Si evita con una regola s
 
 ## 1.2 Il budget e il conto che non torna
 
+> ⚠️ **Superato dall'Aggiornamento 01/08/2026** (in fondo al documento). Il modello a giornate/settimane-uomo di questa sezione e di §12 non riflette più la velocità reale osservata: l'intero §1.2 va letto come contesto storico del perché si è arrivati alla decisione, non come vincolo ancora attivo.
+
 Il business plan (Allegato C) assegna **62 settimane-uomo** su 78 settimane di calendario, pari a ~16 h/settimana, nell'ipotesi di **PWA-first con app nativa rinviata**.
 
 La scelta di sviluppare **nativo dal lancio** modifica il conto. Va detto con precisione:
@@ -104,9 +108,13 @@ Ogni decisione è motivata rispetto ai vincoli di §1.1, non rispetto a criteri 
 | Errori | **Sentry** | Piano gratuito. Per uno sviluppatore unico, sapere che qualcosa si è rotto prima che lo segnali un utente vale più di molte funzionalità |
 | Analytics | **PostHog Cloud EU** | Strumenta le metriche di BP §9.2. Regione EU per coerenza GDPR |
 
+> ⚠️ **Righe superate dall'Aggiornamento 01/08/2026**: "App mobile" (l'app costruita finora è una web app Vite/React, non Expo — il nativo resta l'obiettivo ma parte solo dopo i blocchi bersagli e SEO) e "Backend" per i dati personali (l'app mobile parla direttamente con Supabase, non con `/api/v1` — vedi anche la motivazione REST qui sotto, ora superata per lo stesso motivo).
+
 ## 2.2 Le tre decisioni che meritano una motivazione estesa
 
 ### REST versionato, non tRPC
+
+> ⚠️ **Superato dall'Aggiornamento 01/08/2026.** La motivazione resta valida in astratto, ma nella pratica l'app mobile non passa da `/api/v1` per i dati personali: legge/scrive Supabase direttamente, con RLS come unico livello di protezione. `packages/api-client` non è mai stato costruito. È stato formalizzato come scelta definitiva, non come debito da ripagare — vedi l'Aggiornamento per il ragionamento completo.
 
 tRPC darebbe tipizzazione end-to-end senza scrivere contratti, ed è la scelta naturale in un monorepo TypeScript. **Va evitato comunque**, per una ragione specifica delle app mobili: tRPC accoppia strettamente le versioni di client e server, mentre un'app pubblicata sugli store resta installata in versioni vecchie per mesi. Un utente che non aggiorna avrebbe un'app rotta a ogni modifica del backend.
 
@@ -711,6 +719,8 @@ Il web pubblico costruito in T2 **è** il piano di riserva, e non richiede lavor
 
 # 12. SCOMPOSIZIONE IN TASK PER TRIMESTRE
 
+> ⚠️ **Superato dall'Aggiornamento 01/08/2026.** L'intera scomposizione in trimestri/giornate/settimane-uomo qui sotto era calibrata su ~15-16 ore/settimana di un solo sviluppatore umano. La velocità osservata è di un ordine di grandezza diversa, e il tracciamento del tempo non è più un vincolo che l'utente vuole seguire. Questa sezione resta utile come **elenco dei task e delle dipendenze tra loro**, non come stima di durata. Il backlog attivo, ordinato per priorità invece che per trimestre, è nell'Aggiornamento in fondo al documento.
+
 Stime in giornate da ~5 ore effettive. **1 settimana-uomo = 4 giornate** (il tempo residuo è assorbito da imprevisti, contesto e correzioni).
 
 ## T2 — Mesi 4-6: fondamenta e vetrina web (12 settimane / 48 giornate)
@@ -885,6 +895,8 @@ Il rischio 7 è quello che nella pratica si manifesta per primo, ed è la ragion
 
 # 14. DECISIONI RIMANDATE
 
+> ⚠️ **Tre righe di questa tabella riviste dall'Aggiornamento 01/08/2026**: rilevamento automatico dei fori, Spotter, sincronizzazione offline del diario. Il verdetto per ciascuna è nell'Aggiornamento in fondo al documento — non tutte si sono mosse nella stessa direzione.
+
 Elencate esplicitamente perché non vengano prese per inerzia, cioè scoprendo al momento sbagliato che qualcuno le aveva già decise scrivendo codice.
 
 | Decisione | Quando | Criterio |
@@ -902,3 +914,164 @@ L'ultima merita attenzione: molti poligoni indoor non hanno copertura cellulare,
 ---
 
 *Documento tecnico v1.0 — 29 luglio 2026. Da rivedere alla fine di ogni trimestre, insieme al business plan.*
+
+---
+
+## Censimento funzionalità — confronto con mercato
+
+> Censimento del 01/08/2026. Fonti: 4 analisi competitive indipendenti su app globali per il settore del tiro — `Analisi qwen.txt`, `analisi app tiro deepseek.txt`, `analisi perplexity.txt`, `analisi kimi.pdf` (cartella `app/apps/mobile/Analisi funzionalità APP/`). Frequenza = numero di fonti (su 4) che citano la feature nel proprio elenco ordinato per diffusione di mercato. Stato verificato contro il codice reale del repository al 01/08/2026, non contro la roadmap dichiarata. Nessuna priorità o fase è assegnata qui: è compito dell'utente deciderla a valle di questo censimento.
+>
+> Legenda stato: **Presente** = funzionante end-to-end nel flusso utente reale. **Parziale** = esiste una base di codice (schema dati, funzione pura, UI non collegata) ma manca integrazione o è raggiungibile solo in parte. **Assente** = nessuna traccia nel codice.
+
+### Feature citate in tutte e 4 le fonti
+
+| Feature | Frequenza | Stato nel codice | Note |
+|---|---|---|---|
+| Diario sessioni di tiro / logbook | 4/4 | Presente | `sessions` + `session_shots` su Supabase, gestito da `DiaryPage.jsx` end-to-end |
+| Inventario armi / scheda arma | 4/4 | Presente | Storage solo-locale (`firearmsApi.js` → `localStore.js`), CRUD funzionante |
+| Tracciamento munizioni | 4/4 | Presente | Storage locale (`ammoApi.js`), con valutazione limiti art. 97 TULPS in `domain.js` |
+| Registrazione punteggi / scoring | 4/4 | Parziale | Colonna `target_holes.score` esiste nello schema DB; nessuna schermata permette di inserire un punteggio, né a livello di sessione né di bersaglio |
+| Foto e allegati (armi, bersagli, documenti) | 4/4 | Assente | Colonna `storage_ref` presente nello schema (`user_documents`, `targets`) ma zero upload UI in tutto il repository |
+| Manutenzione, pulizia e promemoria | 4/4 | Parziale | Tabella `maintenance_rules` esiste nello schema DB; nessuna API né UI la popola o la legge |
+| Timer / shot timer per stage e allenamento | 4/4 | Presente | Cronografo (`CronografoPage.jsx`): segnale a ritardo configurabile, rilevamento colpo via microfono, split time. Funzione Pro, gate solo visivo |
+| Calcolatore balistico (traiettoria, vento, deriva) | 4/4 | Assente | `packages/core/src/ballistics` esiste ma calcola solo statistiche di gruppo (centroide, MOA, correzione mira) su fori marcati manualmente — non è un calcolatore di traiettoria esterna. Nome ambiguo tra le fonti e il codice: verificato, non sono la stessa cosa |
+| Directory e mappa poligoni | 4/4 | Presente | `SearchPage`, `RangeMap.jsx`, schede struttura SSG, censimento reale di ~80 poligoni |
+| Training dry-fire / laser | 4/4 | Assente | — |
+| Classifiche / leaderboard | 4/4 | Assente | — |
+| Community, social feed, condivisione risultati | 4/4 | Assente | — |
+| Gestione gare ed eventi | 4/4 | Assente | Nessuna tabella, API o UI per calendario gare, iscrizioni o risultati |
+| Prenotazione linee di tiro | 4/4 | Parziale | Schema `bookings` con vincolo di esclusione anti-doppia-prenotazione pronto in DB; il flusso reale oggi (`BookingPage.jsx`) è solo una richiesta di disponibilità inoltrata al gestore via email, non uno slot prenotabile e confermabile all'istante |
+| Marketplace / annunci armi usate | 4/4 | Assente | Esplicitamente escluso dai principi di prodotto ("nessuna intermediazione su armi o munizioni", `PRODUCT.md`) |
+| Gamification (badge, sfide, duelli) | 4/4 | Presente | Medaglie (`MedagliePage.jsx`): 8 traguardi calcolati da sessioni/colpi/calibri |
+| Integrazione hardware (cronografi, timer Bluetooth, sensori) | 4/4 | Assente | Il Cronografo usa solo il microfono del telefono; nessuna connessione a dispositivi esterni |
+| Analisi colpi / shot grouping / auto-scoring da camera | 4/4 | Parziale | `computeGroupStats`/`computeSightCorrection` esistono e sono testati in `packages/core/ballistics` (duplicati anche in `domain.js` mobile), ma nessuna schermata permette di marcare fori su un bersaglio: funzione pura irraggiungibile da un flusso utente reale |
+| E-commerce / checkout / carrello / POS | 4/4 | Parziale — **nome ambiguo** | Esiste un modulo di billing (`packages/core/billing.ts`, tabelle `subscription_plans`/`invoices`) ma è un abbonamento SaaS per i **gestori** (Pass Pro), non un carrello/checkout per l'utente finale come descritto dalle fonti. Verificare con l'utente se questa è la stessa feature o due cose diverse prima di trattarla come "coperta" |
+
+### Feature citate in 3 fonti su 4
+
+| Feature | Frequenza | Stato nel codice | Note |
+|---|---|---|---|
+| Export, condivisione e report (CSV/PDF/Excel) | 3/4 | Parziale | Export JSON dei dati locali (armeria/munizioni/documenti) implementato in `ProfilePage.jsx`; l'export CSV/iCal per il gestore (previsto dal Piano §7.3) non esiste — nessuna route `/api/v1/manage/export` |
+| Documenti, licenze, permessi e scadenze | 3/4 | Presente | Storage locale (`documentsApi.js`), avvisi di scadenza a 90/30/7 giorni in `domain.js` |
+| Sincronizzazione cloud multi-dispositivo | 3/4 | Parziale | I dati su Supabase (sessioni, prenotazioni) sono "cloud" per definizione quando l'utente è online; non esiste una sincronizzazione multi-dispositivo dichiarata o gestita esplicitamente (né conflitti, né merge) |
+| Modalità offline | 3/4 | Assente | Nessun service worker, nessun manifest PWA, nessuna cache offline-first |
+
+### Feature citate in 2 fonti su 4
+
+| Feature | Frequenza | Stato nel codice | Note |
+|---|---|---|---|
+| Profilo utente e account tiratore (multi-profilo, preferenze) | 2/4 | Presente | Autenticazione Supabase (link magico), `ProfilePage.jsx`. Manca profilazione multi-disciplina/preferenze granulari descritta dalle fonti, ma il nucleo account/profilo è funzionante |
+| Modalità giudice / Range Officer / match director tools | 2/4 | Assente | — |
+| Integrazione con bersagli elettronici | 2/4 | Assente | — |
+| Ricarica munizioni / reloading log | 2/4 | Assente | — |
+| Noleggio armi / rental management | 2/4 | Parziale | `range_services.service` è un campo testo libero che può contenere "noleggio arma" come voce di listino; nessun flusso dedicato di prenotazione, cauzione o disponibilità noleggio |
+| Controllo accessi con QR / check-in | 2/4 | Parziale | `bookings.qr_token` e `checked_in_at` esistono nello schema. Lato tiratore, `BookingsPage.jsx` mostra un pattern QR generato da un seed testuale — puramente cosmetico, non codifica dati scansionabili reali. Lato gestore: nessuno scanner, nessuna route `/api/v1/manage/checkin` |
+| Integrazione con API di federazioni (UITS, FITDS, FITAV) | 2/4 | Assente | — |
+| AI coaching / raccomandazioni automatiche | 2/4 | Assente | — |
+| Multi-lingua | 2/4 | Assente | Nessun framework i18n; app solo in italiano |
+| E-learning / corsi integrati | 2/4 | Assente | "Istruttore" compare solo come voce di prezzo in un listino di esempio, non come feature di gestione corsi |
+
+### Feature citate in 1 fonte su 4
+
+| Feature | Frequenza | Stato nel codice | Note |
+|---|---|---|---|
+| Ricerca, filtri e catalogo schede | 1/4 | Presente | `api/v1/ranges/search` con filtri, `/cerca` |
+| Profili multi-tiratore / famiglia / team | 1/4 | Assente | — |
+| Workflow legale per trasferimento armi | 1/4 | Assente | Esplicitamente fuori scope di prodotto |
+| Companion app per wearable / smartwatch | 1/4 | Assente | — |
+| Statistiche e analytics di progressione (grafici) | 1/4 | Assente | Componente `components/ui/chart.jsx` presente ma è scaffold shadcn mai importato da nessuna pagina |
+| Tagging / categorizzazione sessioni | 1/4 | Assente | — |
+| Cifratura zero-knowledge / end-to-end | 1/4 | Assente | Il Piano §8.2 la prevedeva come opzione per i documenti; ora i documenti sono solo-locali sul dispositivo (scelta di prodotto diversa, stesso obiettivo di privacy), ma la cifratura in sé non è implementata |
+| Integrazione con sistemi governativi (invio telematico moduli) | 1/4 | Assente | — |
+| Digital waivers (firme digitali di responsabilità) | 1/4 | Assente | — |
+| Membership & billing automatizzato (abbonamenti ricorrenti) | 1/4 | Parziale — **nome ambiguo** | Esiste per i **gestori** (Pass Pro, `packages/core/billing.ts`), non per i tiratori. Stessa ambiguità della voce "E-commerce/POS" sopra |
+| Waitlist management per linea di tiro | 1/4 | Assente | — |
+| Multi-location (catene di poligoni) | 1/4 | Assente | Non applicabile al modello attuale: ogni poligono è un'entità indipendente |
+| QR synchronization per gara / live results | 1/4 | Assente | — |
+| VR simulation training | 1/4 | Assente | — |
+| Scoring specifico trap / skeet / tiro a volo | 1/4 | Assente | — |
+| Istruzioni audio per eventi ISSF | 1/4 | Assente | — |
+| Arsenale con localizzazione fisica dell'arma | 1/4 | Assente | — |
+| Pianificazione tattica / hit factor | 1/4 | Assente | — |
+| Modalità multiplayer / competizione in tempo reale | 1/4 | Assente | — |
+| Assicurazione, furto, smarrimento | 1/4 | Assente | — |
+
+### Feature con nome ambiguo rispetto al codice
+
+Due voci compaiono nelle analisi come feature consumer ma nel codice esiste solo l'equivalente lato B2B (gestori), non lato tiratori — segnalate invece di essere classificate a caso:
+
+- **E-commerce / checkout / carrello / POS** (4/4): esiste billing SaaS per gestori (Pass Pro), non e-commerce per tiratori.
+- **Membership & billing automatizzato** (1/4): stessa distinzione — abbonamenti esistono solo lato gestore.
+
+---
+
+## Aggiornamento del piano — 01/08/2026
+
+> Questo aggiornamento nasce dal confronto fra il piano (v1.0, 29 luglio 2026) e lo stato reale del codice a 4 giorni di distanza. In quei 4 giorni (40 commit) è stato costruito quasi per intero T2, grosse parti di T3-T4 e un pezzo di T5 che il piano rinviava ad Anno 2. Il modello di stima a giornate/settimane-uomo, calibrato su ~15-16 ore/settimana di un solo sviluppatore, non descrive più la velocità osservata. Le decisioni qui sotto sono state discusse e confermate con l'utente il 01/08/2026; superano puntualmente le sezioni marcate nel corpo del documento.
+
+### 1. Architettura: Supabase diretto + RLS, formalizzato come scelta definitiva
+
+Il piano (§2.2) motivava REST versionata sotto `/api/v1` specificamente per evitare che l'app mobile si rompesse a ogni modifica del backend. Nella pratica, l'app mobile ha sempre parlato direttamente con Supabase per i dati personali (prenotazioni, sessioni, e ora anche armeria/munizioni/documenti, spostati sul dispositivo il 01/08/2026), bypassando `/api/v1`. `packages/api-client` non è mai stato costruito.
+
+**Decisione: si formalizza questo come architettura definitiva, non come debito tecnico.** Row Level Security resta l'unico livello di protezione per i dati personali lato mobile. Il vantaggio di versionamento che l'API REST avrebbe dato si rinuncia consapevolmente: se in futuro servirà, si costruirà quando servirà davvero (un client nativo pubblicato sugli store, con versioni vecchie installate a lungo, è il caso che lo giustificherebbe — vedi punto 2).
+
+Restano sotto `/api/v1` come oggi: ricerca/schede strutture (dati pubblici, cache, SEO) e billing gestori (dati sensibili lato B2B già passati da route handler reali).
+
+### 2. Piattaforma mobile: nativo confermato, ma dopo altri due blocchi
+
+**Decisione: Opzione C del piano (§12.1) — si mantiene l'obiettivo nativo (Expo/React Native), a calendario esteso rispetto alle stime originali.** Le 8 settimane lorde stimate dal business plan per il nativo erano calcolate sulla vecchia velocità; vanno ricalcolate quando si arriva a quel blocco, non ora.
+
+**Sequenza decisa**: il setup tecnico nativo (Expo, eventuale `packages/api-client` se a quel punto servirà davvero — vedi punto 1) parte **dopo** i blocchi "Bersagli e punteggi" e "SEO/acquisizione", non subito. Fino ad allora l'app resta quella attuale (Vite/React, web).
+
+Non è stata chiesta né decisa l'installabilità PWA (manifest, service worker): l'app resta una web app normale finché non viene deciso altrimenti.
+
+### 3. Modello di pianificazione: backlog a blocchi, non più giornate
+
+**Decisione: si abbandona il conteggio in giornate/settimane-uomo per il lavoro da qui in avanti.** §12 resta valido come elenco di task e dipendenze tra loro, non come stima di durata. Il piano procede per blocchi di lavoro ordinati per priorità; ogni blocco si considera chiuso quando è funzionante end-to-end, non quando si esaurisce un budget di giornate.
+
+### 4. Backlog prioritario (ordine deciso il 01/08/2026)
+
+| # | Blocco | Perché in questa posizione |
+|---|---|---|
+| 1 | **Bersagli e punteggi** (marcatura fori, scoring) | Le funzioni pure esistono già e sono testate (`packages/core/ballistics`, statistiche di gruppo, MOA, correzione mira) ma sono irraggiungibili: nessuna schermata permette di marcarle. È il completamento più a buon mercato di una promessa di prodotto già dichiarata ("Il Mio Tiro") |
+| 2 | **SEO / acquisizione / contenuti** | Il prodotto ha già più del minimo T2 lato tiratore; il collo di bottiglia diventa farsi trovare — più poligoni censiti, più guide, più gestori che rivendicano la scheda |
+| 3 | **Setup tecnico nativo** (Expo) | Come lavoro a sé stante, dopo i due blocchi sopra, non in parallelo |
+| 4 | **Prenotazione reale + pagamenti + check-in QR reale** | Bloccato non solo tecnicamente ma da un prerequisito non tecnico — vedi punto 6. Resta il blocco più citato come critico nel censimento di mercato, ma non è il prossimo passo |
+
+Questo ordine non è una sequenza rigida e cieca: se durante il blocco 1 o 2 emerge un motivo concreto per anticipare qualcos'altro, va rivalutato — ma il default è questo.
+
+### 5. Vincoli reali aggiornati
+
+| Vincolo del piano originale (§1.1) | Stato al 01/08/2026 |
+|---|---|
+| ~15-16 h/settimana | Non più tracciato: l'utente ha indicato che il tempo investito non è un vincolo da seguire in questa fase |
+| Cassa Anno 1 ~10.400 € | **Zero € investiti finora.** Il progetto è bootstrap puro: ogni scelta tecnica deve restare a costo zero / piano gratuito finché non c'è revenue o funding — vincolo più stringente di quello scritto in §1.1, non meno |
+
+### 6. Scadenze esterne (verificate con l'utente, non deducibili dal codice)
+
+| Trigger (business plan) | Stato al 01/08/2026 |
+|---|---|
+| Round di investimento (BP §8.6) | **Non attivo.** Nessun round in corso: nessuna pressione di calendario da questo fronte |
+| Finestra riforma UITS (BP §1.6) | **Da rivalutare il 1 settembre 2026.** Checkpoint esplicito da riprendere a quella data, non prima |
+| Milestone commerciali legate agli store (BP §11.2) | **Confermate invariate.** Restano valide così come scritte, incluso con calendario nativo esteso (Opzione C) |
+
+### 7. Nuovi prerequisiti non tecnici, tracciati esplicitamente
+
+Due blocchi del piano sono ora esplicitamente subordinati a passi che non dipendono dal codice:
+
+- **Pagamenti (Stripe)**: prima serve **apertura di una partita IVA** — non ancora avviata. Il blocco "prenotazione reale + pagamenti" (§4 sopra) non può iniziare la parte Stripe finché questo non è risolto, indipendentemente da quanto altro è pronto.
+- **Revisione DPIA** (Piano, task 57; dati su munizioni/detenzione): il consulente **non è stato ancora contattato**. Da avviare per tempo, dato che una consulenza esterna ha tempi che non si comprimono con la velocità di sviluppo interna.
+  - **Nota positiva**: lo spostamento di armeria/munizioni/documenti a storage solo-locale (01/08/2026, non più su Supabase) riduce il perimetro di questa DPIA per quei tre domini specifici — restano da valutare sessioni e prenotazioni, che rimangono su server.
+
+### 8. Decisioni rimandate (§14) riviste
+
+Delle sei decisioni rimandate elencate in §14, l'utente ha chiesto di rivalutarne tre. Verdetto per ciascuna:
+
+**Rilevamento automatico dei fori — si ammorbidisce il gate temporale, si conferma quello di utilizzo.**
+Il piano lo vincolava a "3 mesi dopo la marcatura manuale, solo se ≥25% degli utenti attivi carica >5 bersagli". Il gate temporale (3 mesi di calendario) non ha più senso alla velocità osservata — ma il gate di utilizzo sì: serve comunque un volume reale di bersagli marcati manualmente per costruire e validare il rilevamento automatico su dati veri, non su ipotesi. **Il criterio resta il 25% degli utenti attivi con >5 bersagli caricati, scorporato da qualunque numero di mesi.** Si valuta quando si arriva al blocco 1 e si osserva l'uso reale, non prima.
+
+**Spotter — conferma del rinvio, con la ragione corretta.**
+Verificato sul business plan (§13.3, §14.5, Allegato C): lo Spotter è un sistema di segnalazione/verifica dati con soglie di fiducia e anti-abuso, esplicitamente descritto come "strumento di qualità del dato, non di retention" che "produce segnalazioni false in proporzione diretta al valore del premio" se introdotto senza una community reale alle spalle. **Il suo blocco non è mai stato di tempo di sviluppo: è mancanza di utenti reali per costruire soglie di fiducia sensate.** Nessuna velocità di sviluppo lo sblocca prima — resta a T6/Anno 2 come da piano originale, per lo stesso motivo di sempre, non per uno nuovo.
+
+**Sincronizzazione offline del diario — resta discrezionale, non promossa.**
+Il piano la vincolava a "reclami reali" sulla copertura in poligono. Zero utenti reali esistono ancora (prodotto non lanciato), quindi il trigger non può essersi verificato per definizione — non perché il problema non esista, ma perché non c'è ancora nessuno che possa reclamarlo. Costruirla ora sarebbe una scommessa su un problema presunto, non osservato. **Resta rimandata**, ma vale la pena registrarla come opzione a basso costo aggiuntivo quando si lavora comunque sul blocco 1 (stessa area di codice, "Il Mio Tiro") — non una promozione a priorità, solo un'opportunità da cogliere se si presenta senza sforzo dedicato.

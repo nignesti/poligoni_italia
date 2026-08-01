@@ -1866,3 +1866,91 @@ Il principio generale resta quello enunciato in §3.5.9: **qualsiasi funzionalit
 ---
 
 *Documento redatto il 29 luglio 2026, aggiornato il 31 luglio 2026 con l'integrazione della ricerca di mercato su ML Armory e sul panorama europeo (§2.5.5, §3.5.3-bis). Dati verificati alle rispettive date. Le fonti sono elencate nell'Allegato A; le stime proprie sono segnalate come tali nel corpo del testo.*
+
+---
+
+## Censimento funzionalità — confronto con mercato
+
+> Censimento del 01/08/2026. Fonti: 4 analisi competitive indipendenti su app globali per il settore del tiro — `Analisi qwen.txt`, `analisi app tiro deepseek.txt`, `analisi perplexity.txt`, `analisi kimi.pdf` (cartella `app/apps/mobile/Analisi funzionalità APP/`). Frequenza = numero di fonti (su 4) che citano la feature nel proprio elenco ordinato per diffusione di mercato. Stato verificato contro il codice reale del repository al 01/08/2026, non contro la roadmap dichiarata. Nessuna priorità o fase è assegnata qui: è compito dell'utente deciderla a valle di questo censimento.
+>
+> Legenda stato: **Presente** = funzionante end-to-end nel flusso utente reale. **Parziale** = esiste una base di codice (schema dati, funzione pura, UI non collegata) ma manca integrazione o è raggiungibile solo in parte. **Assente** = nessuna traccia nel codice.
+
+### Feature citate in tutte e 4 le fonti
+
+| Feature | Frequenza | Stato nel codice | Note |
+|---|---|---|---|
+| Diario sessioni di tiro / logbook | 4/4 | Presente | `sessions` + `session_shots` su Supabase, gestito da `DiaryPage.jsx` end-to-end |
+| Inventario armi / scheda arma | 4/4 | Presente | Storage solo-locale (`firearmsApi.js` → `localStore.js`), CRUD funzionante |
+| Tracciamento munizioni | 4/4 | Presente | Storage locale (`ammoApi.js`), con valutazione limiti art. 97 TULPS in `domain.js` |
+| Registrazione punteggi / scoring | 4/4 | Parziale | Colonna `target_holes.score` esiste nello schema DB; nessuna schermata permette di inserire un punteggio, né a livello di sessione né di bersaglio |
+| Foto e allegati (armi, bersagli, documenti) | 4/4 | Assente | Colonna `storage_ref` presente nello schema (`user_documents`, `targets`) ma zero upload UI in tutto il repository |
+| Manutenzione, pulizia e promemoria | 4/4 | Parziale | Tabella `maintenance_rules` esiste nello schema DB; nessuna API né UI la popola o la legge |
+| Timer / shot timer per stage e allenamento | 4/4 | Presente | Cronografo (`CronografoPage.jsx`): segnale a ritardo configurabile, rilevamento colpo via microfono, split time. Funzione Pro, gate solo visivo |
+| Calcolatore balistico (traiettoria, vento, deriva) | 4/4 | Assente | `packages/core/src/ballistics` esiste ma calcola solo statistiche di gruppo (centroide, MOA, correzione mira) su fori marcati manualmente — non è un calcolatore di traiettoria esterna. Nome ambiguo tra le fonti e il codice: verificato, non sono la stessa cosa |
+| Directory e mappa poligoni | 4/4 | Presente | `SearchPage`, `RangeMap.jsx`, schede struttura SSG, censimento reale di ~80 poligoni |
+| Training dry-fire / laser | 4/4 | Assente | — |
+| Classifiche / leaderboard | 4/4 | Assente | — |
+| Community, social feed, condivisione risultati | 4/4 | Assente | — |
+| Gestione gare ed eventi | 4/4 | Assente | Nessuna tabella, API o UI per calendario gare, iscrizioni o risultati |
+| Prenotazione linee di tiro | 4/4 | Parziale | Schema `bookings` con vincolo di esclusione anti-doppia-prenotazione pronto in DB; il flusso reale oggi (`BookingPage.jsx`) è solo una richiesta di disponibilità inoltrata al gestore via email, non uno slot prenotabile e confermabile all'istante |
+| Marketplace / annunci armi usate | 4/4 | Assente | Esplicitamente escluso dai principi di prodotto ("nessuna intermediazione su armi o munizioni", `PRODUCT.md`) |
+| Gamification (badge, sfide, duelli) | 4/4 | Presente | Medaglie (`MedagliePage.jsx`): 8 traguardi calcolati da sessioni/colpi/calibri |
+| Integrazione hardware (cronografi, timer Bluetooth, sensori) | 4/4 | Assente | Il Cronografo usa solo il microfono del telefono; nessuna connessione a dispositivi esterni |
+| Analisi colpi / shot grouping / auto-scoring da camera | 4/4 | Parziale | `computeGroupStats`/`computeSightCorrection` esistono e sono testati in `packages/core/ballistics` (duplicati anche in `domain.js` mobile), ma nessuna schermata permette di marcare fori su un bersaglio: funzione pura irraggiungibile da un flusso utente reale |
+| E-commerce / checkout / carrello / POS | 4/4 | Parziale — **nome ambiguo** | Esiste un modulo di billing (`packages/core/billing.ts`, tabelle `subscription_plans`/`invoices`) ma è un abbonamento SaaS per i **gestori** (Pass Pro), non un carrello/checkout per l'utente finale come descritto dalle fonti. Verificare con l'utente se questa è la stessa feature o due cose diverse prima di trattarla come "coperta" |
+
+### Feature citate in 3 fonti su 4
+
+| Feature | Frequenza | Stato nel codice | Note |
+|---|---|---|---|
+| Export, condivisione e report (CSV/PDF/Excel) | 3/4 | Parziale | Export JSON dei dati locali (armeria/munizioni/documenti) implementato in `ProfilePage.jsx`; l'export CSV/iCal per il gestore (previsto dal Piano §7.3) non esiste — nessuna route `/api/v1/manage/export` |
+| Documenti, licenze, permessi e scadenze | 3/4 | Presente | Storage locale (`documentsApi.js`), avvisi di scadenza a 90/30/7 giorni in `domain.js` |
+| Sincronizzazione cloud multi-dispositivo | 3/4 | Parziale | I dati su Supabase (sessioni, prenotazioni) sono "cloud" per definizione quando l'utente è online; non esiste una sincronizzazione multi-dispositivo dichiarata o gestita esplicitamente (né conflitti, né merge) |
+| Modalità offline | 3/4 | Assente | Nessun service worker, nessun manifest PWA, nessuna cache offline-first |
+
+### Feature citate in 2 fonti su 4
+
+| Feature | Frequenza | Stato nel codice | Note |
+|---|---|---|---|
+| Profilo utente e account tiratore (multi-profilo, preferenze) | 2/4 | Presente | Autenticazione Supabase (link magico), `ProfilePage.jsx`. Manca profilazione multi-disciplina/preferenze granulari descritta dalle fonti, ma il nucleo account/profilo è funzionante |
+| Modalità giudice / Range Officer / match director tools | 2/4 | Assente | — |
+| Integrazione con bersagli elettronici | 2/4 | Assente | — |
+| Ricarica munizioni / reloading log | 2/4 | Assente | — |
+| Noleggio armi / rental management | 2/4 | Parziale | `range_services.service` è un campo testo libero che può contenere "noleggio arma" come voce di listino; nessun flusso dedicato di prenotazione, cauzione o disponibilità noleggio |
+| Controllo accessi con QR / check-in | 2/4 | Parziale | `bookings.qr_token` e `checked_in_at` esistono nello schema. Lato tiratore, `BookingsPage.jsx` mostra un pattern QR generato da un seed testuale — puramente cosmetico, non codifica dati scansionabili reali. Lato gestore: nessuno scanner, nessuna route `/api/v1/manage/checkin` |
+| Integrazione con API di federazioni (UITS, FITDS, FITAV) | 2/4 | Assente | — |
+| AI coaching / raccomandazioni automatiche | 2/4 | Assente | — |
+| Multi-lingua | 2/4 | Assente | Nessun framework i18n; app solo in italiano |
+| E-learning / corsi integrati | 2/4 | Assente | "Istruttore" compare solo come voce di prezzo in un listino di esempio, non come feature di gestione corsi |
+
+### Feature citate in 1 fonte su 4
+
+| Feature | Frequenza | Stato nel codice | Note |
+|---|---|---|---|
+| Ricerca, filtri e catalogo schede | 1/4 | Presente | `api/v1/ranges/search` con filtri, `/cerca` |
+| Profili multi-tiratore / famiglia / team | 1/4 | Assente | — |
+| Workflow legale per trasferimento armi | 1/4 | Assente | Esplicitamente fuori scope di prodotto |
+| Companion app per wearable / smartwatch | 1/4 | Assente | — |
+| Statistiche e analytics di progressione (grafici) | 1/4 | Assente | Componente `components/ui/chart.jsx` presente ma è scaffold shadcn mai importato da nessuna pagina |
+| Tagging / categorizzazione sessioni | 1/4 | Assente | — |
+| Cifratura zero-knowledge / end-to-end | 1/4 | Assente | Il Piano §8.2 la prevedeva come opzione per i documenti; ora i documenti sono solo-locali sul dispositivo (scelta di prodotto diversa, stesso obiettivo di privacy), ma la cifratura in sé non è implementata |
+| Integrazione con sistemi governativi (invio telematico moduli) | 1/4 | Assente | — |
+| Digital waivers (firme digitali di responsabilità) | 1/4 | Assente | — |
+| Membership & billing automatizzato (abbonamenti ricorrenti) | 1/4 | Parziale — **nome ambiguo** | Esiste per i **gestori** (Pass Pro, `packages/core/billing.ts`), non per i tiratori. Stessa ambiguità della voce "E-commerce/POS" sopra |
+| Waitlist management per linea di tiro | 1/4 | Assente | — |
+| Multi-location (catene di poligoni) | 1/4 | Assente | Non applicabile al modello attuale: ogni poligono è un'entità indipendente |
+| QR synchronization per gara / live results | 1/4 | Assente | — |
+| VR simulation training | 1/4 | Assente | — |
+| Scoring specifico trap / skeet / tiro a volo | 1/4 | Assente | — |
+| Istruzioni audio per eventi ISSF | 1/4 | Assente | — |
+| Arsenale con localizzazione fisica dell'arma | 1/4 | Assente | — |
+| Pianificazione tattica / hit factor | 1/4 | Assente | — |
+| Modalità multiplayer / competizione in tempo reale | 1/4 | Assente | — |
+| Assicurazione, furto, smarrimento | 1/4 | Assente | — |
+
+### Feature con nome ambiguo rispetto al codice
+
+Due voci compaiono nelle analisi come feature consumer ma nel codice esiste solo l'equivalente lato B2B (gestori), non lato tiratori — segnalate invece di essere classificate a caso:
+
+- **E-commerce / checkout / carrello / POS** (4/4): esiste billing SaaS per gestori (Pass Pro), non e-commerce per tiratori.
+- **Membership & billing automatizzato** (1/4): stessa distinzione — abbonamenti esistono solo lato gestore.
