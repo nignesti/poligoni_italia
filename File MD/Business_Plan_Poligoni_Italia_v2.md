@@ -1,7 +1,7 @@
 # BUSINESS PLAN — POLIGONI ITALIA
-## Versione 2.0 — Aggiornata e Integrata — 29 luglio 2026
+## Versione 2.1 — Aggiornata e Integrata — 29-31 luglio 2026
 
-> **Documento di lavoro riservato.** Sostituisce integralmente l'*Executive Business Plan* v1.0 (4 pagine). Integra tre revisioni indipendenti e un ciclo di verifica delle fonti condotto il 29 luglio 2026.
+> **Documento di lavoro riservato.** Sostituisce integralmente l'*Executive Business Plan* v1.0 (4 pagine). Integra tre revisioni indipendenti e un ciclo di verifica delle fonti condotto il 29 luglio 2026, più una ricerca di mercato dedicata su piattaforme digitali per poligoni in Italia ed Europa (`RICERCA_MERCATO.md`, 31 luglio 2026), integrata con lo stesso criterio di verifica indipendente — non recepita acriticamente. Il contributo principale della ricerca è **ML Armory** (§3.5.3-bis), il concorrente italiano più vicino al modulo "Il Mio Tiro" finora non censito.
 >
 > **Documento complementare**: `Piano_Sviluppo_App.md` contiene il piano tecnico esecutivo (architettura, modello dati, API, scomposizione in task). Questo business plan resta la fonte unica per *cosa* si costruisce e *in che ordine*; quel documento possiede solo il *come*. Le due eccezioni da conoscere: il piano tecnico adotta l'**app nativa dal lancio** invece della PWA-first raccomandata in §12.2, e ne quantifica la conseguenza sul calendario; e sposta lo **Spotter** ad Anno 2, coerentemente con quanto già osservato in §13.3.
 
@@ -238,6 +238,7 @@ Nessuna delle tre revisioni ricevute ha individuato i concorrenti effettivi. Due
 | **Anolla** | SaaS sportivo orizzontale | Prenotazione impianti, pricing a consumo, piano free. **Nella pagina impianti sportivi non menziona i poligoni** | **Bassa oggi**, media come fast follower: ha l'infrastruttura ma non il verticale né la conoscenza normativa |
 | **Telefono / WhatsApp / passaparola** | — | — | **Il concorrente principale.** Gratuito, universale, funziona. Ogni analisi che lo ignora è incompleta |
 | **MyGuns** (Svizzera) | App diario/inventario | Sessioni, colpi, scorte munizioni, inventario armi cifrato zero-knowledge, dati balistici | **Media-alta sul solo modulo diario** (§3.5.2). Non prenota, non conosce l'ordinamento italiano |
+| **ML Armory** (Italia) | App diario/inventario/ricarica | Inventario armi-munizioni-ricariche, cassaforte con conteggio preciso, **ricette di ricarica con scalaggio automatico dei componenti**, registro sessioni (data, colpi, munizioni, meteo, bersagli), cronografia, obiettivi/traguardi. Nessun account, dati locali + iCloud | **La più alta sul modulo diario** (§3.5.3-bis). È italiana, in italiano, lanciata nel 2025: più vicina di MyGuns per lingua e mercato. Non prenota, non ha relazione con i poligoni, solo iOS |
 | **TargetScan, Shotlog, ShotScore, MantisX** | App di scoring e analisi | Scoring da foto, statistiche, analisi del movimento con sensore | Media sul modulo diario, **nulla** sul marketplace: nessuna ha rapporti con le strutture |
 
 ### 2.5.2 Le due implicazioni che riscrivono la strategia
@@ -287,6 +288,19 @@ Un quadrante vuoto non è un fossato. Va detto con onestà: **le barriere all'in
 5. **Integrazioni** — ogni gestionale integrato è uno switching cost in più.
 
 Nessuna di queste è disponibile al mese 1. Tutte richiedono esecuzione, non idee. È il motivo per cui la roadmap (§11) è costruita sul censimento e sull'onboarding manuale prima che sul prodotto.
+
+### 2.5.5 Nota sul panorama europeo — fuori perimetro dei primi 18 mesi
+
+Una ricerca di mercato dedicata (31 luglio 2026, non citata altrove in questo documento) ha mappato l'ecosistema europeo. Va riportata con la stessa disciplina di verifica usata per il mercato italiano: **è materiale grezzo, non una raccomandazione da adottare**, perché ripete lo stesso errore metodologico già corretto in §1.5 — propone Poligoni Italia come "first-mover" anche a livello europeo, claim che non è stato verificato con lo stesso rigore delle fonti primarie italiane (§2.5.1) e va trattato con lo stesso scetticismo.
+
+| Paese | Operatori individuati | Maturità digitale | Nota |
+|---|---|---|---|
+| **Regno Unito** | Range Mate, MyGuns UK, ClayArena, National Shooting Centre | Alta | Mercato strutturato, "Home Office approved clubs": barriera regolatoria specifica |
+| **Germania** | BookitOne, VERION, StandFrei, High Ready, 36feet | Alta ma frammentata | 15.000+ Schützenvereine (DSB); Waffengesetz molto restrittivo |
+| **Polonia** | BookitOne, StrzelApp | Bassa concorrenza | Indicata dalla ricerca come primo target di espansione, ma **senza verifica indipendente della dimensione del mercato o delle barriere normative reali** |
+| **Francia** | TirSync, WinTir, ITAC (FFTir), SIA | Media | SIA (tracciamento armi) obbligatorio: barriera tecnica di integrazione |
+
+**Perché questa nota resta breve.** La roadmap di questo piano (§11) è vincolata dal tempo di un fondatore unico e si esaurisce nell'Italia di una provincia pilota per i primi 18 mesi (§5.3-5.4). Ogni riga spesa a pianificare un'espansione in Polonia prima del trigger 4 di §8.6 (playbook replicabile in Italia da persona diversa dal fondatore) è tempo sottratto al problema reale. La tabella resta come riferimento per **quando**, non **se**, si porrà la domanda dell'espansione — verosimilmente non prima dell'Anno 3, e solo dopo aver rifatto per ciascun paese la stessa verifica di fonti primarie condotta qui per l'Italia.
 
 ---
 
@@ -426,7 +440,8 @@ Va detto subito, perché è il punto in cui è più facile sbagliare investiment
 | Prodotto | Origine | Cosa fa | Maturità |
 |---|---|---|---|
 | **TargetScan – Pistol & Rifle** (Deep Scoring Ltd) | UK | Scoring da foto del bersaglio, oltre 80 discipline ISSF, calcolo di deriva, alzo, raggio medio ed estensione del gruppo | Molto alta, sul mercato da oltre un decennio |
-| **MyGuns** | **Svizzera** | Diario sessioni, colpi sparati, inventario armi con matricole e documenti, scorte munizioni scalate automaticamente, dati balistici (V0, ES, SD), cifratura AES-256 zero-knowledge | Alta. **Il concorrente più vicino**, ma non fa prenotazioni e non gestisce i limiti legali italiani |
+| **MyGuns** | **Svizzera** | Diario sessioni, colpi sparati, inventario armi con matricole e documenti, scorte munizioni scalate automaticamente, dati balistici (V0, ES, SD), cifratura AES-256 zero-knowledge | Alta. Non fa prenotazioni e non gestisce i limiti legali italiani |
+| **ML Armory** | **Italia** | Inventario armi/munizioni/componenti di ricarica dal catalogo integrato, cassaforte con conteggio preciso, **ricette di ricarica con scalaggio automatico dei componenti**, registro sessioni (data, colpi, munizioni, meteo, bersagli con colpi e punteggio), **cronografia** (salvataggio test di velocità), obiettivi/traguardi, unità di misura personalizzabili. Nessun account, nessun tracciamento, dati locali + sync iCloud/CloudKit | **Alta — il concorrente più vicino in assoluto.** Italiano, in italiano, lanciato nel 2025. Vedi §3.5.3-bis: non fa prenotazioni, non ha relazione coi poligoni, non gestisce i limiti dell'art. 97 TULPS, solo iOS (Android 2027) |
 | **Shotlog** | Internazionale | Punteggio dal vivo, serie, statistiche, registro manutenzione, timer, sincronizzazione cloud. Free + Pro. **Nessuno scoring da foto** | Alta |
 | **ShotScore / Notch** | USA | Rilevamento automatico dei fori e punteggio da foto, ML on-device | Recenti ma già funzionanti |
 | **MantisX / TitanX** | USA | Analisi del movimento dell'arma con sensore (giroscopio + accelerometro), dry fire e live fire | Molto alta. **Hardware**: territorio diverso |
@@ -436,8 +451,31 @@ Va detto subito, perché è il punto in cui è più facile sbagliare investiment
 **Tre conclusioni operative.**
 
 1. **Costruire un motore di scoring da foto per competere con TargetScan è una battaglia sbagliata.** Ha dieci anni di vantaggio, 80 discipline codificate e un pubblico fedele. Il valore incrementale di una copia peggiore è vicino a zero.
-2. **MyGuns è il concorrente da guardare**, non le app americane: fa quasi esattamente il diario che serve, è in italiano, ed è tecnicamente solido. Ma è **svizzero**, non conosce l'ordinamento italiano, e soprattutto **non ha i poligoni**.
+2. **ML Armory, non MyGuns, è il concorrente da guardare per primo.** È italiano, in italiano, lanciato nel 2025 — più vicino di MyGuns per lingua, mercato e freschezza del prodotto. Fa quasi esattamente il diario e l'inventario che il modulo "Il Mio Tiro" prevede, con una funzione in più che il piano attuale non copriva (le ricette di ricarica, vedi §3.5.3-bis). Ma **non ha i poligoni**, non prenota, e non gestisce i limiti dell'art. 97 TULPS né il libretto GPG.
 3. **Il vantaggio non sta in nessuna di queste funzionalità presa da sola.** Sta in due cose che nessun concorrente può replicare senza costruire prima il lato B2B della piattaforma.
+
+### 3.5.3-bis ML Armory, funzione per funzione: cosa vale la pena riprendere
+
+ML Armory è un'app iOS di inventario privato e registro di tiro, **senza account, senza tracciamento pubblicitario o di terze parti, nessun marketplace**: dati archiviati localmente e sincronizzati via Apple iCloud/CloudKit. È il prodotto italiano più simile a quello che il modulo "Il Mio Tiro" vuole essere sul lato diario/inventario, e va analizzato in dettaglio proprio per questo — è il metro di paragone più diretto disponibile.
+
+| Funzione ML Armory | Presente nel piano attuale (§3.5.6)? | Decisione |
+|---|---|---|
+| Tracciamento armi dal catalogo (armi, munizioni, componenti, ottiche) con foto | Sì — inventario armi (T4) | Confermato, nessuna modifica |
+| Cassaforte con conteggio preciso di colpi e componenti | Sì — inventario munizioni con soglie art. 97 (T4) | Confermato. Il nostro contatore ha in più le soglie di legge, che ML Armory non ha |
+| **Ricette di ricarica**, con scalaggio automatico dei componenti dalla cassaforte | **No** — assente dal piano | **Da aggiungere**, vedi sotto |
+| Registro sessioni (data, colpi, munizioni, meteo, bersagli con colpi e punteggio) | Sì — sessione auto-generata + contatore colpi (T4) | Confermato. La nostra leva resta superiore: ML Armory richiede inserimento manuale della data e della struttura, noi li precompiliamo dal check-in (§3.5.3, Leva 1) |
+| **Cronografia** — salvataggio dei test di velocità (V0) | **No** — assente dal piano | **Da aggiungere**, vedi sotto. MyGuns la offre come dato balistico esteso (V0, ES, SD); ML Armory la offre come funzione singola più semplice |
+| Obiettivi/traguardi basati su allenamento e collezione | No — la gamification è deliberatamente rimandata (§13.3) | **Confermata l'esclusione**: la motivazione di §13.3 (frequenza troppo bassa per un ciclo di rinforzo) vale identica qui |
+| Unità di misura personalizzabili | No, dettaglio minore | Da valutare in fase di design UI, non è una funzione di prodotto |
+| Manutenzione programmata (pulizia, molle) | Sì — manutenzione arma per numero di colpi (T5) | Confermato |
+| Nessun account, dati solo locali | Non applicabile: la nostra leva è la sessione auto-generata dal check-in, che richiede un account e un server. **Non è un'opzione che possiamo copiare senza perdere la leva 1** | Vedi §3.5.8 per l'implicazione sulla privacy |
+
+**Due funzioni da aggiungere alla roadmap del modulo, entrambe assenti dal piano fin qui:**
+
+- **Ricette di ricarica con scalaggio automatico.** Per il segmento di tiratori che ricaricano le proprie munizioni — una nicchia già identificata come "competente e fedele, ma piccola" in §3.5.6 — è la funzione che chiude il cerchio tra inventario e consumo: l'utente definisce una ricetta (bossolo, polvere, innesco, palla in quantità fisse) e ogni ricarica scala automaticamente i componenti dalla cassaforte, invece di far scalare solo le cartucce finite. ML Armory dimostra che la domanda esiste in Italia abbastanza da giustificare una feature dedicata;
+- **Cronografia — salvataggio dei test di velocità.** Un campo dati semplice (V0, eventualmente data e condizioni), collegato alla sessione. Non richiede hardware proprio: registra un valore che il ricaricatore ha già misurato con un cronografo esterno. Utile soprattutto insieme alla ricetta di ricarica, per correlare la ricetta usata alla velocità ottenuta.
+
+**Dove vanno inserite, con lo stesso rigore RICE usato altrove (§11.3).** Nessuna delle due tocca un pubblico ampio: ricaricano una minoranza dei tiratori. Reach basso, quindi RICE basso — coerente con la nicchia "dati balistici avanzati per ricaricatori" già classificata come Anno 2 in §3.5.6. **Non vanno anticipate a T4/T5**: si aggiungono alla riga esistente "Dati balistici avanzati (V0, ES, SD) per ricaricatori — Anno 2" di §3.5.6, che va riletta come comprensiva anche di ricette di ricarica e cronografia, non come una voce isolata. Anticiparle significherebbe ripetere l'errore già segnalato in Allegato C: aggiungere ore senza toglierne altrove, su un piano che eccede già la capacità sostenibile del fondatore.
 
 ### 3.5.3 Le due leve difendibili
 
@@ -523,7 +561,7 @@ Funzionalità dedicate: libretto digitale con le tre scadenze quadrimestrali cal
 | **Rilevamento automatico dei fori dalla foto** | **T6+** | Solo se le metriche d'uso di T5 lo giustificano. Vedi sotto |
 | Confronto anonimo con tiratori simili (calibro, distanza, disciplina) | Anno 2 | Richiede massa critica |
 | Condivisione sessione con accompagnatore o istruttore | Anno 2 | — |
-| Dati balistici avanzati (V0, ES, SD) per ricaricatori | Anno 2 | Nicchia competente e fedele, ma piccola |
+| Dati balistici avanzati: **ricette di ricarica con scalaggio automatico**, **cronografia** (V0, ES, SD) | Anno 2 | Nicchia competente e fedele, ma piccola. Validata da ML Armory (§3.5.3-bis): funzionalità che l'app italiana più simile alla nostra offre già, quindi la domanda esiste, ma resta di nicchia — non giustifica un'anticipazione a T4/T5 |
 | Analisi del movimento con sensore | **Mai** | Territorio MantisX: richiede hardware. Fuori perimetro |
 
 ### 3.5.7 Sull'"analisi AI dei bersagli": cosa fare davvero
@@ -560,6 +598,8 @@ Impostazione adottata, deliberatamente più conservativa:
 4. Il contatore munizioni conserva **quantità e calibro**, non provenienza né estremi di acquisto.
 
 Questa scelta costa una funzionalità che un concorrente offre. Ne vale la pena: è l'unico ambito del piano in cui un errore tecnico si trasforma in un danno a terzi.
+
+**Un chiarimento sul confronto con ML Armory (§3.5.3-bis).** ML Armory risolve il problema della violazione dati alla radice: nessun account, dati solo locali più sync iCloud, il server dell'app non vede mai nulla. È l'approccio più sicuro possibile, e non è replicabile qui senza rinunciare alla leva 1 (§3.5.3): la sessione precompilata dal check-in richiede che il server sappia che un utente ha prenotato in una certa struttura in un certo momento — un dato che, per definizione, non può restare solo sul dispositivo. **La scelta non è tra "sicuro come ML Armory" e "meno sicuro": è tra un prodotto senza la leva differenziante e un prodotto con la leva, che tratta il dato server-side col massimo rigore possibile** (minimizzazione, niente matricole, niente targeting). Va detto con chiarezza a ogni revisione di sicurezza, perché è la ragione per cui questo modulo non può semplicemente "fare come ML Armory" sul fronte privacy.
 
 ### 3.5.9 Effetti sul resto del piano
 
@@ -1552,6 +1592,7 @@ Il brief di questo lavoro assumeva cinque revisioni indipendenti (consulente, Ge
 | `DeepSeek_Review.txt` | Revisione reale, **quasi identica a Grok**: stessa struttura, stesse tabelle, stessi numeri, stessi competitor, stesso pricing |
 | `Perplex Review.txt` | **Copia del prompt originale**, non una revisione |
 | Revisione Gemini | **Assente** |
+| `RICERCA_MERCATO.md` | Ricerca di mercato dedicata (31/07/2026), non una revisione del business plan: mappa competitor Italia/Europa. Contiene un claim di first-mover non verificato con lo stesso rigore delle fonti primarie italiane (§2.5.5) — trattato con lo stesso scetticismo riservato al claim analogo della v1.0 (§1.5). Il contributo verificato e integrato è **ML Armory** (§3.5.3-bis) |
 
 **Le voci indipendenti sono due, non cinque.** Grok e DeepSeek sono state trattate come una fonte sola. Questo cambia la logica di risoluzione delle divergenze: un punto sostenuto da "Grok + DeepSeek" contro Claude è 1-1, non 2-1. Il criterio "must-fix se convergono tre o più revisioni", previsto dal brief, non era applicabile, ed è stato sostituito dal criterio: **verifica indipendente delle fonti primarie**.
 
@@ -1579,7 +1620,8 @@ Il brief di questo lavoro assumeva cinque revisioni indipendenti (consulente, Ge
 5. **Il vincolo reale del fondatore quantificato**: CAC in ore anziché in euro, tetto di onboarding calcolato, roadmap dimensionata su 15 ore a settimana;
 6. **Trigger quantitativi** su ogni decisione rilevante (attivazione canali, round, contingenze), al posto di scadenze temporali arbitrarie;
 7. **La distinzione tra break-even di cassa e break-even economico**, che nessuna revisione faceva e che è il primo punto su cui un investitore fa domande a un piano bootstrap;
-8. **Il modulo "Il Mio Tiro" (§3.5)** con il contatore munizioni conforme all'art. 97 TULPS e il libretto di tiro digitale per le guardie giurate: due funzionalità che nessuna delle otto app concorrenti censite offre, perché sono tutte estere. È anche la risposta strutturale al problema di frequenza d'uso che la v1.0 e le revisioni lasciavano irrisolto.
+8. **Il modulo "Il Mio Tiro" (§3.5)** con il contatore munizioni conforme all'art. 97 TULPS e il libretto di tiro digitale per le guardie giurate: due funzionalità che nessuna delle app concorrenti censite offre, perché sono tutte estere o non conoscono l'ordinamento italiano. È anche la risposta strutturale al problema di frequenza d'uso che la v1.0 e le revisioni lasciavano irrisolto;
+9. **ML Armory** (§3.5.3-bis) come concorrente italiano diretto sul modulo diario/inventario, non censito da nessuna revisione: ne discendono due funzionalità aggiunte alla roadmap Anno 2 (ricette di ricarica con scalaggio automatico, cronografia) e un chiarimento esplicito sul perché il modello privacy zero-account di ML Armory non è replicabile senza rinunciare alla leva della sessione auto-generata (§3.5.8).
 
 ## Limiti dichiarati
 
@@ -1727,6 +1769,7 @@ Ciò che un investitore competente verificherebbe. Utile prima di tutto al fonda
 | Obbligo GPG: 3 esercitazioni/anno quadrimestrali, 50 colpi, libretto di tiro | vedi §3.5.5 | DM 269/2010 via earmi.it; UITS | https://www.earmi.it/diritto/leggi/refolamento%20guardie.htm |
 | Normativa UITS su porto d'armi GPG | — | UITS | https://www.uits.it/homepage/news/8-istituzionale/7625-normativa-sul-porto-d-armi-per-guardie-giurate-validita-2-anni.html |
 | Registro frequenze e libretto di tiro nelle sezioni | — | TSN Busto Arsizio, TSN Torino | https://www.tsnbusto.com/area-istituzionale/certificazioni/ |
+| ML Armory: funzionalità (inventario, cassaforte, ricette di ricarica, cronografia, obiettivi), roadmap, modello privacy zero-account | vedi §3.5.3-bis | ML Armory / Armimagazine.it | https://www.mlarmory.com |
 
 ### Dati NON verificati — da non usare come definitivi
 
@@ -1737,6 +1780,7 @@ Ciò che un investitore competente verificherebbe. Utile prima di tutto al fonda
 | Pricing dei gestionali incumbent | Non pubblico |
 | "Ticketinghub" come concorrente | Citato dalle revisioni, **non verificato** |
 | Cifre advertising (500 €/mese, 5.000 €/evento) | Invenzioni delle revisioni. **Omesse** |
+| Dimensione e maturità dei mercati europei (UK, Germania, Polonia, Francia — §2.5.5) | Fonti secondarie della ricerca di mercato del 31/07/2026, non verificate con fonti primarie. Il claim di "first-mover europeo" e la raccomandazione "Polonia come primo mercato" **non sono adottati**: fuori perimetro dei primi 18 mesi (§2.5.5) |
 
 ## Allegato B — Benchmark competitor
 
@@ -1755,6 +1799,7 @@ Ciò che un investitore competente verificherebbe. Utile prima di tutto al fonda
 | Prodotto | Origine | Diario | Scoring da foto | Munizioni | Limiti legge IT | Prenotazione | Prezzo | URL |
 |---|---|---|---|---|---|---|---|---|
 | **MyGuns** | Svizzera | ✓ | ✓ (risultati) | ✓ scarico automatico | **✗** | **✗** | Free + piani a pagamento | https://www.myguns.app/it |
+| **ML Armory** | Italia | ✓ | ✗ | ✓ + **ricette ricarica** | **✗** | **✗** | Freemium/Premium | https://www.mlarmory.com |
 | **TargetScan** | UK | parziale | ✓ **80+ discipline** | ✗ | ✗ | ✗ | A pagamento | https://apps.apple.com/us/app/targetscan-pistol-rifle/id448045769 |
 | **Shotlog** | Intern. | ✓ | ✗ | ✗ | ✗ | ✗ | Free + Pro | https://shotlog.app/ |
 | **ShotScore** | USA | ✓ | ✓ automatico | parziale | ✗ | ✗ | — | https://apps.apple.com/us/app/shotscore-ai-target-scoring/id6761975477 |
@@ -1820,4 +1865,4 @@ Il principio generale resta quello enunciato in §3.5.9: **qualsiasi funzionalit
 
 ---
 
-*Documento redatto il 29 luglio 2026. Dati verificati alla stessa data. Le fonti sono elencate nell'Allegato A; le stime proprie sono segnalate come tali nel corpo del testo.*
+*Documento redatto il 29 luglio 2026, aggiornato il 31 luglio 2026 con l'integrazione della ricerca di mercato su ML Armory e sul panorama europeo (§2.5.5, §3.5.3-bis). Dati verificati alle rispettive date. Le fonti sono elencate nell'Allegato A; le stime proprie sono segnalate come tali nel corpo del testo.*
