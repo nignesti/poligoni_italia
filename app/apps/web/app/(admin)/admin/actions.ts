@@ -91,6 +91,15 @@ export async function createRangeAction(
 
   const { id } = await insertRangeAdmin({ ...input, slug });
   revalidatePath('/admin');
+  // Stesso motivo di updateRangeAction: pagine pubbliche statiche, nessun
+  // revalidate a tempo. Un poligono nuovo cambia anche i conteggi in / e
+  // /poligoni (assenti da updateRangeAction perché una modifica non cambia
+  // il numero di strutture, solo una creazione lo fa).
+  revalidatePath('/');
+  revalidatePath('/poligoni');
+  revalidatePath('/poligoni/[regione]', 'page');
+  revalidatePath('/poligoni/[regione]/[provincia]', 'page');
+  revalidatePath('/poligoni/[regione]/[provincia]/[slug]', 'page');
   redirect(`/admin/${id}`);
 }
 
