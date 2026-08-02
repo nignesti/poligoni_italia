@@ -4,7 +4,7 @@ import { listDocuments, createDocument } from "@/api/documentsApi";
 import { exportLocalData, importLocalData } from "@/lib/localStore";
 import { supabase } from "@/api/supabaseClient";
 import { useAuth } from "@/lib/useAuth";
-import { User, FileText, AlertTriangle, ChevronRight, Loader2, Plus, Shield, Download, Upload, LogOut, X, Award } from "lucide-react";
+import { User, FileText, AlertTriangle, ChevronRight, Loader2, Plus, Shield, Download, Upload, LogOut, X, Award, Pencil } from "lucide-react";
 import { computeDocumentAlerts, DOCUMENT_LABELS, formatDate } from "@/lib/domain";
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 
@@ -21,11 +21,48 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const importInputRef = useRef(null);
 
+  const [editingName, setEditingName] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [savingName, setSavingName] = useState(false);
+
   useBodyScrollLock(showAddDoc);
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.user_metadata?.first_name ?? "");
+      setLastName(user.user_metadata?.last_name ?? "");
+    }
+  }, [user]);
+
+  const fullName = [user?.user_metadata?.first_name, user?.user_metadata?.last_name]
+    .filter(Boolean)
+    .join(" ");
+
+  const handleSaveName = async () => {
+    setSavingName(true);
+    try {
+      const trimmedFirst = firstName.trim();
+      const trimmedLast = lastName.trim();
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          first_name: trimmedFirst || null,
+          last_name: trimmedLast || null,
+          full_name: [trimmedFirst, trimmedLast].filter(Boolean).join(" ") || null,
+        },
+      });
+      if (error) throw error;
+      setEditingName(false);
+    } catch (e) {
+      console.error(e);
+      alert("Errore nel salvataggio del nome");
+    }
+    setSavingName(false);
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -117,11 +154,54 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white px-4 pt-12 pb-6 rounded-b-3xl">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
             <User className="w-6 h-6 text-white" />
           </div>
-          <div>
-            <h1 className="text-lg font-bold">Tiratore</h1>
+          <div className="flex-1 min-w-0">
+            {editingName ? (
+              <div className="space-y-1.5">
+                <div className="flex gap-1.5">
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Nome"
+                    className="w-1/2 bg-white/10 border border-white/20 rounded-lg px-2 py-1 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Cognome"
+                    className="w-1/2 bg-white/10 border border-white/20 rounded-lg px-2 py-1 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSaveName}
+                    disabled={savingName}
+                    className="text-xs font-semibold text-orange-400 disabled:opacity-50"
+                  >
+                    {savingName ? "Salvataggio…" : "Salva"}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setFirstName(user?.user_metadata?.first_name ?? "");
+                      setLastName(user?.user_metadata?.last_name ?? "");
+                      setEditingName(false);
+                    }}
+                    className="text-xs text-slate-300"
+                  >
+                    Annulla
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button onClick={() => setEditingName(true)} className="flex items-center gap-1.5 group text-left">
+                <h1 className="text-lg font-bold">{fullName || "Tiratore"}</h1>
+                <Pencil className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors flex-shrink-0" />
+              </button>
+            )}
             <p className="text-sm text-slate-300 dark:text-slate-600">{user?.email}</p>
           </div>
         </div>

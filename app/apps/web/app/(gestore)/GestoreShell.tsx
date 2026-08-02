@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import type { ManagedRange } from '@/lib/gestore-auth';
 
 // ---------------------------------------------------------------------------
 // Dashboard Gestore — Shell (Piano §7.3)
@@ -26,9 +27,15 @@ const MINIMAL_PATHS = ['/gestore/login', '/gestore/rivendica', '/gestore/reset-p
 
 export function GestoreShell({
   rangeName,
+  activeRangeId,
+  managedRanges,
+  switchRangeAction,
   children,
 }: {
   rangeName: string | null;
+  activeRangeId: string | null;
+  managedRanges: ManagedRange[];
+  switchRangeAction: (formData: FormData) => Promise<void>;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -50,7 +57,11 @@ export function GestoreShell({
 
   // Login, rivendicazione e reset password hanno layout minimal (no sidebar)
   const isMinimal = MINIMAL_PATHS.includes(pathname);
-  if (isMinimal) return <>{children}</>;
+  // color-scheme: light forza gli input a testo scuro anche col tema globale
+  // del sito dark-only (:root { color-scheme: dark } in globals.css, fuori
+  // dal perimetro isolato di (gestore) — senza, i browser applicano UA style
+  // dark ai form control e il testo digitato risulta bianco su sfondo bianco.
+  if (isMinimal) return <div style={{ colorScheme: 'light' }}>{children}</div>;
 
   return (
     <div className="gest-layout">
@@ -110,7 +121,25 @@ export function GestoreShell({
             ☰
           </button>
           <div className="gest-topbar-right">
-            <span className="gest-range-name">{rangeName ?? 'Nessuna struttura'}</span>
+            {managedRanges.length > 1 ? (
+              <form action={switchRangeAction}>
+                <select
+                  name="rangeId"
+                  defaultValue={activeRangeId ?? undefined}
+                  onChange={(e) => e.currentTarget.form?.requestSubmit()}
+                  className="gest-range-select"
+                  aria-label="Cambia struttura"
+                >
+                  {managedRanges.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name}
+                    </option>
+                  ))}
+                </select>
+              </form>
+            ) : (
+              <span className="gest-range-name">{rangeName ?? 'Nessuna struttura'}</span>
+            )}
             <button
               className="gest-avatar"
               onClick={handleLogout}
@@ -129,6 +158,7 @@ export function GestoreShell({
           display: flex;
           min-height: 100vh;
           background: var(--color-gray-50);
+          color-scheme: light;
         }
 
         /* Sidebar */
@@ -230,6 +260,16 @@ export function GestoreShell({
           font-size: 0.875rem;
           font-weight: 600;
           color: var(--color-gray-700);
+        }
+        .gest-range-select {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: var(--color-gray-700);
+          background: white;
+          border: 1px solid var(--color-gray-200);
+          border-radius: var(--radius-lg);
+          padding: var(--space-1) var(--space-2);
+          max-width: 220px;
         }
         .gest-avatar {
           width: 36px;

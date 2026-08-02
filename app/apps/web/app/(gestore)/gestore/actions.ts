@@ -10,7 +10,7 @@ import {
   markBookingRequestForwardedForGestore,
 } from '@poligoni/db/queries/gestore';
 import { replaceRangeHoursForAdmin } from '@poligoni/db/queries/admin-ranges';
-import { requireManagedRange } from '@/lib/gestore-auth';
+import { requireManagedRange, setActiveManagedRange } from '@/lib/gestore-auth';
 
 // requireManagedRange() risolve la struttura dal lato server a ogni azione,
 // non fidandosi mai di un rangeId passato dal client — stesso principio di
@@ -181,4 +181,15 @@ export async function markGestoreRequestAction(formData: FormData): Promise<void
 
   await markBookingRequestForwardedForGestore(range.id, parsed.data.requestId, parsed.data.outcome);
   revalidatePath('/gestore/richieste');
+}
+
+const SwitchRangeSchema = z.object({ rangeId: z.string().uuid() });
+
+/** Cambia struttura attiva — solo per account che ne gestiscono più di una (i due admin). */
+export async function switchManagedRangeAction(formData: FormData): Promise<void> {
+  const parsed = SwitchRangeSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return;
+
+  await setActiveManagedRange(parsed.data.rangeId);
+  revalidatePath('/gestore', 'layout');
 }
