@@ -16,6 +16,7 @@
     "./schema/premium": "./src/schema/premium.ts",
     "./client": "./src/client.ts",
     "./queries/ranges": "./src/queries/ranges.ts",
+    "./queries/admin-ranges": "./src/queries/admin-ranges.ts",
     "./queries/billing": "./src/queries/billing.ts"
   },
   "scripts": {

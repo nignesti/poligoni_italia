@@ -1,12 +1,27 @@
 /**
  * Refresh della sessione Supabase a ogni richiesta (pattern ufficiale
- * @supabase/ssr) + gate delle rotte gestore: senza sessione, redirect a
- * /gestore/login prima ancora che la pagina venga renderizzata.
+ * @supabase/ssr) + gate delle rotte gestore e admin: senza sessione,
+ * redirect a /gestore/login prima ancora che la pagina venga renderizzata.
+ *
+ * /admin ha un secondo livello di gate oltre alla sessione: l'email deve
+ * comparire in ADMIN_EMAILS. A differenza di /gestore (dove l'autorizzazione
+ * sulla singola struttura è verificata pagina per pagina via
+ * range_managers), qui la scrittura passa da Drizzle con accesso pieno alla
+ * tabella `ranges` — nessuna RLS di mezzo — quindi il controllo email è
+ * l'unica barriera e va ripetuto anche lato server action (vedi
+ * app/(admin)/admin/actions.ts), non solo qui.
  */
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 const GESTORE_PUBLIC_PATHS = ['/gestore/login', '/gestore/rivendica'];
+
+function adminEmails(): string[] {
+  return (process.env.ADMIN_EMAILS ?? '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+}
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -48,6 +63,22 @@ export async function updateSession(request: NextRequest) {
     redirectUrl.pathname = '/gestore/login';
     redirectUrl.searchParams.set('next', pathname);
     return NextResponse.redirect(redirectUrl);
+  }
+
+  if (pathname.startsWith('/admin')) {
+    if (!user) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = '/gestore/login';
+      redirectUrl.searchParams.set('next', pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
+    const email = (user.email ?? '').toLowerCase();
+    if (!adminEmails().includes(email)) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = '/';
+      redirectUrl.search = '';
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
   return response;
