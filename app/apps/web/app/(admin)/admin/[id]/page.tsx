@@ -2,8 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { findRangeByIdForAdmin, listRangeHoursForAdmin } from '@poligoni/db/queries/admin-ranges';
 import { RangeForm } from '../RangeForm';
-import { HoursForm } from './HoursForm';
-import { updateRangeAction, updateRangeHoursAction } from '../actions';
+import { updateRangeAction } from '../actions';
 
 export default async function EditRangePage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
@@ -11,7 +10,6 @@ export default async function EditRangePage(props: { params: Promise<{ id: strin
   if (!range) notFound();
 
   const boundAction = updateRangeAction.bind(null, id);
-  const boundHoursAction = updateRangeHoursAction.bind(null, id);
 
   return (
     <div>
@@ -22,14 +20,7 @@ export default async function EditRangePage(props: { params: Promise<{ id: strin
       <p className="mt-1 text-sm text-ink-muted">{range.comune} ({range.provincia})</p>
 
       <div className="mt-8">
-        <RangeForm mode="edit" initial={range} action={boundAction} />
-      </div>
-
-      <div className="mt-12">
-        <h2 className="text-sm font-bold uppercase tracking-wide text-ink-muted">Orari di apertura</h2>
-        <div className="mt-3">
-          <HoursForm initial={hours} action={boundHoursAction} />
-        </div>
+        <RangeForm mode="edit" initial={range} initialHours={hours} action={boundAction} />
       </div>
     </div>
   );

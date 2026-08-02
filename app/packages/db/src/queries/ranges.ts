@@ -15,6 +15,7 @@ import { slugify } from '@poligoni/core/slug';
 import type { Range, RangeType, RangeStatus } from '@poligoni/schemas/ranges';
 import { getDb } from '../client.js';
 import { PROVINCIA_BY_SIGLA } from '../seed/province-sigle.js';
+import { REGIONI_CANONICHE } from '../seed/regioni.js';
 import {
   ranges,
   rangeHours,
@@ -42,35 +43,8 @@ function parseGeoJsonPoint(geoJson: string | null): { lat: number; lng: number }
   return { lat, lng };
 }
 
-/**
- * Le 20 regioni italiane, forma canonica. Alcune fonti importate (es. lo
- * scraping Targetfun, TARGETFUN_IMPORT_LOG.md) scrivono il nome regione in
- * MAIUSCOLO invece che in Title Case: senza normalizzazione, "Sicilia" e
- * "SICILIA" diventano due voci distinte nei raggruppamenti (regionCounts),
- * mostrate come due bottoni "duplicati" sulla home.
- */
-const REGIONI_CANONICHE = [
-  'Abruzzo',
-  'Basilicata',
-  'Calabria',
-  'Campania',
-  'Emilia-Romagna',
-  'Friuli-Venezia Giulia',
-  'Lazio',
-  'Liguria',
-  'Lombardia',
-  'Marche',
-  'Molise',
-  'Piemonte',
-  'Puglia',
-  'Sardegna',
-  'Sicilia',
-  'Toscana',
-  'Trentino-Alto Adige',
-  'Umbria',
-  "Valle d'Aosta",
-  'Veneto',
-];
+// REGIONI_CANONICHE ora in ../seed/regioni.js — usata anche per normalizzare
+// varianti di casing da fonti importate (es. "SICILIA" vs "Sicilia").
 const REGIONE_CANONICA_BY_LOWER = new Map(
   REGIONI_CANONICHE.map((regione) => [regione.toLowerCase(), regione]),
 );

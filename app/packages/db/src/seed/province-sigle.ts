@@ -3,12 +3,14 @@
  *
  * Dato pubblico stabile: non contiene alcuna informazione su singole
  * strutture, solo il nome per esteso di ciascuna provincia a partire dalla
- * sigla. Elenco completo delle 107 province italiane (incluso VS, sigla
- * storica di Medio Campidano confluita in Sud Sardegna nel 2016, che può
- * comparire in fonti importate meno recenti) — non più limitato alle sole
- * sigle del censimento originale: usato anche per normalizzare province
- * scritte come sigla da fonti importate (es. Targetfun, vedi
- * TARGETFUN_IMPORT_LOG.md) in queries/ranges.ts.
+ * sigla. Elenco completo delle 107 province italiane, più 4 sigle storiche
+ * sarde confluite in Sud Sardegna nel 2016 (VS Medio Campidano, CI
+ * Carbonia-Iglesias, OG Ogliastra, OT Olbia-Tempio) — compaiono ancora in
+ * fonti importate meno recenti, incluso il dataset comuni ISTAT usato per
+ * comuni.ts. Non più limitato alle sole sigle del censimento originale:
+ * usato anche per normalizzare province scritte come sigla da fonti
+ * importate (es. Targetfun, vedi TARGETFUN_IMPORT_LOG.md) in
+ * queries/ranges.ts.
  */
 export const PROVINCIA_BY_SIGLA: Record<string, string> = {
   AG: 'Agrigento',
@@ -34,6 +36,7 @@ export const PROVINCIA_BY_SIGLA: Record<string, string> = {
   CB: 'Campobasso',
   CE: 'Caserta',
   CH: 'Chieti',
+  CI: 'Sud Sardegna',
   CL: 'Caltanissetta',
   CN: 'Cuneo',
   CO: 'Como',
@@ -71,7 +74,9 @@ export const PROVINCIA_BY_SIGLA: Record<string, string> = {
   NA: 'Napoli',
   NO: 'Novara',
   NU: 'Nuoro',
+  OG: 'Sud Sardegna',
   OR: 'Oristano',
+  OT: 'Sud Sardegna',
   PA: 'Palermo',
   PC: 'Piacenza',
   PD: 'Padova',

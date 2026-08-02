@@ -94,6 +94,26 @@ export async function createRangeAction(
   redirect(`/admin/${id}`);
 }
 
+const HourSlotSchema = z.object({
+  weekday: z.number().int().min(0).max(6),
+  opensAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Orario non valido.'),
+  closesAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Orario non valido.'),
+});
+const HoursFormSchema = z.array(HourSlotSchema);
+
+/**
+ * Un unico salvataggio per anagrafica + orari, invece di due bottoni
+ * separati — l'admin li vede come un solo form, li salva come tale.
+ * Le due scritture restano due query distinte (updateRangeAdmin +
+ * replaceRangeHoursForAdmin, quest'ultima già nella sua transazione), non
+ * un'unica transazione DB: non è un'operazione finanziaria, il rischio di
+ * un disallineamento a metà è accettabile per questo caso d'uso.
+ *
+ * Revalida anche le pagine pubbliche della struttura, non solo /admin:
+ * quelle sono statiche (generateStaticParams, nessun revalidate a tempo),
+ * senza questa chiamata un salvataggio da admin non si vedrebbe online
+ * fino al prossimo deploy.
+ */
 export async function updateRangeAction(
   id: string,
   _prev: RangeFormState,
@@ -106,44 +126,25 @@ export async function updateRangeAction(
     return { error: parsed.error.issues[0]?.message ?? 'Dati non validi.' };
   }
 
-  await updateRangeAdmin(id, toInput(parsed.data));
-  revalidatePath('/admin');
-  revalidatePath(`/admin/${id}`);
-  return { error: undefined };
-}
-
-const HourSlotSchema = z.object({
-  weekday: z.number().int().min(0).max(6),
-  opensAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Orario non valido.'),
-  closesAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Orario non valido.'),
-});
-const HoursFormSchema = z.array(HourSlotSchema);
-
-export interface HoursFormState {
-  error?: string | undefined;
-}
-
-export async function updateRangeHoursAction(
-  rangeId: string,
-  _prev: HoursFormState,
-  formData: FormData,
-): Promise<HoursFormState> {
-  await requireAdminUser();
-
-  let raw: unknown;
+  let rawHours: unknown;
   try {
-    raw = JSON.parse(String(formData.get('hoursJson') ?? '[]'));
+    rawHours = JSON.parse(String(formData.get('hoursJson') ?? '[]'));
   } catch {
     return { error: 'Dati orari non validi.' };
   }
-
-  const parsed = HoursFormSchema.safeParse(raw);
-  if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? 'Dati orari non validi.' };
+  const parsedHours = HoursFormSchema.safeParse(rawHours);
+  if (!parsedHours.success) {
+    return { error: parsedHours.error.issues[0]?.message ?? 'Dati orari non validi.' };
   }
 
-  await replaceRangeHoursForAdmin(rangeId, parsed.data);
-  revalidatePath(`/admin/${rangeId}`);
+  await updateRangeAdmin(id, toInput(parsed.data));
+  await replaceRangeHoursForAdmin(id, parsedHours.data);
+
+  revalidatePath('/admin');
+  revalidatePath(`/admin/${id}`);
+  revalidatePath('/poligoni/[regione]/[provincia]/[slug]', 'page');
+  revalidatePath('/poligoni/[regione]/[provincia]', 'page');
+  revalidatePath('/poligoni/[regione]', 'page');
   return { error: undefined };
 }
 

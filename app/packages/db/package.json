@@ -18,6 +18,10 @@
     "./queries/ranges": "./src/queries/ranges.ts",
     "./queries/admin-ranges": "./src/queries/admin-ranges.ts",
     "./queries/admin-users": "./src/queries/admin-users.ts",
+    "./queries/gestore": "./src/queries/gestore.ts",
+    "./seed/province-sigle": "./src/seed/province-sigle.ts",
+    "./seed/regioni": "./src/seed/regioni.ts",
+    "./seed/comuni": "./src/seed/comuni.ts",
     "./queries/billing": "./src/queries/billing.ts"
   },
   "scripts": {
