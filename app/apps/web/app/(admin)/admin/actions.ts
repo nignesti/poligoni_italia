@@ -8,6 +8,7 @@ import {
   insertRangeAdmin,
   updateRangeAdmin,
   isSlugTaken,
+  replaceRangeHoursForAdmin,
   type AdminRangeInput,
 } from '@poligoni/db/queries/admin-ranges';
 import { requireAdminUser } from '@/lib/admin-auth';
@@ -107,5 +108,40 @@ export async function updateRangeAction(
   await updateRangeAdmin(id, toInput(parsed.data));
   revalidatePath('/admin');
   revalidatePath(`/admin/${id}`);
+  return { error: undefined };
+}
+
+const HourSlotSchema = z.object({
+  weekday: z.number().int().min(0).max(6),
+  opensAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Orario non valido.'),
+  closesAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Orario non valido.'),
+});
+const HoursFormSchema = z.array(HourSlotSchema);
+
+export interface HoursFormState {
+  error?: string | undefined;
+}
+
+export async function updateRangeHoursAction(
+  rangeId: string,
+  _prev: HoursFormState,
+  formData: FormData,
+): Promise<HoursFormState> {
+  await requireAdminUser();
+
+  let raw: unknown;
+  try {
+    raw = JSON.parse(String(formData.get('hoursJson') ?? '[]'));
+  } catch {
+    return { error: 'Dati orari non validi.' };
+  }
+
+  const parsed = HoursFormSchema.safeParse(raw);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? 'Dati orari non validi.' };
+  }
+
+  await replaceRangeHoursForAdmin(rangeId, parsed.data);
+  revalidatePath(`/admin/${rangeId}`);
   return { error: undefined };
 }

@@ -10,7 +10,7 @@
 import { asc, eq, sql } from 'drizzle-orm';
 import type { RangeType, RangeStatus } from '@poligoni/schemas/ranges';
 import { getDb } from '../client.js';
-import { ranges } from '../schema/ranges.js';
+import { ranges, rangeHours } from '../schema/ranges.js';
 
 export interface AdminRangeSummary {
   id: string;
@@ -169,4 +169,57 @@ export async function updateRangeAdmin(id: string, input: AdminRangeInput): Prom
       updatedAt: new Date(),
     })
     .where(eq(ranges.id, id));
+}
+
+export interface AdminRangeHour {
+  id: string;
+  weekday: number;
+  opensAt: string;
+  closesAt: string;
+}
+
+export interface AdminRangeHourInput {
+  weekday: number;
+  opensAt: string;
+  closesAt: string;
+}
+
+/** weekday: 0 = Domenica ... 6 = Sabato (Date.getDay()), stessa convenzione di queries/ranges.ts. */
+export async function listRangeHoursForAdmin(rangeId: string): Promise<AdminRangeHour[]> {
+  const db = getDb();
+  return db
+    .select({
+      id: rangeHours.id,
+      weekday: rangeHours.weekday,
+      opensAt: rangeHours.opensAt,
+      closesAt: rangeHours.closesAt,
+    })
+    .from(rangeHours)
+    .where(eq(rangeHours.rangeId, rangeId))
+    .orderBy(asc(rangeHours.weekday), asc(rangeHours.opensAt));
+}
+
+/**
+ * Sostituisce tutte le fasce orarie della struttura con `slots` (delete +
+ * insert in transazione): più semplice di un diff riga-per-riga, e la UI
+ * gestisce già l'intera settimana come un unico form salvato in blocco.
+ */
+export async function replaceRangeHoursForAdmin(
+  rangeId: string,
+  slots: AdminRangeHourInput[],
+): Promise<void> {
+  const db = getDb();
+  await db.transaction(async (tx) => {
+    await tx.delete(rangeHours).where(eq(rangeHours.rangeId, rangeId));
+    if (slots.length > 0) {
+      await tx.insert(rangeHours).values(
+        slots.map((s) => ({
+          rangeId,
+          weekday: s.weekday,
+          opensAt: s.opensAt,
+          closesAt: s.closesAt,
+        })),
+      );
+    }
+  });
 }
