@@ -2,18 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "poligoni-web-critique",
+      "name": "web",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "@poligoni/web", "exec", "next", "dev"],
-      "port": 3000,
-      "autoPort": true
+      "runtimeArgs": ["--filter", "@poligoni/web", "dev"],
+      "port": 3000
     },
     {
-      "name": "poligoni-mobile-preview",
+      "name": "mobile",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "poligoni-italia-app", "exec", "vite", "preview", "--port", "4173"],
-      "port": 4173,
-      "autoPort": true
+      "runtimeArgs": ["--filter", "poligoni-italia-app", "dev"],
+      "port": 5173
     }
   ]
 }
