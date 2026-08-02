@@ -7,11 +7,24 @@ export default function LoginPage() {
   const location = useLocation();
   const next = location.state?.next || "/profilo";
 
+  // Stati per magic link
   const [emailSent, setEmailSent] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Stati per login con password
+  const [loginEmail, setLoginEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false); // true = registrazione, false = login
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  // Modalità attiva: "magic" o "password"
+  const [activeMode, setActiveMode] = useState("magic");
+
+  // --- MAGIC LINK ---
   const handleSendLink = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -31,6 +44,7 @@ export default function LoginPage() {
     setEmailSent(true);
   };
 
+  // --- GOOGLE ---
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
@@ -44,6 +58,70 @@ export default function LoginPage() {
     }
   };
 
+  // --- PASSWORD LOGIN / REGISTRAZIONE ---
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPasswordLoading(true);
+    setPasswordError(null);
+    setSuccessMessage(null);
+
+    if (isSignUp) {
+      // REGISTRAZIONE
+      const { data, error } = await supabase.auth.signUp({
+        email: loginEmail,
+        password: password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+        },
+      });
+
+      setPasswordLoading(false);
+
+      if (error) {
+        if (error.message.includes("User already registered")) {
+          setPasswordError("Questa email è già registrata. Prova ad accedere.");
+        } else {
+          setPasswordError("Registrazione fallita: " + error.message);
+        }
+        return;
+      }
+
+      if (data.user && data.user.identities && data.user.identities.length === 0) {
+        setPasswordError("Questa email è già registrata ma senza password. Usa il magic link o reimposta la password.");
+        return;
+      }
+
+      setSuccessMessage("Registrazione completata! Controlla la tua email per confermare l'indirizzo (se richiesto).");
+      // Resetta i campi
+      setLoginEmail("");
+      setPassword("");
+      // Se la conferma email non è richiesta, puoi fare login automatico qui
+      // altrimenti l'utente deve confermare prima di fare login
+      
+    } else {
+      // LOGIN
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: password,
+      });
+
+      setPasswordLoading(false);
+
+      if (error) {
+        if (error.message.includes("Invalid login credentials")) {
+          setPasswordError("Email o password errati.");
+        } else {
+          setPasswordError("Accesso fallito: " + error.message);
+        }
+        return;
+      }
+
+      // Login riuscito: redirect
+      window.location.href = next;
+    }
+  };
+
+  // --- RENDER ---
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center px-6 py-12">
       <div className="text-center mb-8">
@@ -54,70 +132,186 @@ export default function LoginPage() {
       </div>
 
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-5">
-        {!emailSent ? (
+        {/* TABS per switchare tra i metodi */}
+        <div className="flex rounded-xl bg-slate-100 dark:bg-slate-800 p-1 mb-5">
+          <button
+            onClick={() => setActiveMode("magic")}
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition ${
+              activeMode === "magic"
+                ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                : "text-slate-500 dark:text-slate-400 hover:text-slate-700"
+            }`}
+          >
+            Link magico
+          </button>
+          <button
+            onClick={() => {
+              setActiveMode("password");
+              setPasswordError(null);
+              setSuccessMessage(null);
+            }}
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition ${
+              activeMode === "password"
+                ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                : "text-slate-500 dark:text-slate-400 hover:text-slate-700"
+            }`}
+          >
+            Email e password
+          </button>
+        </div>
+
+        {/* MODO MAGIC LINK */}
+        {activeMode === "magic" && (
           <>
-            <h2 className="font-semibold text-slate-900 dark:text-white mb-1">Accedi</h2>
+            {!emailSent ? (
+              <>
+                <h2 className="font-semibold text-slate-900 dark:text-white mb-1">Accedi</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
+                  Ti mandiamo un link per accedere, senza password.
+                </p>
+
+                <form onSubmit={handleSendLink} className="space-y-3">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="La tua email"
+                    required
+                    disabled={loading}
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-50 active:scale-95 transition-transform flex items-center justify-center gap-2"
+                  >
+                    {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                    {loading ? "Invio…" : "Invia link di accesso"}
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <h2 className="font-semibold text-slate-900 dark:text-white mb-1">Controlla la tua email</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
+                  Abbiamo inviato un link di accesso a <strong>{email}</strong>. Aprilo per entrare.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmailSent(false);
+                    setEmail("");
+                    setError(null);
+                  }}
+                  className="w-full text-center text-xs text-orange-600 font-medium"
+                >
+                  Usa un'altra email
+                </button>
+              </>
+            )}
+          </>
+        )}
+
+        {/* MODO PASSWORD */}
+        {activeMode === "password" && (
+          <>
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-1">
+              {isSignUp ? "Crea un account" : "Accedi con password"}
+            </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
-              Ti mandiamo un link per accedere, senza password.
+              {isSignUp
+                ? "Registrati con email e password per accedere sempre."
+                : "Inserisci le tue credenziali per accedere."}
             </p>
 
-            <form onSubmit={handleSendLink} className="space-y-3">
+            <form onSubmit={handlePasswordSubmit} className="space-y-3">
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
                 placeholder="La tua email"
                 required
-                disabled={loading}
+                disabled={passwordLoading}
                 className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
-              {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={isSignUp ? "Scegli una password" : "La tua password"}
+                required
+                disabled={passwordLoading}
+                minLength={6}
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+              
+              {passwordError && <p className="text-xs text-red-600 dark:text-red-400">{passwordError}</p>}
+              {successMessage && <p className="text-xs text-green-600 dark:text-green-400">{successMessage}</p>}
+
               <button
                 type="submit"
-                disabled={loading}
+                disabled={passwordLoading}
                 className="w-full bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-50 active:scale-95 transition-transform flex items-center justify-center gap-2"
               >
-                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                {loading ? "Invio…" : "Invia link di accesso"}
+                {passwordLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                {passwordLoading
+                  ? isSignUp ? "Registrazione…" : "Accesso…"
+                  : isSignUp ? "Registrati" : "Accedi"}
               </button>
             </form>
 
-            <div className="flex items-center gap-3 my-5 text-xs text-slate-400 dark:text-slate-500">
-              <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
-              oppure
-              <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSignUp(!isSignUp);
+                  setPasswordError(null);
+                  setSuccessMessage(null);
+                }}
+                className="text-xs text-orange-600 dark:text-orange-400 font-medium hover:underline"
+              >
+                {isSignUp
+                  ? "Hai già un account? Accedi"
+                  : "Non hai un account? Registrati"}
+              </button>
             </div>
 
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-2.5 border border-slate-200 dark:border-slate-700 rounded-xl py-3 text-sm font-medium text-slate-700 dark:text-slate-300 disabled:opacity-50 active:scale-95 transition-transform"
-            >
-              <GoogleIcon />
-              Continua con Google
-            </button>
-          </>
-        ) : (
-          <>
-            <h2 className="font-semibold text-slate-900 dark:text-white mb-1">Controlla la tua email</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
-              Abbiamo inviato un link di accesso a <strong>{email}</strong>. Aprilo per entrare.
-            </p>
-
-            <button
-              type="button"
-              onClick={() => {
-                setEmailSent(false);
-                setEmail("");
-                setError(null);
-              }}
-              className="w-full text-center text-xs text-orange-600 font-medium"
-            >
-              Usa un'altra email
-            </button>
+            {!isSignUp && (
+              <div className="mt-2 text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Reindirizza al reset password (se hai implementato la pagina)
+                    // window.location.href = "/reset-password";
+                    // Oppure invia magic link per reset
+                    setActiveMode("magic");
+                  }}
+                  className="text-xs text-slate-400 dark:text-slate-500 hover:underline"
+                >
+                  Password dimenticata?
+                </button>
+              </div>
+            )}
           </>
         )}
+
+        {/* SEPARATORE e GOOGLE (visibile in entrambi i modi) */}
+        <div className="flex items-center gap-3 my-5 text-xs text-slate-400 dark:text-slate-500">
+          <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+          oppure
+          <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
+        </div>
+
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          disabled={loading || passwordLoading}
+          className="w-full flex items-center justify-center gap-2.5 border border-slate-200 dark:border-slate-700 rounded-xl py-3 text-sm font-medium text-slate-700 dark:text-slate-300 disabled:opacity-50 active:scale-95 transition-transform"
+        >
+          <GoogleIcon />
+          Continua con Google
+        </button>
       </div>
 
       <p className="text-center text-xs text-slate-400 dark:text-slate-500 mt-6">
