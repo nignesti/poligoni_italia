@@ -21,6 +21,14 @@ export default function LoginPage() {
   const [passwordError, setPasswordError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
+  // Stati per "password dimenticata": stesso flusso sia per chi resetta una
+  // password esistente sia per chi (registrato via magic link) non ne ha
+  // mai avuta una. Supabase non distingue i due casi — l'email di recovery
+  // apre comunque una sessione temporanea, e ResetPasswordPage lascia
+  // impostare la password lì, prima volta o meno che sia.
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotSent, setForgotSent] = useState(false);
+
   // Modalità attiva: "magic" o "password"
   const [activeMode, setActiveMode] = useState("magic");
 
@@ -121,6 +129,28 @@ export default function LoginPage() {
     }
   };
 
+  // --- PASSWORD DIMENTICATA ---
+  const handleForgotPassword = async () => {
+    if (!loginEmail) {
+      setPasswordError("Inserisci prima la tua email qui sopra, poi tocca di nuovo \"Password dimenticata?\".");
+      return;
+    }
+    setForgotLoading(true);
+    setPasswordError(null);
+    setSuccessMessage(null);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(loginEmail, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    setForgotLoading(false);
+    if (error) {
+      setPasswordError("Non siamo riusciti a inviare l'email. Riprova.");
+      return;
+    }
+    setForgotSent(true);
+  };
+
   // --- RENDER ---
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center px-6 py-12">
@@ -184,7 +214,7 @@ export default function LoginPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-50 active:scale-95 transition-transform flex items-center justify-center gap-2"
+                    className="w-full bg-orange-600 disabled:bg-orange-800 disabled:opacity-100 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm active:scale-95 transition-transform flex items-center justify-center gap-2"
                   >
                     {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                     {loading ? "Invio…" : "Invia link di accesso"}
@@ -214,7 +244,28 @@ export default function LoginPage() {
         )}
 
         {/* MODO PASSWORD */}
-        {activeMode === "password" && (
+        {activeMode === "password" && forgotSent && (
+          <>
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-1">Controlla la tua email</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
+              Abbiamo inviato a <strong>{loginEmail}</strong> un link per creare una nuova password. Se il tuo
+              account non ne aveva mai avuta una (perché registrato solo con il link magico), questo te la fa
+              impostare per la prima volta.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setForgotSent(false);
+                setPasswordError(null);
+              }}
+              className="w-full text-center text-xs text-orange-600 dark:text-orange-400 font-medium"
+            >
+              Torna al login
+            </button>
+          </>
+        )}
+
+        {activeMode === "password" && !forgotSent && (
           <>
             <h2 className="font-semibold text-slate-900 dark:text-white mb-1">
               {isSignUp ? "Crea un account" : "Accedi con password"}
@@ -247,12 +298,12 @@ export default function LoginPage() {
               />
               
               {passwordError && <p className="text-xs text-red-600 dark:text-red-400">{passwordError}</p>}
-              {successMessage && <p className="text-xs text-green-600 dark:text-green-400">{successMessage}</p>}
+              {successMessage && <p className="text-xs text-green-700 dark:text-green-400">{successMessage}</p>}
 
               <button
                 type="submit"
                 disabled={passwordLoading}
-                className="w-full bg-orange-600 text-white font-semibold py-3 rounded-xl text-sm disabled:opacity-50 active:scale-95 transition-transform flex items-center justify-center gap-2"
+                className="w-full bg-orange-600 disabled:bg-orange-800 disabled:opacity-100 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm active:scale-95 transition-transform flex items-center justify-center gap-2"
               >
                 {passwordLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                 {passwordLoading
@@ -281,15 +332,11 @@ export default function LoginPage() {
               <div className="mt-2 text-center">
                 <button
                   type="button"
-                  onClick={() => {
-                    // Reindirizza al reset password (se hai implementato la pagina)
-                    // window.location.href = "/reset-password";
-                    // Oppure invia magic link per reset
-                    setActiveMode("magic");
-                  }}
-                  className="text-xs text-slate-400 dark:text-slate-500 hover:underline"
+                  onClick={handleForgotPassword}
+                  disabled={forgotLoading}
+                  className="text-xs text-slate-500 dark:text-slate-400 hover:underline disabled:no-underline disabled:cursor-not-allowed"
                 >
-                  Password dimenticata?
+                  {forgotLoading ? "Invio…" : "Password dimenticata?"}
                 </button>
               </div>
             )}
@@ -307,7 +354,7 @@ export default function LoginPage() {
           type="button"
           onClick={handleGoogleLogin}
           disabled={loading || passwordLoading}
-          className="w-full flex items-center justify-center gap-2.5 border border-slate-200 dark:border-slate-700 rounded-xl py-3 text-sm font-medium text-slate-700 dark:text-slate-300 disabled:opacity-50 active:scale-95 transition-transform"
+          className="w-full flex items-center justify-center gap-2.5 border border-slate-200 dark:border-slate-700 rounded-xl py-3 text-sm font-medium text-slate-700 dark:text-slate-300 disabled:cursor-not-allowed active:scale-95 transition-transform"
         >
           <GoogleIcon />
           Continua con Google

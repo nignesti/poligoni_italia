@@ -20,6 +20,7 @@ import ProfilePage from '@/pages/ProfilePage';
 import RequestAvailabilityPage from '@/pages/RequestAvailabilityPage';
 import LoginPage from '@/pages/LoginPage';
 import AuthCallbackPage from '@/pages/AuthCallbackPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
 // Add page imports here
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           {/* Pubbliche: nessun account richiesto */}
           <Route path="/accedi" element={<LoginPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/poligono/:id" element={<RangeDetailPage />} />
           <Route path="/richiedi/:id" element={<RequestAvailabilityPage />} />
           <Route path="/prenota/:id" element={<BookingPage />} />
