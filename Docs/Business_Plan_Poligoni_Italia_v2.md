@@ -1875,6 +1875,7 @@ Il principio generale resta quello enunciato in §3.5.9: **qualsiasi funzionalit
 
 > Censimento del 01/08/2026. Fonti: 4 analisi competitive indipendenti su app globali per il settore del tiro — `Analisi qwen.txt`, `analisi app tiro deepseek.txt`, `analisi perplexity.txt`, `analisi kimi.pdf` (cartella `app/apps/mobile/Analisi funzionalità APP/`). Frequenza = numero di fonti (su 4) che citano la feature nel proprio elenco ordinato per diffusione di mercato. Stato verificato contro il codice reale del repository al 01/08/2026, non contro la roadmap dichiarata. Nessuna priorità o fase è assegnata qui: è compito dell'utente deciderla a valle di questo censimento.
 >
+> **Aggiornamento 03/08/2026 — due righe superate.** "Registrazione punteggi / scoring" (4/4) passa da Parziale a **Presente**: `TargetsPage.jsx` marca i fori su un bersaglio e salva un punteggio per foro, non più solo colonna DB inutilizzata. "Analisi colpi / shot grouping" (4/4) passa da Parziale a **Presente** per la parte di marcatura manuale e statistiche di gruppo (`computeGroupStats`, collegato, non più funzione pura irraggiungibile); resta Assente solo l'auto-scoring da camera, deliberatamente rimandato (vedi Piano_Sviluppo_App.md, Aggiornamento 01/08/2026 §8).
 > Legenda stato: **Presente** = funzionante end-to-end nel flusso utente reale. **Parziale** = esiste una base di codice (schema dati, funzione pura, UI non collegata) ma manca integrazione o è raggiungibile solo in parte. **Assente** = nessuna traccia nel codice.
 
 ### Feature citate in tutte e 4 le fonti

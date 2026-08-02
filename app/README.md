@@ -1,9 +1,9 @@
 # Poligoni Italia — codice
 
-Monorepo TypeScript. Documenti di riferimento nella cartella superiore:
+Monorepo TypeScript. Documenti di riferimento in `../Docs/`:
 
-- `../Business_Plan_Poligoni_Italia_v2.md` — fonte unica per **cosa** si costruisce e in che ordine
-- `../Piano_Sviluppo_App.md` — piano tecnico: architettura, modello dati, API, task
+- `../Docs/Business_Plan_Poligoni_Italia_v2.md` — fonte unica per **cosa** si costruisce e in che ordine
+- `../Docs/Piano_Sviluppo_App.md` — piano tecnico: architettura, modello dati, API, task; leggere gli "Aggiornamento del piano" in fondo prima del resto, superano parti del corpo del documento
 
 Se leggendo il codice viene voglia di cambiare una priorità, la modifica va fatta nel
 business plan e poi riflessa qui. Non decisa qui.
@@ -49,16 +49,16 @@ pnpm test
 pnpm coverage
 ```
 
-## Stato
+## Stato (03/08/2026)
 
 | Pacchetto | Stato |
 |---|---|
 | `packages/core` | ✅ Completo e testato al 100% |
-| `packages/schemas` | ⬜ Da fare — task 5 |
-| `packages/db` | ⬜ Da fare — task 2-3 |
-| `packages/api-client` | ⬜ Da fare — task 22 |
-| `apps/web` | ⬜ Da fare — task 8 |
-| `apps/mobile` | ⬜ Da fare — task 21 |
+| `packages/schemas` | ✅ In uso, tipi condivisi via Zod |
+| `packages/db` | ✅ Schema, migrazioni, query — in uso da web e admin |
+| `packages/api-client` | ⬜ Mai costruito, deliberatamente: l'app mobile parla direttamente con Supabase (RLS), non con `/api/v1` — vedi Piano_Sviluppo_App.md, Aggiornamento 01/08/2026 §1 |
+| `apps/web` | ✅ Sito pubblico + dashboard `(admin)` e `(gestore)`, entrambe su dati reali |
+| `apps/mobile` | ✅ Web app Vite/React (non ancora Expo/nativo — vedi Piano, Aggiornamento 01/08/2026 §2) |
 
 ## `packages/core`
 

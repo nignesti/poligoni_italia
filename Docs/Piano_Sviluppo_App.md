@@ -4,6 +4,8 @@
 > Documento operativo interno. Complementare a `Business_Plan_Poligoni_Italia_v2.md`, che resta la fonte unica per **cosa** si costruisce e **in che ordine**. Questo documento possiede solo il **come**.
 
 > ⚠️ **Aggiornamento 01/08/2026 — leggere prima del resto.** A pochi giorni dalla stesura di questo documento, la velocità di sviluppo osservata ha reso obsoleto il modello di budget a giornate/settimane-uomo e alcune decisioni di architettura sono state prese scrivendo codice invece che sulla carta. Vedi **"Aggiornamento del piano — 01/08/2026"** in fondo al documento per il quadro completo: quella sezione ha priorità su §1.2, sulla riga "App mobile" di §2.1, su §12 e su §14 ovunque siano in contraddizione.
+>
+> ⚠️ **Aggiornamento 03/08/2026.** Il blocco 1 del backlog per priorità definito il 01/08 ("Bersagli e punteggi") risulta completato — il blocco attivo è ora il 2 ("SEO / acquisizione / contenuti"). Dashboard gestore (§7.3) passata da mock a dati reali; nuova dashboard admin non prevista dal piano originale. Vedi **"Aggiornamento del piano — 03/08/2026"** in fondo al documento.
 
 ---
 
@@ -1075,3 +1077,30 @@ Verificato sul business plan (§13.3, §14.5, Allegato C): lo Spotter è un sist
 
 **Sincronizzazione offline del diario — resta discrezionale, non promossa.**
 Il piano la vincolava a "reclami reali" sulla copertura in poligono. Zero utenti reali esistono ancora (prodotto non lanciato), quindi il trigger non può essersi verificato per definizione — non perché il problema non esista, ma perché non c'è ancora nessuno che possa reclamarlo. Costruirla ora sarebbe una scommessa su un problema presunto, non osservato. **Resta rimandata**, ma vale la pena registrarla come opzione a basso costo aggiuntivo quando si lavora comunque sul blocco 1 (stessa area di codice, "Il Mio Tiro") — non una promozione a priorità, solo un'opportunità da cogliere se si presenta senza sforzo dedicato.
+
+## Aggiornamento del piano — 03/08/2026
+
+> Due giorni dopo l'Aggiornamento 01/08/2026, quattro cambi di stato verificati contro il codice reale — non contro intenzioni o backlog dichiarato.
+
+### 1. Blocco 1 "Bersagli e punteggi" — già completato, non è più il prossimo passo
+
+Verificato nel codice: `TargetsPage.jsx` (mobile) marca i fori su un bersaglio tap-to-mark, salva punteggio per foro (`target_holes.score`), calcola statistiche di gruppo (`computeGroupStats`) e persiste tutto su Supabase reale — nessun mock. Il blocco che l'Aggiornamento 01/08 metteva in cima al backlog per priorità (§4 di quell'aggiornamento) risulta quindi **chiuso**. Resta assente solo il rilevamento automatico dei fori da foto (§8 dello stesso aggiornamento, correttamente gated su un volume reale di bersagli marcati manualmente — ora possibile, perché lo strumento per generare quel volume esiste).
+
+**Conseguenza pratica**: il blocco attivo del backlog per priorità è ora il **2 — SEO / acquisizione / contenuti**, non più l'1.
+
+### 2. Dashboard gestore (§7.3) — da mock a dati reali
+
+Le schermate elencate in §7.3 (scheda struttura, orari, chiusure/gare, richieste in arrivo — tutte fase T2) sono state ricollegate da dati fittizi a lettura/scrittura reale su `ranges`/`range_hours`/`range_closures`/`range_pricing`/`range_services`/`booking_requests`, con autorizzazione per-struttura via `range_managers` (non la whitelist email usata da `/admin`). Un account che gestisce più strutture (finora solo i due account admin, per verificare cosa vede un gestore reale) può cambiare struttura attiva da un selettore in testata.
+
+### 3. Dashboard admin — non prevista dal piano originale, costruita per necessità operativa
+
+Non è in nessuna sezione del Piano v1.0: è nata per evitare di editare `ranges` a mano via SQL su Supabase. Copre anagrafica struttura, orari, gestione utenti e permessi gestore (assegnazione/rimozione `range_managers`), con provincia/comune/regione selezionabili da elenco reale invece che campo libero. Gate a whitelist email (`ADMIN_EMAILS`), controllo ripetuto a inizio di ogni Server Action, non solo a livello di layout.
+
+### 4. Due bug di piattaforma trovati e corretti, non specifici di una feature
+
+- **Qualità dati geografici**: la Sardegna è tornata a sei province nel 2025 (LR 7/2021), "Sud Sardegna" abolita — il dataset comuni/province usato dai dropdown admin/gestore era fermo all'assetto 2016. Corretto e verificato comune per comune contro fonti ufficiali; corrette anche 3 strutture già censite con provincia obsoleta.
+- **Aggiornamenti non in tempo reale**: creare una struttura da admin non rigenerava le pagine pubbliche statiche (mancava `revalidatePath`); anche dopo averlo aggiunto, il router cache lato client di Next.js (5 minuti di default) nascondeva comunque le modifiche a chi navigava cliccando link invece di ricaricare la pagina. Corretti entrambi.
+
+### 5. Nuovo strumento di lavoro, non di prodotto
+
+Adottato **graphify**: grafo di conoscenza del progetto (codice + documenti), rigenerato dopo modifiche strutturali importanti, usato per query su architettura e relazioni tra file invece di esplorazione manuale. Vive in `graphify-out/` (locale, non versionato). Non è un blocco della roadmap di prodotto — è tooling interno.
