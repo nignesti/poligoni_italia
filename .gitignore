@@ -8,6 +8,8 @@ coverage/
 .env
 .env.*
 !.env.example
+graphify-out/
+.impeccable 
 
 .DS_Store
 .vscode/
