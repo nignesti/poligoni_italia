@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getAdminUser } from '@/lib/admin-auth';
+import { LogoutButton } from './LogoutButton';
 
 /**
  * Area privata, non linkata da nessuna nav pubblica. Il middleware
@@ -24,6 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/" className="hover:text-ink">
               Vedi sito pubblico
             </Link>
+            <LogoutButton />
           </div>
         </div>
       </header>
