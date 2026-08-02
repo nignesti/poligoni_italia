@@ -11,6 +11,7 @@ import {
   replaceRangeHoursForAdmin,
   type AdminRangeInput,
 } from '@poligoni/db/queries/admin-ranges';
+import { addRangeManagerForAdmin, removeRangeManagerForAdmin } from '@poligoni/db/queries/admin-users';
 import { requireAdminUser } from '@/lib/admin-auth';
 
 // requireAdminUser() va chiamata a inizio di OGNI azione qui sotto, non solo
@@ -144,4 +145,45 @@ export async function updateRangeHoursAction(
   await replaceRangeHoursForAdmin(rangeId, parsed.data);
   revalidatePath(`/admin/${rangeId}`);
   return { error: undefined };
+}
+
+export interface ManagerFormState {
+  error?: string | undefined;
+}
+
+const AddManagerSchema = z.object({
+  rangeId: z.string().uuid('Struttura non valida.'),
+  userId: z.string().uuid('Utente non valido.'),
+  role: z.enum(['proprietario', 'staff']),
+});
+
+export async function addRangeManagerAction(
+  _prev: ManagerFormState,
+  formData: FormData,
+): Promise<ManagerFormState> {
+  await requireAdminUser();
+
+  const parsed = AddManagerSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? 'Dati non validi.' };
+  }
+
+  await addRangeManagerForAdmin(parsed.data.rangeId, parsed.data.userId, parsed.data.role);
+  revalidatePath('/admin/utenti');
+  return { error: undefined };
+}
+
+const RemoveManagerSchema = z.object({
+  rangeId: z.string().uuid(),
+  userId: z.string().uuid(),
+});
+
+export async function removeRangeManagerAction(formData: FormData): Promise<void> {
+  await requireAdminUser();
+
+  const parsed = RemoveManagerSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return;
+
+  await removeRangeManagerForAdmin(parsed.data.rangeId, parsed.data.userId);
+  revalidatePath('/admin/utenti');
 }

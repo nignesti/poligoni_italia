@@ -17,6 +17,7 @@
     "./client": "./src/client.ts",
     "./queries/ranges": "./src/queries/ranges.ts",
     "./queries/admin-ranges": "./src/queries/admin-ranges.ts",
+    "./queries/admin-users": "./src/queries/admin-users.ts",
     "./queries/billing": "./src/queries/billing.ts"
   },
   "scripts": {
