@@ -138,6 +138,10 @@ export default function ResetPasswordPage() {
 
       <style>{`
         .login-page {
+          /* vedi stessa nota in gestore/login/page.tsx: :root fissa
+             color-scheme: dark per il redesign pubblico, va sovrascritto
+             qui o gli input nativi ereditano testo bianco su sfondo bianco. */
+          color-scheme: light;
           min-height: 100vh;
           display: flex;
           align-items: center;
@@ -168,12 +172,15 @@ export default function ResetPasswordPage() {
         .login-form { display: flex; flex-direction: column; gap: var(--space-4); }
         .login-label { font-size: 0.875rem; font-weight: 600; color: var(--color-gray-700); }
         .login-input {
+          background: white;
+          color: var(--color-gray-900);
           padding: var(--space-3) var(--space-4);
           border: 1px solid var(--color-gray-300);
           border-radius: var(--radius-lg);
           font-size: 0.9375rem;
           transition: border-color 0.15s;
         }
+        .login-input::placeholder { color: var(--color-gray-400); }
         .login-input:focus { outline: none; border-color: var(--color-green-500); box-shadow: 0 0 0 3px var(--color-green-100); }
         .login-btn { justify-content: center; padding: var(--space-3); font-size: 0.9375rem; width: 100%; display: inline-flex; }
         .login-error { font-size: 0.8125rem; color: var(--color-red-600, #dc2626); margin: 0; }

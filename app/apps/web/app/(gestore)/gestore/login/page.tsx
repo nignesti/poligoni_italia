@@ -353,6 +353,13 @@ function LoginForm() {
 
       <style>{`
         .login-page {
+          /* :root fissa color-scheme: dark per il redesign pubblico
+             (app/styles/globals.css) — senza questo override i controlli
+             nativi (input, ecc.) ereditano i colori UA dark anche qui,
+             dove il tema deve restare chiaro: testo bianco su sfondo
+             bianco, illeggibile. (gestore) è volutamente escluso dal
+             redesign, vedi CLAUDE.md. */
+          color-scheme: light;
           min-height: 100vh;
           display: flex;
           align-items: center;
@@ -407,12 +414,15 @@ function LoginForm() {
         .login-form { display: flex; flex-direction: column; gap: var(--space-4); }
         .login-label { font-size: 0.875rem; font-weight: 600; color: var(--color-gray-700); }
         .login-input {
+          background: white;
+          color: var(--color-gray-900);
           padding: var(--space-3) var(--space-4);
           border: 1px solid var(--color-gray-300);
           border-radius: var(--radius-lg);
           font-size: 0.9375rem;
           transition: border-color 0.15s;
         }
+        .login-input::placeholder { color: var(--color-gray-400); }
         .login-input:focus { outline: none; border-color: var(--color-green-500); box-shadow: 0 0 0 3px var(--color-green-100); }
         .login-code-input { letter-spacing: 0.3em; font-variant-numeric: tabular-nums; text-align: center; font-size: 1.25rem; }
         .login-btn { justify-content: center; padding: var(--space-3); font-size: 0.9375rem; }
