@@ -277,6 +277,7 @@ export default async function RangePage(
           </div>
           <div className="mt-4 overflow-hidden rounded-panel border border-hairline">
             <iframe
+              key={`${range.location.lat},${range.location.lng}`}
               title={`Mappa di ${range.name}`}
               src={`https://www.google.com/maps?q=${range.location.lat},${range.location.lng}&z=15&output=embed`}
               className="h-80 w-full"

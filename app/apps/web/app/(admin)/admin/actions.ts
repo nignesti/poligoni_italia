@@ -80,7 +80,11 @@ export async function createRangeAction(
 ): Promise<RangeFormState> {
   await requireAdminUser();
 
-  const parsed = RangeFormSchema.safeParse(Object.fromEntries(formData));
+  const rawEntries = Object.fromEntries(formData);
+  if (typeof rawEntries.lat === 'string') rawEntries.lat = rawEntries.lat.replace(',', '.');
+  if (typeof rawEntries.lng === 'string') rawEntries.lng = rawEntries.lng.replace(',', '.');
+
+  const parsed = RangeFormSchema.safeParse(rawEntries);
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? 'Dati non validi.' };
   }
@@ -130,7 +134,11 @@ export async function updateRangeAction(
 ): Promise<RangeFormState> {
   await requireAdminUser();
 
-  const parsed = RangeFormSchema.safeParse(Object.fromEntries(formData));
+  const rawEntries = Object.fromEntries(formData);
+  if (typeof rawEntries.lat === 'string') rawEntries.lat = rawEntries.lat.replace(',', '.');
+  if (typeof rawEntries.lng === 'string') rawEntries.lng = rawEntries.lng.replace(',', '.');
+
+  const parsed = RangeFormSchema.safeParse(rawEntries);
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? 'Dati non validi.' };
   }

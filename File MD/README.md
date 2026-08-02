@@ -1,1 +1,0 @@
-# poligoni_italia

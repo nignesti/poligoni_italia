@@ -98,19 +98,21 @@ Questa è una posizione più modesta e molto più solida. Un investitore che ver
 
 ## 1.6 Il fattore di tempismo: la riforma UITS
 
-Il **26 giugno 2026** è stato pubblicato il decreto-legge n. 108/2026, il cui articolo 8 riordina l'Unione Italiana Tiro a Segno. È il fatto più rilevante accaduto al settore negli ultimi vent'anni e ricade esattamente nella finestra di questo piano. Effetti sintetici:
+**Aggiornamento 02/08/2026 — la riforma è ora legge definitiva.** Il **26 giugno 2026** è stato pubblicato il decreto-legge n. 108/2026, il cui articolo 8 riordina l'Unione Italiana Tiro a Segno. Il termine costituzionale per la conversione (art. 77 Cost., 60 giorni) cadeva il 25 agosto 2026, ma il Senato ha chiuso l'iter in anticipo: **conversione definitiva il 30 luglio 2026**, senza ulteriori modifiche al testo già approvato dalla Camera il 23 luglio. Non è più un decreto a rischio di decadenza — è legge dello Stato. È il fatto più rilevante accaduto al settore negli ultimi vent'anni e ricade esattamente nella finestra di questo piano. Effetti sintetici (testo finale, dopo gli emendamenti Camera):
 
 - Separazione tra componente istituzionale (ente pubblico) e componente sportiva ("Istituzione sportiva" con bilancio autonomo);
-- **Gestione degli impianti centralizzata presso UITS**, con facoltà di delega a terzi tramite procedure pubbliche;
-- I beni del demanio militare passano in comodato direttamente a UITS;
-- Istituzione dell'Ispettore UITS retribuito e di un comitato tecnico di vigilanza su infrastrutture e agibilità;
-- **I poligoni privati possono federarsi a UITS** per attività addestrative e sportive;
-- Il DIMA (certificato di maneggio armi) resta rilasciabile solo dalle sezioni TSN;
+- **Gestione degli impianti centralizzata presso UITS**, con facoltà di delega a terzi tramite procedure a evidenza pubblica — un commentatore legale esterno la definisce "novità storica rispetto al modello monopolistico territoriale", che crea "un vero mercato" con "concorrenza economica diretta";
+- I beni del demanio militare passano in comodato direttamente a UITS; per i beni delle sezioni TSN, il trasferimento è stato **ridotto ai soli beni immobili** (emendamento Camera, non più l'intero patrimonio);
+- ~~Istituzione dell'Ispettore UITS retribuito~~ — **emendamento Camera ha eliminato la figura degli ispettori retribuiti presso le sezioni TSN**, accolto con parere favorevole del Governo;
+- **I poligoni privati possono federarsi a UITS** per attività addestrative e sportive (come "enti federati" o "organismi affiliati" a seconda dell'attività) — confermato nel testo finale;
+- Il DIMA (certificato di maneggio armi) resta rilasciabile solo dalle sezioni TSN — confermato nel testo finale;
 - 90 giorni per l'adeguamento dello statuto (scadenza indicativa: fine settembre 2026), più 30 per il regolamento di contabilità.
 
-La riforma è **fortemente contestata**: presidenti di sezione ne chiedono la soppressione parlando di "esproprio delle TSN".
+La riforma è stata **fortemente contestata** in fase di decreto: presidenti di sezione ne hanno chiesto la soppressione parlando di "esproprio delle TSN". Gli emendamenti Camera (ispettori, perimetro beni) sono la risposta parziale a quella protesta — non hanno toccato il nucleo della riforma (centralizzazione, delega a terzi, apertura ai privati).
 
-**Perché conta per questo progetto.** La centralizzazione trasforma un mercato di ~300 controparti autonome in un mercato con **un interlocutore nazionale unico**. È simultaneamente la più grande opportunità (un solo accordo può sbloccare centinaia di strutture) e il più grande rischio (un solo soggetto può chiudere il mercato). È inoltre una finestra di attenzione: nei prossimi 12 mesi le sezioni saranno costrette a rivedere processi e contabilità, e la disponibilità al cambiamento sarà più alta della norma. Il piano è costruito per sfruttare questa finestra.
+**Nuovo elemento di rischio, non presente nel decreto originale.** La componente sportiva ha eletto Valentina Turisini presidente pochi giorni prima dell'approvazione definitiva; la legge dispone che le procedure elettorali svolte prima dell'approvazione dello statuto non producano effetti sulla costituzione degli organi, il che rende quella elezione contestabile. È un torbidume di governance interna, non una minaccia alla riforma in sé — ma un interlocutore le cui cariche sono in discussione è un rischio operativo in più nei primi accordi.
+
+**Perché conta per questo progetto.** La centralizzazione trasforma un mercato di ~300 controparti autonome in un mercato con **un interlocutore nazionale unico**. È simultaneamente la più grande opportunità (un solo accordo può sbloccare centinaia di strutture) e il più grande rischio (un solo soggetto può chiudere il mercato). È inoltre una finestra di attenzione: nei prossimi 12 mesi le sezioni saranno costrette a rivedere processi e contabilità, e la disponibilità al cambiamento sarà più alta della norma. Il piano è costruito per sfruttare questa finestra — finestra che ora è più solida, non più a rischio di decadenza del decreto.
 
 ## 1.7 Obiettivi a 3 anni
 
@@ -189,11 +191,11 @@ Sport e Salute ha assegnato per il 2026 **344,4 milioni di euro** agli organismi
 | Trend | Evidenza | Implicazione per il progetto |
 |---|---|---|
 | **Crescita strutturale delle licenze** | +7,9% caccia, +6,3% tiro a volo nel 2025, sopra l'intero triennio precedente | Il bacino di utenza si allarga da solo: la crescita non dipende dall'evangelizzazione del mercato |
-| **Riforma UITS (DL 108/2026)** | Pubblicata in Gazzetta il 26 giugno 2026; 90 giorni per lo statuto | Finestra di attenzione e riorganizzazione; interlocutore nazionale unico; incertezza operativa nelle sezioni |
+| **Riforma UITS (DL 108/2026)** | Convertita in legge definitiva il 30 luglio 2026 (senza ulteriori modifiche del Senato); 90 giorni per lo statuto dalla pubblicazione | Finestra di attenzione e riorganizzazione; interlocutore nazionale unico; incertezza operativa nelle sezioni |
 | **Apertura ai poligoni privati** | Il DL consente ai campi privati di federarsi a UITS | Il segmento privato, oggi il più digitalizzabile, entra nel perimetro federale: cresce la rilevanza di un layer trasversale pubblico/privato |
 | **Digitalizzazione già avviata ma frammentata** | Booking online autonomo attivo su TSN Catania, Thiene, Este, Mirano | La domanda di prenotazione online è già dimostrata dal comportamento dei gestori. Non va creata: va aggregata |
 | **Spostamento da difesa a sport** | Licenze difesa personale −9,3% | Posizionamento sportivo coerente con la direzione del mercato e con le policy degli store |
-| **Contrazione del volontariato dirigenziale** | Presidenti di sezione volontari, Ispettori UITS retribuiti (DL 108) | Le sezioni hanno poco tempo dirigenziale: uno strumento che *toglie* lavoro ha più chance di uno che ne aggiunge |
+| **Contrazione del volontariato dirigenziale** | Presidenti di sezione volontari, gestione centralizzata su UITS (figura ispettori retribuiti eliminata da emendamento Camera) | Le sezioni hanno poco tempo dirigenziale: uno strumento che *toglie* lavoro ha più chance di uno che ne aggiunge |
 
 ## 2.3 Analisi della domanda: profili di tiratore
 

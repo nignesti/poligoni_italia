@@ -3,12 +3,28 @@
  *
  * Dato pubblico stabile: non contiene alcuna informazione su singole
  * strutture, solo il nome per esteso di ciascuna provincia a partire dalla
- * sigla. Elenco completo delle 107 province italiane, più 4 sigle storiche
- * sarde confluite in Sud Sardegna nel 2016 (VS Medio Campidano, CI
- * Carbonia-Iglesias, OG Ogliastra, OT Olbia-Tempio) — compaiono ancora in
- * fonti importate meno recenti, incluso il dataset comuni ISTAT usato per
- * comuni.ts. Non più limitato alle sole sigle del censimento originale:
- * usato anche per normalizzare province scritte come sigla da fonti
+ * sigla. Elenco completo delle 107 province italiane.
+ *
+ * Le 4 sigle sarde storiche VS/CI/OG/OT (istituite nel 2005, poi confluite
+ * in "Sud Sardegna" nel 2016, sigle ancora usate dal dataset comuni ISTAT
+ * importato in comuni.ts) sono state riverificate il 03/08/2026: dal 2025
+ * (LR 7/2021) la Sardegna è tornata a sei province e "Sud Sardegna" è stata
+ * abolita — VS/CI/OG/OT mappano di nuovo sulle rispettive province attuali
+ * (Medio Campidano, Sulcis Iglesiente, Ogliastra, Gallura Nord-Est
+ * Sardegna), non più su un unico nome ombrello. Fonti: pagine ufficiali dei
+ * comuni per provincia (tuttitalia.it) incrociate con le 101 righe già
+ * presenti in comuni.ts — unico scarto Teulada (SU generico nel dataset
+ * originale), confermato passato a Sulcis Iglesiente.
+ *
+ * La sigla SU (usata storicamente per "Sud Sardegna" stessa, non per una
+ * delle 4 mini-province) è stata rimossa apposta: la provincia non esiste
+ * più e i suoi comuni sono stati redistribuiti su tre province diverse
+ * (Sulcis Iglesiente, Medio Campidano, Cagliari) — nessun singolo nome può
+ * sostituirla senza sapere quale comune specifico porta quella sigla, quindi
+ * meglio un errore esplicito in provinciaFromSigla() che un valore silenziosamente
+ * sbagliato.
+ *
+ * Usato anche per normalizzare province scritte come sigla da fonti
  * importate (es. Targetfun, vedi TARGETFUN_IMPORT_LOG.md) in
  * queries/ranges.ts.
  */
@@ -36,7 +52,7 @@ export const PROVINCIA_BY_SIGLA: Record<string, string> = {
   CB: 'Campobasso',
   CE: 'Caserta',
   CH: 'Chieti',
-  CI: 'Sud Sardegna',
+  CI: 'Sulcis Iglesiente',
   CL: 'Caltanissetta',
   CN: 'Cuneo',
   CO: 'Como',
@@ -74,9 +90,9 @@ export const PROVINCIA_BY_SIGLA: Record<string, string> = {
   NA: 'Napoli',
   NO: 'Novara',
   NU: 'Nuoro',
-  OG: 'Sud Sardegna',
+  OG: 'Ogliastra',
   OR: 'Oristano',
-  OT: 'Sud Sardegna',
+  OT: 'Gallura Nord-Est Sardegna',
   PA: 'Palermo',
   PC: 'Piacenza',
   PD: 'Padova',
@@ -104,7 +120,6 @@ export const PROVINCIA_BY_SIGLA: Record<string, string> = {
   SP: 'La Spezia',
   SR: 'Siracusa',
   SS: 'Sassari',
-  SU: 'Sud Sardegna',
   SV: 'Savona',
   TA: 'Taranto',
   TE: 'Teramo',
@@ -121,7 +136,7 @@ export const PROVINCIA_BY_SIGLA: Record<string, string> = {
   VE: 'Venezia',
   VI: 'Vicenza',
   VR: 'Verona',
-  VS: 'Sud Sardegna',
+  VS: 'Medio Campidano',
   VT: 'Viterbo',
   VV: 'Vibo Valentia',
 };
